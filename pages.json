@@ -1,0 +1,259 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "侏罗纪家仙女VIP专属",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+					"van-icon": "/wxcomponents/vant/icon/index",
+					"van-grid": "/wxcomponents/vant/grid/index",
+					"van-grid-item": "/wxcomponents/vant/grid-item/index",
+					"van-tag": "/wxcomponents/vant/tag/index",
+					"van-cell": "/wxcomponents/vant/cell/index",
+					// "van-row": "/wxcomponents/vant/row/index",
+					"van-col": "/wxcomponents/vant/col/index",
+					"van-image": "/wxcomponents/vant/image/index"
+				}
+			}
+
+		}, {
+			"path": "pages/video/index",
+			"style": {
+				"navigationBarTitleText": "直播预告",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/shop/index",
+			"style": {
+				"navigationBarTitleText": "积分商城",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"usingComponents": {
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+					"van-tab": "/wxcomponents/vant/tab/index",
+					"van-tabs": "/wxcomponents/vant/tabs/index",
+					"van-icon": "/wxcomponents/vant/icon/index",
+					// "van-row": "/wxcomponents/vant/row/index",
+					"van-col": "/wxcomponents/vant/col/index",
+					"van-image": "/wxcomponents/vant/image/index"
+				}
+			}
+
+		}, {
+			"path": "pages/user/index",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"usingComponents": {
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+					"van-icon": "/wxcomponents/vant/icon/index",
+					"van-grid": "/wxcomponents/vant/grid/index",
+					"van-grid-item": "/wxcomponents/vant/grid-item/index",
+					"van-progress": "/wxcomponents/vant/progress/index",
+					// "van-row": "/wxcomponents/vant/row/index",
+					"van-col": "/wxcomponents/vant/col/index",
+					"van-image": "/wxcomponents/vant/image/index",
+					"van-button": "/wxcomponents/vant/button/index"
+				}
+			}
+
+		}, {
+			"path": "pages/user/userInfo/userInfo",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-cell": "/wxcomponents/vant/cell/index",
+					"van-icon": "/wxcomponents/vant/icon/index",
+					"van-field": "/wxcomponents/vant/field/index",
+					"van-datetime-picker": "/wxcomponents/vant/datetime-picker/index",
+					"van-popup": "/wxcomponents/vant/popup/index",
+					"van-area": "/wxcomponents/vant/area/index",
+					"van-image": "/wxcomponents/vant/image/index",
+					"van-picker": "/wxcomponents/vant/picker/index"
+				}
+			}
+
+		}, {
+			"path": "pages/user/address/address",
+			"style": {
+				"navigationBarTitleText": "收货地址",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-cell-group": "/wxcomponents/vant/cell-group/index",
+					"van-cell": "/wxcomponents/vant/cell/index",
+					"van-icon": "/wxcomponents/vant/icon/index",
+					"van-swipe-cell": "/wxcomponents/vant/swipe-cell/index",
+					"van-dialog": "/wxcomponents/vant/dialog/index",
+					"van-empty": "/wxcomponents/vant/empty/index",
+					"van-tag": "/wxcomponents/vant/tag/index",
+					"van-button": "/wxcomponents/vant/button/index"
+				}
+			}
+
+		}, {
+			"path": "pages/user/redbook/redbook",
+			"style": {
+				"navigationBarTitleText": "分享小红书账号",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/message/message",
+			"style": {
+				"navigationBarTitleText": "消息中心",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-cell-group": "/wxcomponents/vant/cell-group/index"
+				}
+			}
+		},
+		{
+			"path": "pages/user/authorization/index",
+			"style": {
+				"navigationBarTitleText": "授权",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"usingComponents": {
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index"
+				}
+			}
+
+		},
+		{
+			"path": "pages/user/address/add",
+			"style": {
+				"navigationBarTitleText": "新增地址",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-cell-group": "/wxcomponents/vant/cell-group/index",
+					"van-cell": "/wxcomponents/vant/cell/index",
+					"van-field": "/wxcomponents/vant/field/index",
+					"van-switch": "/wxcomponents/vant/switch/index",
+					"van-button": "/wxcomponents/vant/button/index",
+					"van-popup": "/wxcomponents/vant/popup/index",
+					"van-area": "/wxcomponents/vant/area/index"
+				}
+			}
+
+		},
+		{
+			"path": "pages/shop/order/list",
+			"style": {
+				"navigationBarTitleText": "订单",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"usingComponents": {
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+					"van-card": "/wxcomponents/vant/card/index",
+					"van-empty": "/wxcomponents/vant/empty/index",
+					"van-cell-group": "/wxcomponents/vant/cell-group/index"
+
+				}
+			}
+		},
+		{
+			"path": "pages/shop/order/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-icon": "/wxcomponents/vant/icon/index",
+					"van-cell-group": "/wxcomponents/vant/cell-group/index"
+				}
+			}
+
+		}
+
+		, {
+			"path": "pages/shop/order/afterSales",
+			"style": {
+				"navigationBarTitleText": "售后",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"usingComponents": {
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+					"van-empty": "/wxcomponents/vant/empty/index"
+				}
+			}
+		}, {
+			"path": "pages/user/daySignIn/daySignIn",
+			"style": {
+				"navigationBarTitleText": "签到",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"usingComponents": {
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+					"van-calendar": "/wxcomponents/vant/calendar/index",
+					"van-icon": "/wxcomponents/vant/icon/index",
+					"van-grid": "/wxcomponents/vant/grid/index",
+					"van-grid-item": "/wxcomponents/vant/grid-item/index"
+
+				}
+
+			}
+
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#fff",
+		"backgroundColor": "#fff",
+		"usingComponents": {
+			"van-card": "/wxcomponents/vant/card/index",
+			"van-button": "/wxcomponents/vant/button/index",
+			"van-tag": "/wxcomponents/vant/tag/index",
+			"van-cell": "/wxcomponents/vant/cell/index",
+			"van-row": "/wxcomponents/vant/row/index",
+			"van-col": "/wxcomponents/vant/col/index",
+			"van-image": "/wxcomponents/vant/image/index",
+			"van-divider": "/wxcomponents/vant/divider/index"
+		},
+		"lazyCodeLoading": "requiredComponents"
+
+	},
+	"tabBar": {
+		"color": "#909399",
+		"selectedColor": "#666",
+		"borderStyle": "black",
+		"backgroundColor": "#fff",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/tabbar/home.png",
+			"selectedIconPath": "static/tabbar/home-active.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/shop/index",
+			"iconPath": "static/tabbar/shop.png",
+			"selectedIconPath": "static/tabbar/shop.png",
+			"text": "积分商城"
+		}, {
+			"pagePath": "pages/video/index",
+			"iconPath": "static/tabbar/video.png",
+			"selectedIconPath": "static/tabbar/video.png",
+			"text": "直播预定"
+		}, {
+			"pagePath": "pages/user/index",
+			"iconPath": "static/tabbar/user.png",
+			"selectedIconPath": "static/tabbar/user-active.png",
+			"text": "我的"
+		}]
+	},
+
+	"uniIdRouter": {},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
+}

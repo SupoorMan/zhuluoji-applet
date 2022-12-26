@@ -1,0 +1,19 @@
+import request from '../index.js';
+
+/**
+ * @description  传id和需要更新的字段即可
+ */
+export const updateUser = async (data) => {
+	return await request.post('/auser/update', data);
+}
+
+export const getUserIofo = async () => {
+	return await request.get('/auser/getUser');
+}
+/**
+ * @param {code: wxcode, userInfo} 
+ * @description 登录
+ */
+export const login = async (data) => {
+	return await request.post('/wx/login', data);
+}
