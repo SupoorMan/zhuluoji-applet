@@ -17,3 +17,10 @@ export const getUserIofo = async () => {
 export const login = async (data) => {
 	return await request.post('/wx/login', data);
 }
+
+/**
+ * @description 获取轮播
+ */
+export const getBanner = async () => {
+	return await request.get('/banner/list');
+}

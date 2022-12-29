@@ -57,7 +57,7 @@ export default {
 view {
 	box-sizing: border-box;
 	font-size: 28rpx;
-	font-family: '宋体', sans-serif;
+	font-family: '微软雅黑', sans-serif;
 }
 
 page {

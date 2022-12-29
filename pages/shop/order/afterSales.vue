@@ -57,6 +57,12 @@ export default {
 	methods: {
 		backPage() {
 			uni.navigateBack({ delta: 1 });
+		},
+		async getList(params) {
+			const { data, code } = await getOrders(params);
+			if (code === 200) {
+				this.orders = data.records;
+			}
 		}
 	}
 };

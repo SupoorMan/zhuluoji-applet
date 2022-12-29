@@ -4,12 +4,15 @@
 		<van-nav-bar title="侏罗纪家仙女VIP专属" class="navbar" fixed>
 			<van-icon name="chat-o" slot="left" size="20" />
 		</van-nav-bar>
+		<view></view>
 		<!-- 轮播 -->
 		<view class="uni-margin-wrap">
 			<swiper class="swiper" circular :indicator-dots="true" :autoplay="true">
-				<swiper-item><view class="swiper-item">A</view></swiper-item>
-				<swiper-item><view class="swiper-item">B</view></swiper-item>
-				<swiper-item><view class="swiper-item">C</view></swiper-item>
+				<swiper-item v-for="bn in banners" :key="bn.id">
+					<view class="swiper-item">
+						<van-image :src="bn.url" width="690rpx" height="300rpx"></van-image>
+					</view>
+				</swiper-item>
 			</swiper>
 		</view>
 		<!-- 主要操作 -->
@@ -20,12 +23,36 @@
 					icon-color="#fdaad2"
 					text="每日签到"
 					link-type="navigateTo"
-					url="/pages/user/daySignIn/daySignIn"
+					:url="jumpPath('/pages/user/daySignIn/daySignIn')"
 				/>
-				<van-grid-item icon="shop" icon-color="#f3b777" text="侏罗纪的家" />
-				<van-grid-item icon="video" icon-color="#cea6fe" text="直播预告" />
-				<van-grid-item icon="balance-list" icon-color="#aaf79d" text="订单转换" />
-				<van-grid-item icon="gift-card" icon-color="#fb8885" text="仙女买家秀" />
+				<van-grid-item
+					icon="shop"
+					icon-color="#f3b777"
+					text="侏罗纪的家"
+					link-type="navigateTo"
+					:url="jumpPath('/pages/user/daySignIn/daySignIn')"
+				/>
+				<van-grid-item
+					icon="video"
+					icon-color="#cea6fe"
+					text="直播预告"
+					link-type="navigateTo"
+					:url="jumpPath('/pages/user/daySignIn/daySignIn')"
+				/>
+				<van-grid-item
+					icon="balance-list"
+					icon-color="#aaf79d"
+					text="订单转换"
+					link-type="navigateTo"
+					:url="jumpPath('/pages/user/daySignIn/daySignIn')"
+				/>
+				<van-grid-item
+					icon="gift-card"
+					icon-color="#fb8885"
+					text="仙女买家秀"
+					link-type="navigateTo"
+					:url="jumpPath('/pages/user/daySignIn/daySignIn')"
+				/>
 			</van-grid>
 		</view>
 		<!-- 积分商品推荐位 -->
@@ -39,17 +66,18 @@
 
 			<view class="pro-bar">
 				<van-grid :border="false">
-					<van-grid-item use-slot v-for="item in [1, 2, 3, 4]" :key="item">
+					<!-- https://img.yzcdn.cn/vant/cat.jpeg -->
+					<van-grid-item use-slot v-for="item in prods" :key="item.id">
 						<div>
 							<van-image
-								width="100%"
+								width="130rpx"
 								height="130rpx"
 								radius="4"
 								fit="cover"
-								src="https://img.yzcdn.cn/vant/cat.jpeg"
+								:src="item.productImage"
 								class="prod-image"
 							/>
-							<text class="prod-text" slot="text">经典小香风织带 抱枕30x50cm</text>
+							<text class="prod-text" slot="text">{{ item.productName }}</text>
 						</div>
 					</van-grid-item>
 				</van-grid>
@@ -57,68 +85,55 @@
 		</view>
 		<!--  商品列表-->
 		<view class="pro-list">
-			<ProCard class="pro-unit" v-for="item in [1, 2, 3, 4]" :key="item"></ProCard>
-			<!-- <view class="pro-unit" >
-				<view class="">
-					<van-image
-						width="336rpx"
-						height="336rpx"
-						radius="4"
-						fit="cover"
-						src="https://img.yzcdn.cn/vant/cat.jpeg"
-						class="prod-image"
-					/>
-				</view>
-				<view class="pro-desc">
-					<view class="pro-tag"><van-tag plain type="danger" round>新品</van-tag></view>
-					<view class="pro-title">
-						<p class="prod-text">经典小香风织带抱枕 黑色 30x50cm</p>
-						<van-row>
-							<van-col span="16">
-								<text class="pro-price">2000</text>
-								<text class="pro-price-unit">积分</text>
-							</van-col>
-							<van-col span="8">
-								<van-tag plain size="medium" color="#ff6a5f" round>兑换</van-tag>
-							</van-col>
-						</van-row>
-					</view>
-				</view>
-			</view>
-		 -->
+			<ProCard class="pro-unit" v-for="item in prods" :key="item.id" :item="item" />
 		</view>
 	</view>
 </template>
 
 <script>
 import ProCard from '@/components/ProCard.vue';
+import { getProds } from '@/api/product.js';
+import { getBanner } from '@/api/user/user';
 export default {
 	components: {
 		ProCard
 	},
 	data() {
 		return {
-			title: 'Hello'
+			user: null,
+			prods: null,
+			banners: []
 		};
 	},
 	onLoad(options) {
-		this.getUser();
+		this.getRecomemdProd();
+		this.getBanners();
 	},
-	// mounted() {
-	// 	this.getUser();
-	// },
+
 	methods: {
-		getUser() {
-			this.$request.get('/auser/getUser').then(res => {
-				console.log(res);
-				getApp().globalData.user = res.data;
-			});
+		async getBanners() {
+			const result = await getBanner();
+			if (result.code === 200) {
+				this.banners = result.data;
+			}
+		},
+		jumpPath(realpath) {
+			return this.user ? realpath : '/pages/user/authorization/index';
+		},
+		async getRecomemdProd() {
+			const result = await getProds({ current: 1, pageSize: 20 });
+			if (result.code === 200) {
+				this.prods = result.data.records;
+			}
 		}
+	},
+	onShow() {
+		this.user = getApp().globalData.user;
 	}
 };
 </script>
 
-<style>
+<style scoped>
 .content {
 	display: flex;
 	flex-direction: column;
@@ -141,7 +156,7 @@ export default {
 	height: 300rpx;
 	line-height: 300rpx;
 	text-align: center;
-	background-color: aliceblue;
+	/* background-color: #fff; */
 }
 
 .home-operation {

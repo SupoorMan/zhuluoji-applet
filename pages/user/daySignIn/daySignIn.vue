@@ -1,6 +1,12 @@
 <template>
 	<view class="day-sign">
-		<van-nav-bar title="每日签到" class="navbar" fixed left-arrow></van-nav-bar>
+		<van-nav-bar
+			title="每日签到"
+			class="navbar"
+			fixed
+			left-arrow
+			@click-left="backPage"
+		></van-nav-bar>
 		<view class="">
 			<view class="top-inter">
 				<view class="inter-content">
@@ -82,7 +88,11 @@ export default {
 			calendarLineHeight: uni.upx2px(80)
 		};
 	},
-	methods: {}
+	methods: {
+		backPage() {
+			uni.navigateBack({ delta: 1 });
+		}
+	}
 };
 </script>
 

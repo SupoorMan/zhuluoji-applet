@@ -20,7 +20,8 @@
 							fit="cover"
 						/>
 						<view class="user-desc">
-							<view>{{ user.nickname || '登录' }}</view>
+							<view v-if="user">{{ user.nickname }}</view>
+							<navigator v-else url="/pages/user/authorization/index">登录</navigator>
 							<view class="user-code">当前积分：{{ user.integral || '0' }}</view>
 						</view>
 					</view>
@@ -49,11 +50,17 @@
 			</view>
 		</view>
 		<view class="page-list">
-			<van-tabs :active="active" animated v-if="activeKey == 1">
+			<van-tabs :active="active" animated v-if="activeKey == 1" @change="changeTab">
 				<van-tab :title="item.name" v-for="item in proCate" :key="item.key">
 					<view class="pro-list">
-						<ProCard class="pro-unit" />
-						<ProCard class="pro-unit" />
+						<navigator
+							v-for="item in prods"
+							:key="item.id"
+							:url="'/pages/shop/detail?productId=' + item.id"
+							class="pro-unit"
+						>
+							<ProCard :item="item" />
+						</navigator>
 					</view>
 				</van-tab>
 			</van-tabs>
@@ -74,6 +81,7 @@
 <script>
 import ProCard from '@/components/ProCard.vue';
 import RankCard from './components/RankCard.vue';
+import { getProds } from '@/api/product.js';
 export default {
 	components: {
 		ProCard,
@@ -82,21 +90,63 @@ export default {
 	data() {
 		return {
 			activeKey: 1,
+			active: '1',
 			tabs: [
-				{ name: '全部商品', key: 1 },
-				{ name: '我能兑换', key: 2 },
-				{ name: '人气排名', key: 3 },
-				{ name: '新品上新', key: 4 }
+				{ name: '全部商品', key: 11 },
+				{ name: '我能兑换', key: 12 },
+				{ name: '人气排名', key: 13 },
+				{ name: '新品上新', key: 14 }
 			],
 			proCate: [
-				{ name: '玻璃餐具', key: 'p1' },
-				{ name: '睡衣浴袍', key: 'p2' },
-				{ name: '床上用品', key: 'p3' },
-				{ name: '家居装点', key: 'p4' }
-			]
+				{ name: '玻璃餐具', key: '1' },
+				{ name: '睡衣浴袍', key: '2' },
+				{ name: '床上用品', key: '3' },
+				{ name: '家居装点', key: '4' }
+			],
+			page: {
+				current: 1,
+				pageSize: 20,
+				productType: '0'
+			},
+			tabProds: {},
+			user: null,
+			prods: null
 		};
 	},
-	methods: {}
+	onLoad(options) {
+		this.getRecomemdProd(this.page);
+	},
+	methods: {
+		async getRecomemdProd(params) {
+			const result = await getProds(params);
+			if (result.code === 200) {
+				if (!this.tabProds[params.productType]) {
+					this.tabProds[params.productType] = [];
+				}
+				if (params.productType && this.tabProds[params.productType]) {
+					if (params.current === 1) {
+						this.tabProds[params.productType] = result.data.records;
+						this.prods = result.data.records;
+					} else {
+						this.tabProds[params.productType] = [
+							...this.tabProds[params.productType],
+							...result.data.records
+						];
+						this.prods = [...this.prods, ...result.data.records];
+					}
+				}
+				// this.prods = result.data.records;
+			}
+		},
+		changeTab(event) {
+			this.active = event.detail.name;
+			this.page.productType = event.detail.name;
+			this.getRecomemdProd(this.page);
+		}
+	},
+	onShow() {
+		this.user = getApp().globalData.user;
+	}
 };
 </script>
 
@@ -156,15 +206,15 @@ export default {
 	text-align: center;
 }
 .tab.active {
-	background-color: #f9f9f9;
+	background-color: #fffaf060;
 	border-radius: 16rpx 16rpx 0 0;
 }
 
 .page-list {
 	padding: 24rpx;
-	background-color: #f9f9f9;
-	height: 100%;
-	--tabs-nav-background-color: #f9f9f9;
+	background-color: #fffaf060;
+	height: 70%;
+	--tabs-nav-background-color: transparent;
 	--tabs-bottom-bar-color: #4d4d4d;
 	--tabs-line-height: 68rpx;
 }
@@ -175,9 +225,13 @@ export default {
 .pro-list {
 	padding-top: 16rpx;
 }
+.pro-unit {
+	display: inline-block;
+}
 .pro-unit:nth-child(2n) {
 	margin-left: 16rpx;
 }
+
 .record-inter {
 	background: linear-gradient(to right, #fefeff, #ede5fc);
 	border-radius: 30rpx 0 0 30rpx;

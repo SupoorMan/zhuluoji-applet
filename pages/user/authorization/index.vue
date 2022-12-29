@@ -57,7 +57,7 @@ export default {
 			const authorize = await _this.wxloginres(this.code, userInfo);
 			if (authorize.code === 200) {
 				uni.setStorageSync('uid', authorize.data.uid);
-				_this.getUser();
+				await _this.getUser();
 				uni.showToast({
 					icon: 'none',
 					mask: true,
@@ -100,10 +100,11 @@ export default {
 				userInfo
 			});
 		},
-		getUser() {
-			getUserIofo().then(res => {
+		async getUser() {
+			const res = await getUserIofo();
+			if (res) {
 				getApp().globalData.user = res.data;
-			});
+			}
 		},
 		backPage() {
 			uni.navigateBack({ delta: 1 });

@@ -60,12 +60,24 @@
 <script>
 import OrderCard from './components/OrderCard';
 import Recommend from '../components/Recommend.vue';
+import { getOrder } from '@/api/order';
 export default {
 	components: { OrderCard, Recommend },
 	data() {
-		return {};
+		return {
+			detail: null
+		};
 	},
-	methods: {}
+	methods: {},
+	onLoad(option) {
+		let _this = this;
+		const eventChannel = this.getOpenerEventChannel();
+		eventChannel.on('acceptDataFromOpenerPage', function(data) {
+			if (data) {
+				_this.detail = data;
+			}
+		});
+	}
 };
 </script>
 

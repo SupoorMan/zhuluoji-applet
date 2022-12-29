@@ -1,22 +1,22 @@
 <template>
-	<view class="pro-unit">
+	<navigator class="pro-unit" :url="'/pages/shop/detail?productId=' + item.id">
 		<view class="">
 			<van-image
 				width="336rpx"
 				height="336rpx"
 				radius="4"
 				fit="cover"
-				src="https://img.yzcdn.cn/vant/cat.jpeg"
+				:src="item.productImage"
 				class="prod-image"
 			/>
 		</view>
 		<view class="pro-desc">
 			<view class="pro-tag"><van-tag plain type="danger" round>新品</van-tag></view>
 			<view class="pro-title">
-				<p class="prod-text">经典小香风织带抱枕 黑色 30x50cm</p>
+				<p class="prod-text">{{ item.productName }}</p>
 				<van-row>
 					<van-col span="16">
-						<text class="pro-price">2000</text>
+						<text class="pro-price">{{ item.integral }}</text>
 						<text class="pro-price-unit">积分</text>
 					</van-col>
 					<van-col span="8">
@@ -25,12 +25,17 @@
 				</van-row>
 			</view>
 		</view>
-	</view>
+	</navigator>
 </template>
 
 <script>
 export default {
 	name: 'ProCard',
+	props: {
+		item: {
+			type: Object
+		}
+	},
 	data() {
 		return {};
 	}
@@ -67,12 +72,13 @@ export default {
 	margin-bottom: 12rpx;
 }
 .pro-tag {
-	width: 140rpx;
+	width: 104rpx;
 	text-align: center;
 }
 
 .pro-title {
 	padding-right: 16rpx;
+	flex: 1;
 }
 
 .pro-price {

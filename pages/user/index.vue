@@ -17,27 +17,22 @@
 							fit="cover"
 						/>
 						<view class="user-desc">
-							<view>{{ user.nickname || '登录' }}</view>
+							<view v-if="user">{{ user.nickname }}</view>
+							<navigator v-else url="/pages/user/authorization/index">登录</navigator>
 							<view class="user-code">{{ user.uid || '' }}</view>
 						</view>
 					</view>
 				</van-col>
 				<van-col span="6">
 					<view style="margin-top: 70rpx;text-align: right;">
-						<van-button
-							icon="edit"
-							url="/pages/user/daySignIn/daySignIn"
-							size="small"
-							round
-							color="#fc817c"
+						<navigator
+							:url="jumpPath('/pages/user/daySignIn/daySignIn')"
+							class="sign-btn"
 						>
-							<navigator
-								url="/pages/user/daySignIn/daySignIn"
-								hover-class="navigator-hover"
-							>
+							<van-button icon="edit" size="small" round color="#fc817c">
 								签到
-							</navigator>
-						</van-button>
+							</van-button>
+						</navigator>
 					</view>
 				</van-col>
 			</van-row>
@@ -51,14 +46,14 @@
 				<text>LV{{ user.level ? user.level + 1 : 1 }}</text>
 			</view>
 			<van-progress track-color="#f0e2ff" color="#fff" :show-pivot="false" percentage="30" />
-			<view class="level-tip">100/300, 还差200经验值，便可升级</view>
+			<view class="level-tip">100/1000, 还差200经验值，便可升级</view>
 			<view class="level-content">
 				<view class="content-unit">
-					<view>{{ user.growth }}</view>
+					<view>{{ user.growth || 0 }}</view>
 					<view>成长值</view>
 				</view>
 				<view class="content-unit">
-					<view>{{ user.integral }}</view>
+					<view>{{ user.integral || 0 }}</view>
 					<view>积分</view>
 				</view>
 			</view>
@@ -73,13 +68,21 @@
 					</view>
 					<view class="">订单转换</view>
 				</van-grid-item>
-				<van-grid-item use-slot link-type="navigateTo" url="/pages/message/message">
+				<van-grid-item
+					use-slot
+					link-type="navigateTo"
+					:url="jumpPath('/pages/message/message')"
+				>
 					<view class="service-icon icon-2">
 						<van-icon name="comment-o" color="#fff" size="72rpx" />
 					</view>
 					<view class="">信息中心</view>
 				</van-grid-item>
-				<van-grid-item use-slot link-type="navigateTo" url="/pages/shop/order/afterSales">
+				<van-grid-item
+					use-slot
+					link-type="navigateTo"
+					:url="jumpPath('/pages/shop/order/afterSales')"
+				>
 					<view class="service-icon icon-3">
 						<van-icon name="logistics" color="#fff" size="72rpx" />
 					</view>
@@ -94,16 +97,14 @@
 					icon="orders-o"
 					text="订单"
 					link-type="navigateTo"
-					url="/pages/shop/order/list"
+					:url="jumpPath('/pages/shop/order/list')"
 				/>
 				<van-grid-item icon="service-o" text="客服" />
 				<van-grid-item
 					icon="contact"
 					text="用户"
 					link-type="navigateTo"
-					:url="
-						user ? '/pages/user/userInfo/userInfo' : '/pages/user/authorization/index'
-					"
+					:url="jumpPath('/pages/user/userInfo/userInfo')"
 				/>
 				<van-grid-item icon="records" text="建议分享" />
 				<van-grid-item icon="info-o" text="关于我们" />
@@ -117,10 +118,15 @@
 export default {
 	data() {
 		return {
-			user: null
+			user: null,
+			expens: 1000 // 经验值
 		};
 	},
-	methods: {},
+	methods: {
+		jumpPath(realpath) {
+			return this.user ? realpath : '/pages/user/authorization/index';
+		}
+	},
 	onShow() {
 		this.user = getApp().globalData.user;
 	}
@@ -141,7 +147,12 @@ export default {
 	margin: 0 auto;
 	padding-top: 32rpx;
 }
-
+.sign-btn {
+	background-color: #fc817c;
+	border-radius: 36rpx;
+	border: 4rpx solid #fff;
+	padding-right: 16rpx;
+}
 .user-info {
 	display: flex;
 	align-items: center;
