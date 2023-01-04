@@ -196,9 +196,7 @@ export default {
 							: [...this.prods, ...result.data.records];
 				}
 			}
-
 			this.loading = false;
-			this.$nextTick(() => this.$forceUpdate());
 		},
 		async changeTab(event) {
 			this.activeCate = event.detail.name;
@@ -217,6 +215,8 @@ export default {
 	height: auto;
 	min-height: 100%;
 	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
 }
 .search-pro {
 	display: flex;
@@ -232,7 +232,7 @@ export default {
 	text-align: left;
 }
 .user-card {
-	/* width: 668rpx; */
+	width: 100%;
 	margin: 0 auto;
 	padding-left: 24rpx;
 	padding-bottom: 32rpx;
@@ -276,7 +276,7 @@ export default {
 .page-list {
 	padding: 24rpx;
 	background-color: #fffff029;
-	height: 70%;
+	flex:1;
 	--tabs-nav-background-color: transparent;
 	--tabs-bottom-bar-color: #4d4d4d;
 	--tabs-line-height: 68rpx;

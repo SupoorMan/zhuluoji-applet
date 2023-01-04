@@ -67,14 +67,15 @@
 			<view class="pro-bar">
 				<van-grid :border="false">
 					<!-- https://img.yzcdn.cn/vant/cat.jpeg -->
-					<van-grid-item use-slot v-for="item in prods" :key="item.id">
+					<van-grid-item use-slot v-for="item in prods" :key="item.id" link-type="navigateTo"
+					:url="'/pages/shop/detail?productId=' + item.id">
 						<div>
 							<van-image
 								width="130rpx"
 								height="130rpx"
 								radius="4"
 								fit="cover"
-								:src="item.productImage"
+								:src="getProImage(item.productImage)"
 								class="prod-image"
 							/>
 							<text class="prod-text" slot="text">{{ item.productName }}</text>
@@ -119,6 +120,14 @@ export default {
 		},
 		jumpPath(realpath) {
 			return this.user ? realpath : '/pages/user/authorization/index';
+		},
+		getProImage(urls){
+			if (urls) {
+				const imgs = urls.split(',');
+				return imgs.length > 1 ? imgs[0] : urls;
+			} else {
+				return '';
+			}
 		},
 		async getRecomemdProd() {
 			const result = await getProds({ current: 1, pageSize: 20 });

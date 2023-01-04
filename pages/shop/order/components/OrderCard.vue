@@ -1,32 +1,47 @@
 <template>
-	<van-card thumb="https://img.yzcdn.cn/vant/cat.jpeg" custom-class="pro-card">
-		<view slot="title" class="title">
-			<view class="">经典小香风织带抱枕 黑色 30x50cm</view>
-			<view class="order-status">{{ orderState[order.status] }}</view>
-		</view>
-		<view slot="desc" class="price">
-			{{ order.integral }}
-			<text class="unit">积分</text>
-		</view>
-		<view slot="footer">
-			<van-button
-				size="mini"
-				class="button"
-				round
-				v-for="btn in buttons[order.status]"
-				:key="btn.key"
-			>
-				{{ btn.name }}
-			</van-button>
-		</view>
-	</van-card>
+	<navigator :url="'/pages/shop/order/detail?id=' + order.id">
+		<van-card :thumb="firstImage" custom-class="pro-card">
+			<view slot="title" class="title">
+				<view >{{order.productName}}</view>
+				<view class="order-status">{{ orderState[order.status] }}</view>
+			</view>
+			<view slot="desc" class="price">
+				{{ order.integral }}
+				<text class="unit"> 积分</text>
+			</view>
+			<view slot="footer">
+				<van-button
+					size="mini"
+					class="button"
+					round
+					v-for="btn in buttons[order.status]"
+					:key="btn.key"
+					@tap="clickButton(btn.key)"
+				>
+					{{ btn.name }}
+				</van-button>
+			</view>
+		</van-card>
+	</navigator>
 </template>
 
 <script>
+	import { updateStatus } from '@/api/order';
+	import Dialog from '@/wxcomponents/vant/dialog/dialog';
 export default {
 	props: {
 		order: {
 			type: Object
+		}
+	},
+	computed: {
+		firstImage() {
+			if (this.order && this.order.productImage) {
+				const imgs = this.order.productImage.split(',');
+				return imgs.length > 1 ? imgs[0] : this.order.productImage;
+			} else {
+				return '';
+			}
 		}
 	},
 	data() {
@@ -55,7 +70,57 @@ export default {
 			}
 		};
 	},
-	methods: {}
+	methods: {
+		
+		updateOrder(record) {
+			updateStatus({...this.order,...record}).then(res=>this.$emit('update',res.code===200))
+		},
+		clickButton(key) {
+			switch (key){
+				case 2: // 催发货
+					break;
+				case 3: // 改地址
+					break;
+				case 4: // 取消订单
+					uni.showModal({
+						content: '确认取消该订单吗',
+						success:(res)=> {
+							if(res.confirm){
+							this.updateOrder({status:-1})
+								
+							}
+						}
+					}) 
+				
+					break;
+				case 5: // 确认收货
+					this.updateOrder({status:3})
+					break;
+				case 6: // 去评价
+				uni.navigateTo({
+					url: '/pages/userReviews/add?productId='+this.order.productId
+				})
+					break;
+				case 7: // 删除订单
+					uni.showModal({
+						content: '确认删除该订单吗',
+						success:(res)=>  {
+							if(res.confirm) {
+								this.updateOrder({state:-1})
+							}
+						}
+					})
+					break;
+				case 8: // 重新兑换
+					uni.navigateTo({
+						url: '/pages/shop/detail?productId='+this.order.productId
+					})
+					break;
+				default:
+					break;
+			}
+		}
+	}
 };
 </script>
 
@@ -72,10 +137,12 @@ export default {
 }
 .title {
 	height: 118rpx;
+	justify-content: space-between;
 }
 .order-status {
 	color: #ff6a5f;
 	width: 120rpx;
+	text-align: right;
 }
 .price {
 	align-items: center;
@@ -83,6 +150,7 @@ export default {
 }
 .unit {
 	color: #666;
+	margin-left: 4rpx;
 }
 .button {
 	--button-mini-font-size: 22rpx;

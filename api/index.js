@@ -3,7 +3,8 @@ function https({
 	url,
 	data
 }) {
-	const baseUrl = "http://47.96.64.19:8888/" // "https://ny21368148.goho.co";
+	// const baseUrl = "http://47.96.64.19:8888" // "https://ny21368148.goho.co";
+	const baseUrl = "http://192.168.31.152:8888" // "https://ny21368148.goho.co";
 
 	let header = {
 		"Access-Control-Allow-Headers": 'token',

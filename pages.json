@@ -75,6 +75,7 @@
 					"van-radio-group": "/wxcomponents/vant/radio-group/index",
 					"van-radio": "/wxcomponents/vant/radio/index",
 					"van-dialog": "/wxcomponents/vant/dialog/index",
+					"van-action-sheet": "/wxcomponents/vant/action-sheet/index",
 					"van-icon": "/wxcomponents/vant/icon/index"
 				}
 			}

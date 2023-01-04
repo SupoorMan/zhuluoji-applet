@@ -19,3 +19,10 @@ export const updateAddress = async (data) => {
 export const getAddressList = async () => {
 	return await request.get('/appletDeliveryAddress/list');
 }
+
+/** @params 
+ *  @@description  获取配置信息
+ */
+export const getConfigInfos = async (data) => {
+	return await request.get('/configInfo/list',data);
+}

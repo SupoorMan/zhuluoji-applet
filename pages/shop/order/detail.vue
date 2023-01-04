@@ -1,10 +1,10 @@
 <template>
 	<view class="order-detail-page">
 		<view class="detail-content">
-			<OrderCard />
+			<OrderCard :order="detail"/>
 			<van-cell title="运费">
 				<template #default>
-					<text>运费（快递）：￥{{ detail.expressFee }}</text>
+					<text>运费（到付）：￥{{ detail.expressFee }}</text>
 				</template>
 			</van-cell>
 			<van-cell title="收货信息：" :border="false" title-width="200rpx">
@@ -20,20 +20,20 @@
 			</van-cell>
 			<van-cell title="创建时间：" :border="false" title-width="200rpx">
 				<template #default>
-					<text>{{ detail.createTime }}</text>
+					<text>{{ getTime(detail.createTime) }}</text>
 				</template>
 			</van-cell>
 			<van-cell title="付款时间：" :border="false" title-width="200rpx">
 				<template #default>
-					<text>{{ detail.payTime }}</text>
+					<text>{{ getTime(detail.payTime) }}</text>
 				</template>
 			</van-cell>
-			<van-cell title="发货时间：" :border="false" title-width="200rpx">
+			<van-cell title="发货时间：" :border="false" title-width="200rpx"  v-show="detail.status>1">
 				<template #default>
 					<text>{{ detail.updateTime }}</text>
 				</template>
 			</van-cell>
-			<van-cell title="完成时间：" :border="false" title-width="200rpx">
+			<van-cell title="完成时间：" :border="false" title-width="200rpx" v-show="detail.finishTime">
 				<template #default>
 					<text>{{ detail.finishTime }}</text>
 				</template>
@@ -58,7 +58,8 @@
 <script>
 import OrderCard from './components/OrderCard';
 import Recommend from '../components/Recommend.vue';
-import { getOrder } from '@/api/order';
+import { getOrders } from '@/api/order';
+import dayjs from 'dayjs';
 export default {
 	components: { OrderCard, Recommend },
 	data() {
@@ -66,15 +67,20 @@ export default {
 			detail: null
 		};
 	},
-	methods: {},
-	onLoad(option) {
-		let _this = this;
-		const eventChannel = this.getOpenerEventChannel();
-		eventChannel.on('acceptDataFromOpenerPage', function(data) {
+	methods: {
+		async getDetail(opt){
+			const {data} = await getOrders(opt)
 			if (data) {
-				_this.detail = data;
+				this.detail = data.records[0];
 			}
-		});
+		},
+		getTime (time) {
+			return dayjs(time).format('YYYY-MM-DD hh:mm:ss')
+		}
+	},
+	onLoad(option) {
+		this.getDetail(option)
+		
 	}
 };
 </script>
