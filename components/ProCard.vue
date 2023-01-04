@@ -6,12 +6,15 @@
 				height="336rpx"
 				radius="4"
 				fit="cover"
-				:src="item.productImage"
+				:src="firstImage"
 				class="prod-image"
 			/>
 		</view>
 		<view class="pro-desc">
-			<view class="pro-tag"><van-tag plain type="danger" round>新品</van-tag></view>
+			<view class="pro-tag">
+				<van-tag plain type="danger" round v-if="item.tagType === 0">新品</van-tag>
+				<van-tag plain type="danger" round v-else-if="item.tagType === 1">人气</van-tag>
+			</view>
 			<view class="pro-title">
 				<p class="prod-text">{{ item.productName }}</p>
 				<van-row>
@@ -34,6 +37,16 @@ export default {
 	props: {
 		item: {
 			type: Object
+		}
+	},
+	computed: {
+		firstImage() {
+			if (this.item && this.item.productImage) {
+				const imgs = this.item.productImage.split(',');
+				return imgs.length > 1 ? imgs[0] : this.item.productImage;
+			} else {
+				return '';
+			}
 		}
 	},
 	data() {

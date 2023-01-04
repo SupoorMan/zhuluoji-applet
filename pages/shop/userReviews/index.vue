@@ -6,12 +6,22 @@
 					<van-collapse :value="activeNames" @change="onChange">
 						<van-collapse-item name="1">
 							<view slot="title">
-								标题1
+								用户
 								<van-icon name="question-o" />
 							</view>
-							代码是写出来给人看的，附带能在机器上运行
+							<view class="review-tools">
+								<van-icon name="share-o" size="32rpx" />
+								分享
+								<van-icon name="like-o" size="32rpx" style="margin-left: 20rpx;" />
+								20
+							</view>
 						</van-collapse-item>
-						<van-collapse-item name="2" custom-class="review-collapse">
+						<van-collapse-item
+							custom-class="review-collapse"
+							v-for="item in list"
+							:name="item.id"
+							:key="item.id"
+						>
 							<template #icon>
 								<van-image
 									round
@@ -22,12 +32,18 @@
 								/>
 							</template>
 							<template #title>
-								用户名，Level0
+								{{ item.appletUserId }}，Level0
 							</template>
 							<template #value>
-								22-12-20
+								{{ dayjs(item.createTime).format('YY-MM-DD') }}
 							</template>
-							代码是写出来给人看的，附带能在机器上运行
+							{{ item.message }}
+							<div class="review-tools">
+								<van-icon name="share-o" size="32rpx" />
+								分享
+								<van-icon name="like-o" size="32rpx" />
+								20
+							</div>
 						</van-collapse-item>
 					</van-collapse>
 				</view>
@@ -38,6 +54,7 @@
 
 <script>
 import { getEvals } from '@/api/review';
+import dayjs from 'dayjs';
 export default {
 	data() {
 		return {
@@ -83,5 +100,10 @@ export default {
 	--tabs-line-height: 80rpx;
 }
 .review-collapse {
+}
+.review-tools {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 }
 </style>

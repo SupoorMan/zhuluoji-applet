@@ -1,17 +1,16 @@
 <template>
-	<van-card
-		thumb="https://img.yzcdn.cn/vant/cat.jpeg"
-		:custom-class="['pro-card', 'top', 'top-' + rank]"
-	>
-		<view slot="title" class="title">经典小香风织带抱枕 黑色 30x50cm</view>
-		<view slot="desc" class="desc">
-			<view class="price-body">
-				<text class="price">2000</text>
-				<text class="unit">积分</text>
+	<navigator :url="'/pages/shop/detail?productId=' + item.id">
+		<van-card :thumb="firstImage" :custom-class="['pro-card', 'top', 'top-' + rank]">
+			<view slot="title" class="title">{{ item.productName }}</view>
+			<view slot="desc" class="desc">
+				<view class="price-body">
+					<text class="price">{{ item.integral }}</text>
+					<text class="unit">积分</text>
+				</view>
+				<van-button size="mini" class="button" color="#ff6a5f" round plain>兑换</van-button>
 			</view>
-			<van-button size="mini" class="button" color="#ff6a5f" round plain>兑换</van-button>
-		</view>
-	</van-card>
+		</van-card>
+	</navigator>
 </template>
 
 <script>
@@ -19,6 +18,18 @@ export default {
 	props: {
 		rank: {
 			type: Number
+		},
+		item: {
+			type: Object
+		}
+	},
+	computed: {
+		firstImage() {
+			if (this.item && this.item.productImage && this.item.productImage.length > 1) {
+				return this.item.productImage.split(',')[0];
+			} else {
+				return '';
+			}
 		}
 	},
 	data() {
@@ -35,6 +46,7 @@ export default {
 	border-radius: 16rpx;
 	margin-top: 16rpx;
 	border: 2rpx solid #bdbdbd;
+	--card-thumb-size: 216rpx;
 }
 .pro-card.top-1,
 .top-2,
@@ -50,7 +62,6 @@ export default {
 .top-3:before {
 	content: '';
 
-	background-size: contain;
 	display: inline-block;
 	position: absolute;
 	height: 40rpx;
@@ -59,22 +70,26 @@ export default {
 	top: -4rpx;
 	text-align: center;
 	color: #fff;
+	z-index: 1;
 }
 
 .top-1:before {
 	content: '1';
 	background: url('@/static/shop/rank-t.png') no-repeat center;
+	background-size: contain;
 }
 .top-2:before {
 	content: '2';
 	background: url('@/static/shop/rank-t.png') no-repeat center;
+	background-size: contain;
 }
 .top-3:before {
 	content: '3';
 	background: url('@/static/shop/rank-t.png') no-repeat center;
+	background-size: contain;
 }
 .title {
-	height: 118rpx;
+	height: 162rpx;
 }
 .order-status {
 	color: #ff6a5f;

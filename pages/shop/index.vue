@@ -44,35 +44,51 @@
 				v-for="tab in tabs"
 				:key="tab.key"
 				:class="{ active: activeKey === tab.key }"
-				@tap="activeKey = tab.key"
+				@tap="changeType(tab.key)"
 			>
 				{{ tab.name }}
 			</view>
 		</view>
 		<view class="page-list">
-			<van-tabs :active="active" animated v-if="activeKey == 1" @change="changeTab">
-				<van-tab :title="item.name" v-for="item in proCate" :key="item.key">
+			<van-tabs :active="activeCate" v-if="activeKey == 11" @change="changeTab">
+				<!-- 全部商品 -->
+				<van-tab :title="tab.name" v-for="tab in proCate" :key="tab.key" :name="tab.key">
 					<view class="pro-list">
-						<navigator
+						<ProCard
+							class="pro-unit"
 							v-for="item in prods"
 							:key="item.id"
-							:url="'/pages/shop/detail?productId=' + item.id"
-							class="pro-unit"
-						>
-							<ProCard :item="item" />
-						</navigator>
+							:item="item"
+						/>
 					</view>
 				</van-tab>
 			</van-tabs>
-			<view class="pro-list" v-else-if="activeKey == 3">
-				<RankCard rank="1" />
-				<RankCard rank="2" />
-				<RankCard rank="3" />
-				<RankCard rank="4" />
+			<view class="pro-list" v-else-if="activeKey == 13">
+				<!-- 排行商品 -->
+
+				<RankCard
+					v-for="(item, index) in prods"
+					:key="item.key"
+					:rank="index + 1"
+					:item="item"
+				/>
 			</view>
 			<view class="pro-list" v-else>
-				<ProCard class="pro-unit" />
-				<ProCard class="pro-unit" />
+				<!-- 我能兑换、新品 -->
+				<ProCard
+					class="pro-unit"
+					v-for="(item, index) in prods"
+					:key="item.key"
+					:item="item"
+				/>
+			</view>
+			<view class="custom-image" v-if="(!prods || prods.length === 0) && !loading">
+				<van-empty image="/static/empty.png">
+					<template #description>
+						<view>抱歉，暂无商品</view>
+						<view>小编正在整理货仓，尽请期待</view>
+					</template>
+				</van-empty>
 			</view>
 		</view>
 	</view>
@@ -89,8 +105,8 @@ export default {
 	},
 	data() {
 		return {
-			activeKey: 1,
-			active: '1',
+			activeKey: 11,
+			activeCate: '0',
 			tabs: [
 				{ name: '全部商品', key: 11 },
 				{ name: '我能兑换', key: 12 },
@@ -98,10 +114,10 @@ export default {
 				{ name: '新品上新', key: 14 }
 			],
 			proCate: [
-				{ name: '玻璃餐具', key: '1' },
-				{ name: '睡衣浴袍', key: '2' },
-				{ name: '床上用品', key: '3' },
-				{ name: '家居装点', key: '4' }
+				{ name: '玻璃餐具', key: '0' },
+				{ name: '睡衣浴袍', key: '1' },
+				{ name: '床上用品', key: '2' },
+				{ name: '家居装点', key: '3' }
 			],
 			page: {
 				current: 1,
@@ -109,39 +125,85 @@ export default {
 				productType: '0'
 			},
 			tabProds: {},
+			loading: true,
 			user: null,
 			prods: null
 		};
 	},
 	onLoad(options) {
-		this.getRecomemdProd(this.page);
+		setTimeout(() => this.getRecomemdProd(this.page), 100);
 	},
 	methods: {
-		async getRecomemdProd(params) {
-			const result = await getProds(params);
-			if (result.code === 200) {
-				if (!this.tabProds[params.productType]) {
-					this.tabProds[params.productType] = [];
-				}
-				if (params.productType && this.tabProds[params.productType]) {
-					if (params.current === 1) {
-						this.tabProds[params.productType] = result.data.records;
-						this.prods = result.data.records;
-					} else {
-						this.tabProds[params.productType] = [
-							...this.tabProds[params.productType],
-							...result.data.records
-						];
-						this.prods = [...this.prods, ...result.data.records];
-					}
-				}
-				// this.prods = result.data.records;
+		changeType(active) {
+			this.activeKey = active;
+			switch (active) {
+				case 11:
+					this.page = {
+						current: 1,
+						pageSize: 20,
+						productType: '0'
+					};
+					break;
+				case 12:
+					this.page = {
+						current: 1,
+						pageSize: 20
+					};
+					break;
+				case 13:
+					this.page = {
+						current: 1,
+						pageSize: 20,
+						tagType: 1
+					};
+					break;
+				case 14:
+					this.page = {
+						current: 1,
+						pageSize: 20,
+						tagType: 0
+					};
+					break;
 			}
-		},
-		changeTab(event) {
-			this.active = event.detail.name;
-			this.page.productType = event.detail.name;
 			this.getRecomemdProd(this.page);
+		},
+		async getRecomemdProd(params) {
+			this.loading = true;
+			if (this.activeKey == 11) {
+				if (this.tabProds[params.productType]) {
+					this.prods = this.tabProds[params.productType];
+					this.loading = false;
+					return;
+				}
+				const result = await getProds({ ...params, shopping: 1 });
+				this.tabProds[params.productType] = [];
+				if (params.current === 1) {
+					this.tabProds[params.productType] = result.data.records;
+					this.prods = result.data.records;
+				} else {
+					this.tabProds[params.productType] = [
+						...this.tabProds[params.productType],
+						...result.data.records
+					];
+					this.prods = [...this.prods, ...result.data.records];
+				}
+			} else {
+				const result = await getProds({ ...params, shopping: 1 });
+				if (result.code === 200) {
+					this.prods =
+						params.current === 1
+							? result.data.records
+							: [...this.prods, ...result.data.records];
+				}
+			}
+
+			this.loading = false;
+			this.$nextTick(() => this.$forceUpdate());
+		},
+		async changeTab(event) {
+			this.activeCate = event.detail.name;
+			this.page.productType = event.detail.name;
+			await this.getRecomemdProd(this.page);
 		}
 	},
 	onShow() {
@@ -152,7 +214,9 @@ export default {
 
 <style>
 .shop-page {
-	height: 100%;
+	height: auto;
+	min-height: 100%;
+	overflow-x: hidden;
 }
 .search-pro {
 	display: flex;
@@ -192,7 +256,6 @@ export default {
 	padding-top: 24rpx;
 }
 .tabs {
-	/* width: 100%; */
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
@@ -206,13 +269,13 @@ export default {
 	text-align: center;
 }
 .tab.active {
-	background-color: #fffaf060;
+	background-color: #fffff029;
 	border-radius: 16rpx 16rpx 0 0;
 }
 
 .page-list {
 	padding: 24rpx;
-	background-color: #fffaf060;
+	background-color: #fffff029;
 	height: 70%;
 	--tabs-nav-background-color: transparent;
 	--tabs-bottom-bar-color: #4d4d4d;
@@ -257,5 +320,15 @@ export default {
 }
 .record-inter + .record-inter {
 	margin-top: 16rpx;
+}
+.custom-image {
+	background-color: #fffffe;
+	border-radius: 24rpx;
+	text-align: center;
+	margin-top: 24rpx;
+}
+.van-empty__image {
+	width: 525rpx !important;
+	height: 185rpx !important;
 }
 </style>
