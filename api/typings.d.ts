@@ -64,7 +64,24 @@ declare namespace API {
 		status?: number;
 		updateTime?: string;
 	};
-
+	type OrderConvert = {
+		/** 小程序用户id */
+		appletUserId?: number;
+		/** 消费价格 */
+		costs?: string;
+		createTime?: string;
+		id?: number;
+		/** 订单图片证明 */
+		images?: string;
+		/** 订单号 */
+		orderNo?: string;
+		/** 备注 */
+		remark?: string;
+		/** 审核状态: 0.未通过 1.通过 */
+		status?: number;
+		/** 类型: 0.微信 1.淘宝 2.小红书 3.抖音 4.其他 */
+		type?: number;
+	};
 	type IntegralProduct = {
 		/** 详情图文内容 */
 		details?: string;
@@ -139,6 +156,12 @@ declare namespace API {
 
 	interface pageOrderParams extends PageParams {
 		appletUserId?: number;
+	}
+	interface pageOrderConvertParams extends PageParams {
+		/** 审核状态: 0.未通过 1.通过 */
+		status?: number;
+		/** 类型: 0.微信 1.淘宝 2.小红书 3.抖音 4.其他 */
+		type?: number;
 	}
 
 	interface PageAfterSalesParams extends PageParams {

@@ -181,7 +181,6 @@
 			"style": {
 				"navigationBarTitleText": "授权",
 				"enablePullDownRefresh": false,
-				"navigationStyle": "custom",
 				"usingComponents": {
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index"
 				}
@@ -256,12 +255,31 @@
 					"van-icon": "/wxcomponents/vant/icon/index",
 					"van-grid": "/wxcomponents/vant/grid/index",
 					"van-grid-item": "/wxcomponents/vant/grid-item/index"
-
 				}
-
 			}
-
+		}, {
+			"path": "pages/user/transferOrder/transfer",
+			"style": {
+				"navigationBarTitleText": "订单转化",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-cell-group": "/wxcomponents/vant/cell-group/index",
+					"van-uploader": "/wxcomponents/vant/uploader/index",
+					"van-popup": "/wxcomponents/vant/popup/index",
+					"van-picker": "/wxcomponents/vant/picker/index",
+					"van-icon": "/wxcomponents/vant/icon/index",
+					"van-action-sheet": "/wxcomponents/vant/action-sheet/index",
+					"van-field": "/wxcomponents/vant/field/index"
+				}
+			}
+		}, {
+			"path": "pages/user/transferOrder/list",
+			"style": {
+				"navigationBarTitleText": "转化记录",
+				"enablePullDownRefresh": false
+			}
 		}
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

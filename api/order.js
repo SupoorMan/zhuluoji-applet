@@ -41,3 +41,17 @@ export const updateOrderAddr = async (data) => {
 export const updateStatus = async (data) => {
 	return request.post('/orders/updateStatus', data);
 }
+
+/** 新增订单兑换
+ * @param {API.OrderConvert}
+ */
+export const addOConvert = async (data) => {
+	return request.post('/orderConvert/add', data);
+}
+
+/** 列表查询订单兑换
+ * @param {API.pageOrderConvertParams}
+ */
+export const pageOrderConvert = async (data) => {
+	return request.get('/orderConvert/page', data);
+}

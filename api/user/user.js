@@ -24,3 +24,10 @@ export const login = async (data) => {
 export const getBanner = async () => {
 	return await request.get('/banner/list');
 }
+
+/**
+ * @description 获取消息
+ */
+export const getNotice = async (data) => {
+	return await request.get('/appletNotify/page');
+}

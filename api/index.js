@@ -1,14 +1,17 @@
+const baseUrl = "http://47.96.64.19:8888" // "https://ny21368148.goho.co";
+// const baseUrl = "http://192.168.31.152:8888" // "https://ny21368148.goho.co";
 function https({
 	method,
 	url,
-	data
+	data,
+	header = {}
 }) {
-	// const baseUrl = "http://47.96.64.19:8888" // "https://ny21368148.goho.co";
-	const baseUrl = "http://192.168.31.152:8888" // "https://ny21368148.goho.co";
 
-	let header = {
+	header = {
+
 		"Access-Control-Allow-Headers": 'token',
 		'content-type': method === 'POST' ? 'application/json' : 'application/x-www-form-urlencoded',
+		...header,
 	};
 	const token = uni.getStorageSync('token')
 	if (token) {
@@ -39,6 +42,7 @@ function https({
 	})
 }
 const request = {
+	baseUrl,
 	get(url, data) {
 		return https({
 			method: 'GET',
@@ -53,6 +57,20 @@ const request = {
 			data: data || {}
 		})
 	},
+	file(url, data, file) {
+		return https({
+			method: 'POST',
+			header: {
+				"content-type": "multipart/form-data"
+			},
+			url: data.area ? url + '?area=' + data.area : url,
+			data: {
+				'file': file
+			}
+		})
+
+	}
+
 }
 
 export default request

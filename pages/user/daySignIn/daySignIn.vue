@@ -108,21 +108,17 @@
 					}
 				})
 				this.signDays = [...signDays]
-
 			},
 			getDaysArrayByMonth() { // 当月每日日期
 				//获取当前月份包含的天数
 				var daysInMonth = dayjs().daysInMonth();
 				var arrDays = [];
-
 				//循环获取月份里的日期
 				while (daysInMonth) {
-					var current = dayjs().date(daysInMonth).format('YYYY/MM/DD');
-
-					arrDays.push(new Date(current));
+					var current = dayjs().date(daysInMonth);
+					arrDays.push(current);
 					daysInMonth--;
 				}
-
 				return arrDays.reverse();
 			},
 			backPage() {
@@ -136,7 +132,8 @@
 				} = await signDay()
 				if (data.includes('已签')) {
 					uni.showModal({
-						content: "今日已签到"
+						content: "今日已签到",
+						showCancel: false
 					})
 				} else {
 					uni.showModal({

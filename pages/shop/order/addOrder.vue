@@ -2,12 +2,7 @@
 	<view class="order-detail-page">
 		<view style="background: #fff;">
 			<view class="detail-content">
-				<van-card
-					num="1"
-					:desc="'简介:'+detail.introduction"
-					:title="detail.productName"
-					:thumb="getProImage(detail.productImage||'')"
-				>
+				<van-card num="1" :desc="'简介:' + detail.introduction" :title="detail.productName" :thumb="getProImage(detail.productImage || '')">
 					<template #price>
 						<text>规格：{{ detail.amount }}</text>
 					</template>
@@ -18,45 +13,18 @@
 		</view>
 		<view class="contract-cell">
 			<van-cell-group :border="false">
-				<van-cell title="配送" title-width="100rpx" is-link @tap="transferSelectShow=true">
-					<template #default>
-						<text>{{currentTransf}}</text>
-					</template>
-				</van-cell>
-				<van-cell title="运费">
-					<template #default>
-						<text>运费（到付）：￥{{expressFee}}</text>
-					</template>
-				</van-cell>
-
-				<van-cell
-					is-link
-					title="地址"
-					:border="false"
-					title-width="100rpx"
-					:value="filedValue || '请选择地区'"
-					@click="showSelectAddress = true"
-				></van-cell>
+				<van-cell title="配送" title-width="100rpx" value="普通快递"></van-cell>
+				<van-cell title="运费" value="包邮"></van-cell>
+				<van-cell is-link title="地址" :border="false" title-width="100rpx" :value="filedValue || '请选择地区'" @click="showSelectAddress = true"></van-cell>
 			</van-cell-group>
 			<van-popup round position="bottom" :show="showSelectAddress" @close="onAddrChange">
 				<van-radio-group :value="selectAddress">
 					<view style="line-height: 80rpx;padding-left: 24rpx;">选择配送地址</view>
 					<van-cell-group>
-						<van-cell
-							use-label-slot
-							center
-							clickable
-							v-for="item in address"
-							:key="item.id"
-							:data-name="item.id"
-							:border="false"
-							@click="onAddrSelect"
-						>
+						<van-cell use-label-slot center clickable v-for="item in address" :key="item.id" :data-name="item.id" :border="false" @click="onAddrSelect">
 							<template #title>
 								<text>{{ item.receiver + ' ' + item.phone + ' ' }}</text>
-								<van-tag mark type="danger" v-if="item.defaults === 1">
-									默认
-								</van-tag>
+								<van-tag mark type="danger" v-if="item.defaults === 1">默认</van-tag>
 							</template>
 							<template #label>
 								{{ item.province + item.city + item.area + item.address }}
@@ -67,18 +35,8 @@
 				</van-radio-group>
 			</van-popup>
 			<van-dialog id="van-dialog" />
-			<!-- 快递选择 -->
-			<van-action-sheet
-			  :show="transferSelectShow"
-			  :actions="transferList"
-				:cancel-text="'取消'"
-			  @close="transferSelectShow=false"
-			  @select="onTransSelect"
-			/>
 		</view>
-		<view class="btn-box">
-			<van-button @click="addOrder" round block color="#F9CD90">确认兑换</van-button>
-		</view>
+		<view class="btn-box"><van-button @click="addOrder" round block color="#F9CD90">确认兑换</van-button></view>
 	</view>
 </template>
 
@@ -86,7 +44,7 @@
 import OrderCard from './components/OrderCard';
 import Recommend from '../components/Recommend.vue';
 import { getOrder, addOrder2 } from '@/api/order';
-import { getAddressList ,getConfigInfos} from '@/api/setting/setting';
+import { getAddressList, getConfigInfos } from '@/api/setting/setting';
 import Dialog from '@/wxcomponents/vant/dialog/dialog';
 export default {
 	components: { OrderCard, Recommend },
@@ -96,15 +54,11 @@ export default {
 			filedValue: '',
 			showSelectAddress: false,
 			selectAddress: null, // 选中的地址
-			address: null,
-			expressFee: 0,
-			transferList: null,
-			transferSelectShow: false,
-			currentTransf: '' // 当前快递类型
+			address: null
 		};
 	},
 	methods: {
-		getProImage(urls){
+		getProImage(urls) {
 			if (urls) {
 				const imgs = urls.split(',');
 				return imgs.length > 1 ? imgs[0] : urls;
@@ -112,24 +66,11 @@ export default {
 				return '';
 			}
 		},
-		onTransSelect(event){ // 选择快递
-			console.log(event.detail)
-			this.expressFee  = event.detail.value
-			this.currentTransf  = event.detail.name
-		},
 		onAddrChange() {
 			this.showSelectAddress = false;
 			if (this.selectAddress) {
 				const nowAddr = this.address.find(n => n.id === this.selectAddress);
-				this.filedValue =
-					nowAddr.receiver +
-					',' +
-					nowAddr.phone +
-					',' +
-					nowAddr.province +
-					nowAddr.city +
-					nowAddr.area +
-					nowAddr.address;
+				this.filedValue = nowAddr.receiver + ',' + nowAddr.phone + ',' + nowAddr.province + nowAddr.city + nowAddr.area + nowAddr.address;
 			}
 		},
 		onAddrSelect(event) {
@@ -141,27 +82,19 @@ export default {
 			this.address = data;
 		},
 		async getTansfer() {
-			const { data } = await getConfigInfos({key:'transfer'});
-			this.transferList = data.map(n=> ({name: n.value,value: n.context}));
-			this.expressFee = data[0].context
-			this.currentTransf = data[0].value
+			const { data } = await getConfigInfos({ key: 'transfer' });
+			this.transferList = data.map(n => ({ name: n.value, value: n.context }));
+			this.expressFee = data[0].context;
+			this.currentTransf = data[0].value;
 		},
 		async addOrder() {
-			if (!this.selectAddress) {
-				uni.showToast({
-					icon: 'none',
-					title: '请选择配送地址'
-				});
-				return;
-			}
 			Dialog.confirm({
 				message: '确认使用' + this.detail.integral + '积分兑换'
 			})
 				.then(async () => {
 					const result = await addOrder2({
 						amount: 1,
-						expressFee: this.expressFee,
-						transferDetail: this.currentTransf,
+						expressFee: 0,
 						integral: this.detail.integral,
 						productId: this.detail.id,
 						receiveAddress: this.filedValue,
@@ -169,11 +102,10 @@ export default {
 						status: 1
 					});
 					if (result.code === 200) {
-						Dialog.alert({ title: '兑换成功', message: '可至“我的订单”中查看详情'  })
-						.then(() => {
-							  // on close
-							  uni.navigateBack({delta:1})
-							});
+						Dialog.alert({ title: '兑换成功', message: '可至“我的订单”中查看详情' }).then(() => {
+							// on close
+							uni.navigateBack({ delta: 1 });
+						});
 					} else {
 						uni.showToast({
 							icon: 'error',
@@ -189,7 +121,6 @@ export default {
 	onLoad(option) {
 		let _this = this;
 		this.getList();
-		this.getTansfer();
 		const eventChannel = this.getOpenerEventChannel();
 		eventChannel.on('acceptDataFromOpenerPage', function(data) {
 			if (data) {

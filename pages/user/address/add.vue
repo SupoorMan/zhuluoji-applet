@@ -50,45 +50,23 @@
 			</van-cell>
 		</van-cell-group>
 		<van-cell-group inset>
-			<van-cell
-				title="粘贴文本识别"
-				use-label-slot
-				title-class="title"
-				custom-class="read-address"
-			>
+			<van-cell title="粘贴文本识别" use-label-slot title-class="title" custom-class="read-address">
 				<template #label>
 					<textarea v-model="copyValue"></textarea>
-					<van-button
-						size="mini"
-						color="#c5abff"
-						class="read-button"
-						style="float: right;"
-						@tap="getArea"
-					>
+					<van-button size="mini" color="#c5abff" class="read-button" style="float: right;" @tap="getArea">
 						识别信息
 					</van-button>
 				</template>
 			</van-cell>
 		</van-cell-group>
 		<view class="button">
-			<van-button
-				type="default"
-				block
-				round
-				color="linear-gradient(to right, #cca0ff, #eadefc)"
-				@tap="toAdd"
-			>
+			<van-button type="default" block round color="linear-gradient(to right, #cca0ff, #eadefc)" @tap="toAdd">
 				{{ add.id ? '确认修改' : '确认添加' }}
 			</van-button>
 		</view>
 
 		<!-- 地区 -->
-		<van-popup
-			:show="showSelectAddress"
-			round
-			position="bottom"
-			@close="showSelectAddress = false"
-		>
+		<van-popup :show="showSelectAddress" round position="bottom" @close="showSelectAddress = false">
 			<van-area
 				:value="fieldValue"
 				title="请选择省市区"
@@ -163,7 +141,7 @@ export default {
 		async toAdd() {
 			const keys = Object.keys(this.add);
 			for (var i = 0; i < keys.length; i++) {
-				if (this.add[i] === '') {
+				if (this.add[keys[i]] === '') {
 					uni.showToast({
 						icon: 'none',
 						title: '必填项不能为空'

@@ -9,33 +9,31 @@
 </template>
 
 <script>
-	import ProCard from '@/components/ProCard.vue';
-	export default {
-		components: {
-			ProCard
-		},
-		data() {
-			return {};
-		},
-		methods: {
-
-		}
-	};
+import ProCard from '@/components/ProCard.vue';
+export default {
+	components: {
+		ProCard
+	},
+	data() {
+		return {};
+	},
+	methods: {}
+};
 </script>
 
 <style>
-	.recommend {
-		padding-top: 32rpx;
-	}
+.recommend {
+	padding-top: 32rpx;
+}
 
-	.pro-list {
-		padding-top: 16rpx;
-		padding-left: 24rpx;
-		padding-right: 24rpx;
-		margin: 0 auto;
-	}
+.pro-list {
+	padding-top: 16rpx;
+	padding-left: 24rpx;
+	padding-right: 24rpx;
+	margin: 0 auto;
+}
 
-	.pro-unit:nth-child(2n) {
-		margin-left: 16rpx;
-	}
+.pro-unit:nth-child(2n) {
+	margin-left: 16rpx;
+}
 </style>
