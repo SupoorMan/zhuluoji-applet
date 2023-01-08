@@ -1,7 +1,18 @@
 <template>
-	<view></view>
+	<view class="add-recommend-page"></view>
 </template>
 
-<script></script>
+<script>
+export default {
+	data() {
+		return {};
+	},
+	methods: {},
+	onLoad(opt) {}
+};
+</script>
 
-<style></style>
+<style>
+.add-recommend-page {
+}
+</style>
