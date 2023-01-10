@@ -38,116 +38,116 @@
 </template>
 
 <script>
-	import {
-		updateUser
-	} from '@/api/user/user.js';
-	import {
-		areaList
-	} from '@vant/area-data';
-	import dayjs from 'dayjs';
+import {
+	updateUser
+} from '@/api/user.js';
+import {
+	areaList
+} from '@vant/area-data';
+import dayjs from 'dayjs';
 
-	export default {
-		// components: { CascaderAddress },
-		data() {
-			return {
-				showSelectYear: false,
-				showSelectSex: false,
-				showSelectAddress: false,
-				columns: [{
-						text: '男',
-						value: 1
-					},
-					{
-						text: '女',
-						value: 0
-					}
-				],
-				currentDate: new Date().getTime(),
-				maxDate: new Date().getTime(),
-				minDate: new Date('1940-01-01').getTime(),
-				formatter(type, value) {
-					if (type === 'year') {
-						return `${value}年`;
-					}
-					if (type === 'month') {
-						return `${value}月`;
-					}
-					return value;
-				},
-				areaList: areaList,
-				fieldValue: '',
-				user: null
-			};
-		},
-		onLoad(options) {},
-		onShow() {
-			this.user = getApp().globalData.user;
-			console.log('useinfo', this.user);
-		},
-		methods: {
-			async selectSex(event) {
-				const {
-					value,
-					index
-				} = event.detail;
-				console.log(value, index);
-				const success = await this.update({
-					gender: value.value
-				});
-				if (success) {
-					this.user.gender = value.value;
-				}
-				this.showSelectSex = false;
+export default {
+	// components: { CascaderAddress },
+	data() {
+		return {
+			showSelectYear: false,
+			showSelectSex: false,
+			showSelectAddress: false,
+			columns: [{
+				text: '男',
+				value: 1
 			},
-			async confirmYear(event) {
-				const birthday = dayjs(event.detail).format('YYYY-MM-DD');
-
-				const success = await this.update({
-					birthday: birthday
-				});
-				if (success) {
-					this.user.birthday = birthday;
-				}
-				this.showSelectYear = false;
-			},
-			async onFinish(event) {
-				this.fieldValue = event.values;
-				const textArr = event.values.map(n => n.name);
-
-				const success = await this.update({
-					province: textArr[0],
-					city: textArr[1],
-					country: textArr[2]
-				});
-				if (success) {
-					this.addresstext = textArr.join('/');
-				}
-				this.showSelectAddress = false;
-			},
-			async update(userinfo) {
-				const {
-					code
-				} = await updateUser({
-					...userinfo,
-					id: this.user.id
-				});
-				if (code === 200) {
-					return true;
-				}
-				return false;
+			{
+				text: '女',
+				value: 0
 			}
+			],
+			currentDate: new Date().getTime(),
+			maxDate: new Date().getTime(),
+			minDate: new Date('1940-01-01').getTime(),
+			formatter(type, value) {
+				if (type === 'year') {
+					return `${value}年`;
+				}
+				if (type === 'month') {
+					return `${value}月`;
+				}
+				return value;
+			},
+			areaList: areaList,
+			fieldValue: '',
+			user: null
+		};
+	},
+	onLoad(options) { },
+	onShow() {
+		this.user = getApp().globalData.user;
+		console.log('useinfo', this.user);
+	},
+	methods: {
+		async selectSex(event) {
+			const {
+				value,
+				index
+			} = event.detail;
+			console.log(value, index);
+			const success = await this.update({
+				gender: value.value
+			});
+			if (success) {
+				this.user.gender = value.value;
+			}
+			this.showSelectSex = false;
+		},
+		async confirmYear(event) {
+			const birthday = dayjs(event.detail).format('YYYY-MM-DD');
+
+			const success = await this.update({
+				birthday: birthday
+			});
+			if (success) {
+				this.user.birthday = birthday;
+			}
+			this.showSelectYear = false;
+		},
+		async onFinish(event) {
+			this.fieldValue = event.values;
+			const textArr = event.values.map(n => n.name);
+
+			const success = await this.update({
+				province: textArr[0],
+				city: textArr[1],
+				country: textArr[2]
+			});
+			if (success) {
+				this.addresstext = textArr.join('/');
+			}
+			this.showSelectAddress = false;
+		},
+		async update(userinfo) {
+			const {
+				code
+			} = await updateUser({
+				...userinfo,
+				id: this.user.id
+			});
+			if (code === 200) {
+				return true;
+			}
+			return false;
 		}
-	};
+	}
+};
 </script>
 
 <style>
-	.info-page {
-		background: #fff;
-	}
+.info-page {
+	background: #fff;
+}
 
-	.title {
-		line-height: 80rpx;
-		padding-left: 32rpx;
-		font-weight: 600;
-	}
+.title {
+	line-height: 80rpx;
+	padding-left: 32rpx;
+	font-weight: 600;
+}
 </style>

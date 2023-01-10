@@ -1,4 +1,4 @@
-import request from '../index.js';
+import request from './index.js';
 
 /** @params 
  *  @@description  新增收货地址
@@ -24,5 +24,5 @@ export const getAddressList = async () => {
  *  @@description  获取配置信息
  */
 export const getConfigInfos = async (data) => {
-	return await request.get('/configInfo/list',data);
+	return await request.get('/configInfo/list', data);
 }

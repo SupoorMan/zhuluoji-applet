@@ -8,7 +8,7 @@
 				"enablePullDownRefresh": false,
 				"usingComponents": {
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
-					"van-icon": "/wxcomponents/vant/icon/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-grid": "/wxcomponents/vant/grid/index",
 					"van-grid-item": "/wxcomponents/vant/grid-item/index",
 					// "van-tag": "/wxcomponents/vant/tag/index",
@@ -38,7 +38,7 @@
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
 					"van-tab": "/wxcomponents/vant/tab/index",
 					"van-tabs": "/wxcomponents/vant/tabs/index",
-					"van-icon": "/wxcomponents/vant/icon/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-empty": "/wxcomponents/vant/empty/index",
 					"van-col": "/wxcomponents/vant/col/index"
 					// "van-image": "/wxcomponents/vant/image/index"
@@ -56,7 +56,7 @@
 					"van-cell-group": "/wxcomponents/vant/cell-group/index",
 					"van-col": "/wxcomponents/vant/col/index",
 					"van-field": "/wxcomponents/vant/field/index",
-					"van-icon": "/wxcomponents/vant/icon/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-goods-action": "/wxcomponents/vant/goods-action/index",
 					"van-goods-action-icon": "/wxcomponents/vant/goods-action-icon/index",
 					"van-goods-action-button": "/wxcomponents/vant/goods-action-button/index"
@@ -74,9 +74,8 @@
 					"van-popup": "/wxcomponents/vant/popup/index",
 					"van-radio-group": "/wxcomponents/vant/radio-group/index",
 					"van-radio": "/wxcomponents/vant/radio/index",
-					"van-dialog": "/wxcomponents/vant/dialog/index",
-					"van-action-sheet": "/wxcomponents/vant/action-sheet/index",
-					"van-icon": "/wxcomponents/vant/icon/index"
+					"van-dialog": "/wxcomponents/vant/dialog/index"
+					// "van-icon": "/wxcomponents/vant/icon/index"
 				}
 			}
 		},
@@ -115,7 +114,7 @@
 				"navigationStyle": "custom",
 				"usingComponents": {
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
-					"van-icon": "/wxcomponents/vant/icon/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-grid": "/wxcomponents/vant/grid/index",
 					"van-grid-item": "/wxcomponents/vant/grid-item/index",
 					"van-progress": "/wxcomponents/vant/progress/index",
@@ -132,7 +131,7 @@
 				"enablePullDownRefresh": false,
 				"usingComponents": {
 					"van-cell": "/wxcomponents/vant/cell/index",
-					"van-icon": "/wxcomponents/vant/icon/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-field": "/wxcomponents/vant/field/index",
 					"van-datetime-picker": "/wxcomponents/vant/datetime-picker/index",
 					"van-popup": "/wxcomponents/vant/popup/index",
@@ -218,7 +217,7 @@
 				"navigationBarTitleText": "订单详情",
 				"enablePullDownRefresh": false,
 				"usingComponents": {
-					"van-icon": "/wxcomponents/vant/icon/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-cell-group": "/wxcomponents/vant/cell-group/index"
 				}
 			}
@@ -246,7 +245,7 @@
 				"usingComponents": {
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
 					"van-calendar": "/wxcomponents/vant/calendar/index",
-					"van-icon": "/wxcomponents/vant/icon/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-grid": "/wxcomponents/vant/grid/index",
 					"van-grid-item": "/wxcomponents/vant/grid-item/index"
 				}
@@ -261,8 +260,7 @@
 					"van-uploader": "/wxcomponents/vant/uploader/index",
 					"van-popup": "/wxcomponents/vant/popup/index",
 					"van-picker": "/wxcomponents/vant/picker/index",
-					"van-icon": "/wxcomponents/vant/icon/index",
-					"van-action-sheet": "/wxcomponents/vant/action-sheet/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-field": "/wxcomponents/vant/field/index"
 				}
 			}
@@ -283,9 +281,10 @@
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
 					"van-tab": "/wxcomponents/vant/tab/index",
 					"van-card": "/wxcomponents/vant/card/index",
+					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-divider": "/wxcomponents/vant/divider/index",
-					"van-search": "/wxcomponents/vant/search/index",
 					"van-collapse": "/wxcomponents/vant/collapse/index",
+					"van-cell-group": "/wxcomponents/vant/cell-group/index",
 					"van-tabs": "/wxcomponents/vant/tabs/index"
 				}
 			}
@@ -304,6 +303,7 @@
 			"van-cell": "/wxcomponents/vant/cell/index",
 			"van-row": "/wxcomponents/vant/row/index",
 			"van-col": "/wxcomponents/vant/col/index",
+			"van-icon": "/wxcomponents/vant/icon/index",
 			"van-image": "/wxcomponents/vant/image/index",
 			"van-divider": "/wxcomponents/vant/divider/index"
 		},

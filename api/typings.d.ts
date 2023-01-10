@@ -3,6 +3,15 @@ declare namespace API {
 		current?: number;
 		pageSize?: number;
 	}
+	type PageHomeParams = {
+		topId?: number;
+		status?: number;
+	} & PageParams;
+
+	type PageHomeEvalParams = {
+		homeId?: number;
+	} & PageParams;
+
 	interface ConfigInfoParams {
 		/** key */
 		key?: string;
@@ -367,4 +376,27 @@ declare namespace API {
 		/** 更新时间 */
 		updateTime?: string;
 	}
+	type ZhuluojiHomeEvaluate = {
+		/** 小程序用户id */
+		appletUserId?: number;
+		createTime?: string;
+		/** 评论标签 */
+		evaluateTag?: string;
+		/** 侏罗纪的家id */
+		homeId?: number;
+		id?: number;
+		/** 评价消息 */
+		message?: string;
+		/** 积分商品id */
+		productId?: number;
+		/** 红星数 */
+		starter?: number;
+		/** 状态: 0.正常 1.删除 2.隐藏 */
+		state?: number;
+		/** 上级id */
+		topId?: number;
+		/** 评价类型 1.积分商品 2.侏罗纪之家*/
+		type?: number;
+	};
+
 }

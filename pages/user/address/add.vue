@@ -1,51 +1,18 @@
 <template>
 	<view class="add-address">
 		<van-cell-group>
-			<van-field
-				required
-				label="收件人"
-				:value="add.receiver"
-				placeholder="请输入收件人"
-				border="false"
-				@change="onChange($event, 'receiver')"
-			/>
-			<van-field
-				required
-				label="手机号"
-				type="number"
-				:value="add.phone"
-				placeholder="请输入手机号"
-				border="false"
-				@change="onChange($event, 'phone')"
-			/>
-			<van-field
-				required
-				label="选择地址"
-				:value="add.province + add.city + add.area"
-				placeholder="选择地址"
-				border="false"
-				is-link
-				readonly
-				@tap="showSelectAddress = true"
-			/>
-			<van-field
-				required
-				label="详细地址"
-				:value="add.address"
-				placeholder="请输入详细地址"
-				type="textarea"
-				autosize
-				border="false"
-				@change="onChange($event, 'address')"
-			/>
+			<van-field required label="收件人" :value="add.receiver" placeholder="请输入收件人" border="false"
+				@change="onChange($event, 'receiver')" />
+			<van-field required label="手机号" type="number" :value="add.phone" placeholder="请输入手机号" border="false"
+				@change="onChange($event, 'phone')" />
+			<van-field required label="选择地址" :value="add.province + add.city + add.area" placeholder="选择地址"
+				border="false" is-link readonly @tap="showSelectAddress = true" />
+			<van-field required label="详细地址" :value="add.address" placeholder="请输入详细地址" type="textarea" autosize
+				border="false" @change="onChange($event, 'address')" />
 			<van-cell title="设为默认">
 				<template #default>
-					<van-switch
-						:checked="add.defaults === 1"
-						@change="setDefault"
-						size="40rpx"
-						active-color="#e5d4ff"
-					/>
+					<van-switch :checked="add.defaults === 1" @change="setDefault" size="40rpx"
+						active-color="#e5d4ff" />
 				</template>
 			</van-cell>
 		</van-cell-group>
@@ -67,20 +34,15 @@
 
 		<!-- 地区 -->
 		<van-popup :show="showSelectAddress" round position="bottom" @close="showSelectAddress = false">
-			<van-area
-				:value="fieldValue"
-				title="请选择省市区"
-				:area-list="areaList"
-				@confirm="onFinish"
-				@close="showSelectAddress = false"
-			/>
+			<van-area :value="fieldValue" title="请选择省市区" :area-list="areaList" @confirm="onFinish"
+				@close="showSelectAddress = false" />
 		</van-popup>
 	</view>
 </template>
 
 <script>
 import { areaList } from '@vant/area-data';
-import { addAddress, updateAddress } from '@/api/setting/setting';
+import { addAddress, updateAddress } from '@/api/setting';
 export default {
 	data() {
 		return {
@@ -175,7 +137,7 @@ export default {
 	onLoad(option) {
 		let _this = this;
 		const eventChannel = this.getOpenerEventChannel();
-		eventChannel.on('acceptDataFromOpenerPage', function(data) {
+		eventChannel.on('acceptDataFromOpenerPage', function (data) {
 			if (data) {
 				_this.add = data;
 			}
@@ -189,20 +151,24 @@ export default {
 	background: #fff;
 	height: 100%;
 }
+
 .button {
 	width: 448rpx;
 	margin: 80rpx auto;
 }
+
 .read-address {
 	margin-top: 32rpx;
 	border: 2rpx solid #454545;
 	border-radius: 16rpx;
 	overflow: hidden;
 }
+
 .title::before {
 	content: '|';
 	margin-right: 4rpx;
 }
+
 .read-button {
 	border: 2rpx solid #454545;
 	border-radius: 24rpx;

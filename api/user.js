@@ -1,4 +1,4 @@
-import request from '../index.js';
+import request from './index.js';
 
 /**
  * @description  传id和需要更新的字段即可

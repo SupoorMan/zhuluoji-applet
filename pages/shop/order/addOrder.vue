@@ -2,7 +2,8 @@
 	<view class="order-detail-page">
 		<view style="background: #fff;">
 			<view class="detail-content">
-				<van-card num="1" :desc="'简介:' + detail.introduction" :title="detail.productName" :thumb="getProImage(detail.productImage || '')">
+				<van-card num="1" :desc="'简介:' + detail.introduction" :title="detail.productName"
+					:thumb="getProImage(detail.productImage || '')">
 					<template #price>
 						<text>规格：{{ detail.amount }}</text>
 					</template>
@@ -15,13 +16,15 @@
 			<van-cell-group :border="false">
 				<van-cell title="配送" title-width="100rpx" value="普通快递"></van-cell>
 				<van-cell title="运费" value="包邮"></van-cell>
-				<van-cell is-link title="地址" :border="false" title-width="100rpx" :value="filedValue || '请选择地区'" @click="showSelectAddress = true"></van-cell>
+				<van-cell is-link title="地址" :border="false" title-width="100rpx" :value="filedValue || '请选择地区'"
+					@click="showSelectAddress = true"></van-cell>
 			</van-cell-group>
 			<van-popup round position="bottom" :show="showSelectAddress" @close="onAddrChange">
 				<van-radio-group :value="selectAddress">
 					<view style="line-height: 80rpx;padding-left: 24rpx;">选择配送地址</view>
 					<van-cell-group>
-						<van-cell use-label-slot center clickable v-for="item in address" :key="item.id" :data-name="item.id" :border="false" @click="onAddrSelect">
+						<van-cell use-label-slot center clickable v-for="item in address" :key="item.id"
+							:data-name="item.id" :border="false" @click="onAddrSelect">
 							<template #title>
 								<text>{{ item.receiver + ' ' + item.phone + ' ' }}</text>
 								<van-tag mark type="danger" v-if="item.defaults === 1">默认</van-tag>
@@ -44,7 +47,7 @@
 import OrderCard from './components/OrderCard';
 import Recommend from '../components/Recommend.vue';
 import { getOrder, addOrder2 } from '@/api/order';
-import { getAddressList, getConfigInfos } from '@/api/setting/setting';
+import { getAddressList, getConfigInfos } from '@/api/setting';
 import Dialog from '@/wxcomponents/vant/dialog/dialog';
 export default {
 	components: { OrderCard, Recommend },
@@ -122,7 +125,7 @@ export default {
 		let _this = this;
 		this.getList();
 		const eventChannel = this.getOpenerEventChannel();
-		eventChannel.on('acceptDataFromOpenerPage', function(data) {
+		eventChannel.on('acceptDataFromOpenerPage', function (data) {
 			if (data) {
 				_this.detail = data;
 			}
@@ -140,6 +143,7 @@ export default {
 	align-items: center;
 	flex-direction: column;
 }
+
 .detail-content {
 	margin: 0 16rpx 24rpx 16rpx;
 	width: 716rpx;
@@ -153,9 +157,11 @@ export default {
 	--cell-font-size: 26rpx;
 	--divider-margin: 8rpx;
 }
+
 .van-card__thumb {
 	background-color: #ffffff;
 }
+
 .contract-cell {
 	padding-top: 24rpx;
 	flex: 1;
@@ -163,6 +169,7 @@ export default {
 	background-color: #ffffff;
 	--cell-background-color: #ffffff;
 }
+
 .btn-box {
 	background-color: #f5f5f5;
 	padding: 32rpx 80rpx;

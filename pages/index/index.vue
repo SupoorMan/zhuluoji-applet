@@ -18,41 +18,16 @@
 		<!-- 主要操作 -->
 		<view class="home-operation">
 			<van-grid column-num="5">
-				<van-grid-item
-					icon="sign"
-					icon-color="#fdaad2"
-					text="每日签到"
-					link-type="navigateTo"
-					:url="jumpPath('/pages/user/daySignIn/daySignIn')"
-				/>
-				<van-grid-item
-					icon="shop"
-					icon-color="#f3b777"
-					text="侏罗纪的家"
-					link-type="navigateTo"
-					:url="jumpPath('/pages/home/index')"
-				/>
-				<van-grid-item
-					icon="video"
-					icon-color="#cea6fe"
-					text="直播预告"
-					link-type="navigateTo"
-					:url="jumpPath('/pages/user/daySignIn/daySignIn')"
-				/>
-				<van-grid-item
-					icon="balance-list"
-					icon-color="#aaf79d"
-					text="订单转换"
-					link-type="navigateTo"
-					:url="jumpPath('/pages/user/transferOrder/transfer')"
-				/>
-				<van-grid-item
-					icon="gift-card"
-					icon-color="#fb8885"
-					text="仙女买家秀"
-					link-type="navigateTo"
-					:url="jumpPath('/pages/user/daySignIn/daySignIn')"
-				/>
+				<van-grid-item icon="sign" icon-color="#fdaad2" text="每日签到" link-type="navigateTo"
+					:url="jumpPath('/pages/user/daySignIn/daySignIn')" />
+				<van-grid-item icon="shop" icon-color="#f3b777" text="侏罗纪的家" link-type="navigateTo"
+					:url="jumpPath('/pages/home/index')" />
+				<van-grid-item icon="video" icon-color="#cea6fe" text="直播预告" link-type="navigateTo"
+					:url="jumpPath('/pages/user/daySignIn/daySignIn')" />
+				<van-grid-item icon="balance-list" icon-color="#aaf79d" text="订单转换" link-type="navigateTo"
+					:url="jumpPath('/pages/user/transferOrder/transfer')" />
+				<van-grid-item icon="gift-card" icon-color="#fb8885" text="仙女买家秀" link-type="navigateTo"
+					:url="jumpPath('/pages/user/daySignIn/daySignIn')" />
 			</van-grid>
 		</view>
 		<!-- 积分商品推荐位 -->
@@ -67,22 +42,11 @@
 			<view class="pro-bar">
 				<van-grid :border="false">
 					<!-- https://img.yzcdn.cn/vant/cat.jpeg -->
-					<van-grid-item
-						use-slot
-						v-for="item in prods"
-						:key="item.id"
-						link-type="navigateTo"
-						:url="'/pages/shop/detail?productId=' + item.id"
-					>
+					<van-grid-item use-slot v-for="item in prods" :key="item.id" link-type="navigateTo"
+						:url="'/pages/shop/detail?productId=' + item.id">
 						<div>
-							<van-image
-								width="130rpx"
-								height="130rpx"
-								radius="4"
-								fit="cover"
-								:src="getProImage(item.productImage)"
-								class="prod-image"
-							/>
+							<van-image width="130rpx" height="130rpx" radius="4" fit="cover"
+								:src="getProImage(item.productImage)" class="prod-image" />
 							<text class="prod-text" slot="text">{{ item.productName }}</text>
 						</div>
 					</van-grid-item>
@@ -99,7 +63,7 @@
 <script>
 import ProCard from '@/components/ProCard.vue';
 import { getProds } from '@/api/product.js';
-import { getBanner } from '@/api/user/user';
+import { getBanner } from '@/api/user';
 export default {
 	components: {
 		ProCard

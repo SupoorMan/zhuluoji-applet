@@ -1,5 +1,6 @@
-const baseUrl = "http://47.96.64.19:8888" // "https://ny21368148.goho.co";
-// const baseUrl = "http://192.168.31.152:8888" // "https://ny21368148.goho.co";
+// const baseUrl = "http://47.96.64.19:8888" ;
+const baseUrl = "http://192.168.31.152:8888";
+
 function https({
 	method,
 	url,
@@ -18,9 +19,9 @@ function https({
 		header.token = token
 		header.uid = uni.getStorageSync('uid')
 	}
-	uni.showLoading({
-		title: '加载中'
-	})
+	// uni.showLoading({
+	// 	title: '加载中'
+	// })
 	return new Promise((resolve, reject) => {
 		uni.request({
 			header: header,
@@ -32,7 +33,7 @@ function https({
 					uni.setStorageSync('token', res.header.token)
 				}
 				resolve(res.data)
-				uni.hideLoading()
+				// uni.hideLoading()
 			},
 			fail: (res) => {
 				reject(res.data)
@@ -68,7 +69,6 @@ const request = {
 				'file': file
 			}
 		})
-
 	}
 
 }

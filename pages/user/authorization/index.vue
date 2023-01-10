@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { login, getUserIofo, updateUser } from '@/api/user/user.js';
+import { login, getUserIofo, updateUser } from '@/api/user.js';
 import WXBizDataCrypt from '@/utils/WXBizDataCrypt';
 export default {
 	data() {

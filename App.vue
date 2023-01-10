@@ -1,4 +1,5 @@
 <script>
+import { userStore } from '@/store';
 export default {
 	globalData: {
 		user: null
@@ -34,6 +35,7 @@ export default {
 					_this.$request.get('/auser/getUser').then(res => {
 						console.log(res);
 						_this.globalData.user = res.data;
+						// userStore().setUser(res.data)
 					});
 				} else {
 					// _this.login(res.authSetting['scope.userInfo']);

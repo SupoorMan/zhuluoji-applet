@@ -25,13 +25,7 @@
 			<van-dialog id="van-dialog" />
 		</view>
 		<view class="button">
-			<van-button
-				type="default"
-				block
-				round
-				color="linear-gradient(to right, #cca0ff, #eadefc)"
-				@tap="toAdd"
-			>
+			<van-button type="default" block round color="linear-gradient(to right, #cca0ff, #eadefc)" @tap="toAdd">
 				新增地址
 			</van-button>
 		</view>
@@ -39,7 +33,7 @@
 </template>
 
 <script>
-import { getAddressList } from '@/api/setting/setting';
+import { getAddressList } from '@/api/setting';
 import Dialog from '@/wxcomponents/vant/dialog/dialog';
 export default {
 	data() {
@@ -51,7 +45,7 @@ export default {
 		toEdit(item) {
 			uni.navigateTo({
 				url: '/pages/user/address/add',
-				success: function(res) {
+				success: function (res) {
 					// 通过eventChannel向被打开页面传送数据
 					res.eventChannel.emit('acceptDataFromOpenerPage', item);
 				}
@@ -96,14 +90,17 @@ export default {
 	flex-direction: column;
 	background: #f9f9f9;
 }
+
 .addresslist {
 	flex: 1;
 	width: 100%;
 }
+
 .address-unit {
 	position: relative;
 	padding-top: 32rpx;
 }
+
 .delete {
 	background-color: #fc817c;
 	height: inherit;
@@ -115,6 +112,7 @@ export default {
 	text-align: center;
 	font-size: 24rpx;
 }
+
 .button {
 	width: 448rpx;
 	margin: 0 auto;
