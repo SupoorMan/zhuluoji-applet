@@ -1,7 +1,7 @@
 <template>
 	<view class="order-detail-page">
 		<view class="detail-content">
-			<OrderCard :order="detail"/>
+			<OrderCard :order="detail" />
 			<van-cell title="运费">
 				<template #default>
 					<text>运费（到付）：￥{{ detail.expressFee }}</text>
@@ -23,12 +23,12 @@
 					<text>{{ getTime(detail.createTime) }}</text>
 				</template>
 			</van-cell>
-			<van-cell title="付款时间：" :border="false" title-width="200rpx">
+			<!-- <van-cell title="付款时间：" :border="false" title-width="200rpx">
 				<template #default>
 					<text>{{ getTime(detail.payTime) }}</text>
 				</template>
-			</van-cell>
-			<van-cell title="发货时间：" :border="false" title-width="200rpx"  v-show="detail.status>1">
+			</van-cell> -->
+			<van-cell title="发货时间：" :border="false" title-width="200rpx" v-show="detail.status>1">
 				<template #default>
 					<text>{{ detail.updateTime }}</text>
 				</template>
@@ -56,52 +56,61 @@
 </template>
 
 <script>
-import OrderCard from './components/OrderCard';
-import Recommend from '../components/Recommend.vue';
-import { getOrders } from '@/api/order';
-import dayjs from 'dayjs';
-export default {
-	components: { OrderCard, Recommend },
-	data() {
-		return {
-			detail: null
-		};
-	},
-	methods: {
-		async getDetail(opt){
-			const {data} = await getOrders(opt)
-			if (data) {
-				this.detail = data.records[0];
+	import OrderCard from './components/OrderCard';
+	import Recommend from '../components/Recommend.vue';
+	import {
+		getOrders
+	} from '@/api/order';
+	import dayjs from 'dayjs';
+	export default {
+		components: {
+			OrderCard,
+			Recommend
+		},
+		data() {
+			return {
+				detail: null
+			};
+		},
+		methods: {
+			async getDetail(opt) {
+				const {
+					data
+				} = await getOrders(opt)
+				if (data) {
+					this.detail = data.records[0];
+				}
+			},
+			getTime(time) {
+				return dayjs(time).format('YYYY-MM-DD hh:mm:ss')
 			}
 		},
-		getTime (time) {
-			return dayjs(time).format('YYYY-MM-DD hh:mm:ss')
+		onLoad(option) {
+			this.getDetail(option)
+
 		}
-	},
-	onLoad(option) {
-		this.getDetail(option)
-		
-	}
-};
+	};
 </script>
 
 <style>
-.order-detail-page {
-	height: auto;
-	padding-top: 24rpx;
-}
-.detail-content {
-	margin: 0 32rpx 24rpx 32rpx;
-	background-color: #fffff9;
-	border-radius: 16rpx;
-	overflow: hidden;
-	--card-background-color: #fffff9;
-	--cell-background-color: #fffff9;
-	--cell-line-height: 28rpx;
-	--cell-font-size: 26rpx;
-}
-.contract-cell {
-	margin-top: 24rpx;
-	--cell-background-color: #fffff9;
-}
+	.order-detail-page {
+		height: auto;
+		padding-top: 24rpx;
+	}
+
+	.detail-content {
+		margin: 0 32rpx 24rpx 32rpx;
+		background-color: #fffff9;
+		border-radius: 16rpx;
+		overflow: hidden;
+		--card-background-color: #fffff9;
+		--cell-background-color: #fffff9;
+		--cell-line-height: 28rpx;
+		--cell-font-size: 26rpx;
+	}
+
+	.contract-cell {
+		margin-top: 24rpx;
+		--cell-background-color: #fffff9;
+	}
 </style>

@@ -13,9 +13,16 @@ export const updateEvaluate = async (data) => {
 	return await request.post('/productEvaluate/update', data);
 }
 
-/** 评论分页查询 分页查询 GET /product/page
+/** 评论分页查询 分页查询 GET /productEvaluate/page
  * @param { API.PageProdEval }  
  */
 export const getEvals = async (params) => {
 	return await request.get('/productEvaluate/page', params);
+}
+
+/** 查询商品评价数量 GET /productEvaluate/count
+ * @param { API.PageProdEval }  
+ */
+export const getEvalsCount = async (params) => {
+	return await request.get('/productEvaluate/count', params);
 }

@@ -16,7 +16,7 @@
 				<van-col span="12">
 					<view class="prod-title">{{ detail.productName }}</view>
 					<view class="price">
-						{{ detail.integral }}
+						{{ detail.list[0].integral }}
 						<text class="price-unit">积分</text>
 					</view>
 				</van-col>
@@ -29,8 +29,8 @@
 			</van-row>
 		</view>
 		<view class="prod-detail-info">
-			<van-field readonly label="规格:" :value="detail.amount || '-'" :border="false" title-width="2.5em"
-				label-class="detail-title" />
+			<van-field readonly label="规格:" :value="detail.list[0].sizes +detail.list[0].colors || '-'" :border="false"
+				title-width="2.5em" label-class="detail-title" />
 			<van-field readonly label="类型:" :value="proCate[detail.productType]" :border="false" title-width="2.5em"
 				label-class="detail-title" />
 			<van-field readonly label="发货:" value="3-15个工作日" :border="false" title-width="2.5em"
@@ -38,7 +38,7 @@
 		</view>
 		<view class="prod-title-info">
 			<van-row>
-				<van-col span="12">用户评价（00）</van-col>
+				<van-col span="12">用户评价（{{evals.total}}）</van-col>
 				<van-col span="12" style="text-align: right;">
 					<navigator :url="'/pages/shop/userReviews/index?productId=' + detail.id">
 						查看全部
@@ -46,13 +46,14 @@
 					</navigator>
 				</van-col>
 			</van-row>
-			<view>
+			<view v-if="evals && evals.total>0">
 				<view style="display: flex;align-items: center;">
-					<van-image width="20" height="20" src="https://img.yzcdn.cn/vant/cat.jpeg" round
+					<van-image width="24" height="24" :src="evals.first.avatarUrl" round
 						style="margin-top: 20rpx;margin-right: 8rpx;" />
-					<text>用户名, LV0</text>
+					<text>{{evals.first.nickname}} ,</text>
+					<text style="color:#edba00;font-size:24rpx;">LV{{evals.first.level}}</text>
 				</view>
-				<view>评价内容。。。。。。。。。。。。。。。。</view>
+				<view>{{evals.first.message}}</view>
 			</view>
 		</view>
 		<view class="prod-photo-info">
@@ -75,6 +76,9 @@
 	import {
 		getProdDetail
 	} from '@/api/product';
+	import {
+		getEvals
+	} from '@/api/review';
 	export default {
 		data() {
 			return {
@@ -85,7 +89,8 @@
 					3: '床上用品',
 					4: '家居装点'
 				},
-				proBanner: []
+				proBanner: [],
+				evals: null // 评价对象 
 			};
 		},
 		methods: {
@@ -103,12 +108,24 @@
 					this.proBanner = data.productImage.split(',');
 				}
 			},
+			async getEval(options) {
+				const {
+					data
+				} = await getEvals({
+					current: 1,
+					pageSize: 1,
+					...options
+				})
+				this.evals = {
+					total: data.total,
+					first: data.total > 0 ? data.records[0] : {}
+				}
+			},
 			onClickButton() {
 				const prod = this.detail;
 				uni.navigateTo({
 					url: '/pages/shop/order/addOrder',
 					success: function(res) {
-						console.log(prod);
 						// 通过eventChannel向被打开页面传送数据
 						res.eventChannel.emit('acceptDataFromOpenerPage', prod);
 					}
@@ -117,6 +134,7 @@
 		},
 		onLoad(options) {
 			this.getDetail(options);
+			this.getEval(options)
 		}
 	};
 </script>

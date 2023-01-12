@@ -8,25 +8,29 @@
 				"enablePullDownRefresh": false,
 				"usingComponents": {
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
-					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-grid": "/wxcomponents/vant/grid/index",
 					"van-grid-item": "/wxcomponents/vant/grid-item/index",
-					// "van-tag": "/wxcomponents/vant/tag/index",
-					// "van-cell": "/wxcomponents/vant/cell/index",
-					// "van-row": "/wxcomponents/vant/row/index",
 					"van-col": "/wxcomponents/vant/col/index"
-					// "van-image": "/wxcomponents/vant/image/index"
 				}
 			}
-
 		}, {
 			"path": "pages/video/index",
 			"style": {
 				"navigationBarTitleText": "直播预告",
 				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"usingComponents": {
+					"van-cell-group": "/wxcomponents/vant/cell-group/index"
+				}
 			}
-
+		}, {
+			"path": "pages/video/appointment/index",
+			"style": {
+				"navigationBarTitleText": "我的预约",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-cell-group": "/wxcomponents/vant/cell-group/index"
+				}
+			}
 		},
 		{
 			"path": "pages/shop/index",
@@ -38,13 +42,10 @@
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
 					"van-tab": "/wxcomponents/vant/tab/index",
 					"van-tabs": "/wxcomponents/vant/tabs/index",
-					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-empty": "/wxcomponents/vant/empty/index",
 					"van-col": "/wxcomponents/vant/col/index"
-					// "van-image": "/wxcomponents/vant/image/index"
 				}
 			}
-
 		}, {
 			"path": "pages/shop/detail",
 			"style": {
@@ -56,7 +57,6 @@
 					"van-cell-group": "/wxcomponents/vant/cell-group/index",
 					"van-col": "/wxcomponents/vant/col/index",
 					"van-field": "/wxcomponents/vant/field/index",
-					// "van-icon": "/wxcomponents/vant/icon/index",
 					"van-goods-action": "/wxcomponents/vant/goods-action/index",
 					"van-goods-action-icon": "/wxcomponents/vant/goods-action-icon/index",
 					"van-goods-action-button": "/wxcomponents/vant/goods-action-button/index"
@@ -74,8 +74,8 @@
 					"van-popup": "/wxcomponents/vant/popup/index",
 					"van-radio-group": "/wxcomponents/vant/radio-group/index",
 					"van-radio": "/wxcomponents/vant/radio/index",
+					"van-picker": "/wxcomponents/vant/picker/index",
 					"van-dialog": "/wxcomponents/vant/dialog/index"
-					// "van-icon": "/wxcomponents/vant/icon/index"
 				}
 			}
 		},
@@ -99,11 +99,12 @@
 			"style": {
 				"navigationBarTitleText": "新增评价",
 				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
 				"usingComponents": {
-					"van-cell-group": "/wxcomponents/vant/cell-group/index",
-					"van-col": "/wxcomponents/vant/col/index",
-					"van-tab": "/wxcomponents/vant/tab/index",
-					"van-tabs": "/wxcomponents/vant/tabs/index"
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+					"van-card": "/wxcomponents/vant/card/index",
+					"van-checkbox": "/wxcomponents/vant/checkbox/index",
+					"van-uploader": "/wxcomponents/vant/uploader/index"
 				}
 			}
 		}, {
@@ -140,7 +141,6 @@
 					"van-picker": "/wxcomponents/vant/picker/index"
 				}
 			}
-
 		}, {
 			"path": "pages/user/address/address",
 			"style": {
@@ -156,7 +156,6 @@
 					"van-button": "/wxcomponents/vant/button/index"
 				}
 			}
-
 		},
 		{
 			"path": "pages/message/message",
@@ -177,7 +176,6 @@
 					"van-nav-bar": "/wxcomponents/vant/nav-bar/index"
 				}
 			}
-
 		},
 		{
 			"path": "pages/user/address/add",
@@ -194,7 +192,6 @@
 					"van-area": "/wxcomponents/vant/area/index"
 				}
 			}
-
 		},
 		{
 			"path": "pages/shop/order/list",
@@ -207,7 +204,6 @@
 					// "van-card": "/wxcomponents/vant/card/index",
 					"van-empty": "/wxcomponents/vant/empty/index",
 					"van-cell-group": "/wxcomponents/vant/cell-group/index"
-
 				}
 			}
 		},
@@ -221,9 +217,7 @@
 					"van-cell-group": "/wxcomponents/vant/cell-group/index"
 				}
 			}
-
 		},
-
 		// , {
 		// 	"path": "pages/shop/order/afterSales",
 		// 	"style": {
@@ -289,7 +283,6 @@
 				}
 			}
 		}
-
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -308,7 +301,6 @@
 			"van-divider": "/wxcomponents/vant/divider/index"
 		},
 		"lazyCodeLoading": "requiredComponents"
-
 	},
 	"tabBar": {
 		"color": "#909399",
@@ -337,7 +329,6 @@
 			"text": "我的"
 		}]
 	},
-
 	"uniIdRouter": {},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)

@@ -19,7 +19,7 @@ declare namespace API {
 		value?: string;
 	}
 
-	interface ProdDetailParams {
+	type ProdDetailParams = {
 		/** productId */
 		productId?: number;
 	}
@@ -46,6 +46,13 @@ declare namespace API {
 		/** 密码 */
 		pwd?: string;
 	};
+	type PageActDetailParams = {
+		sources?: number, /* 来源: 0.家纺直播 1.家居直播 */
+		status?: number, // 状态: 0.关闭 1.开启
+		type?: number, // 类型: 0.直播预告 1.买家秀
+		appletUserId?: string,
+		dates?: string // 日期: 格式.2022-12-29
+	} & PageParams;
 	type Order = {
 		/** 购买规格/数量 */
 		amount?: string;

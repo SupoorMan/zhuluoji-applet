@@ -61,132 +61,130 @@
 </template>
 
 <script>
-import ProCard from '@/components/ProCard.vue';
-import { getProds } from '@/api/product.js';
-import { getBanner } from '@/api/user';
-export default {
-	components: {
-		ProCard
-	},
-	data() {
-		return {
-			user: null,
-			prods: null,
-			banners: []
-		};
-	},
-	onLoad(options) {
-		this.getRecomemdProd();
-		this.getBanners();
-	},
-
-	methods: {
-		async getBanners() {
-			const result = await getBanner();
-			if (result.code === 200) {
-				this.banners = result.data;
+	import ProCard from '@/components/ProCard.vue';
+	import { getProds } from '@/api/product.js';
+	import { getBanner } from '@/api/user';
+	export default {
+		components: {
+			ProCard
+		},
+		data() {
+			return {
+				user: null,
+				prods: null,
+				banners: []
+			};
+		},
+		onLoad(options) {
+			this.getRecomemdProd();
+			this.getBanners();
+		},
+		methods: {
+			async getBanners() {
+				const result = await getBanner({ type: 0 });
+				if (result.code === 200) {
+					this.banners = result.data;
+				}
+			},
+			jumpPath(realpath) {
+				return this.user ? realpath : '/pages/user/authorization/index';
+			},
+			getProImage(urls) {
+				if (urls) {
+					const imgs = urls.split(',');
+					return imgs.length > 1 ? imgs[0] : urls;
+				} else {
+					return '';
+				}
+			},
+			async getRecomemdProd() {
+				const result = await getProds({
+					current: 1,
+					pageSize: 20
+				});
+				if (result.code === 200) {
+					this.prods = result.data.records;
+				}
 			}
 		},
-		jumpPath(realpath) {
-			return this.user ? realpath : '/pages/user/authorization/index';
-		},
-		getProImage(urls) {
-			if (urls) {
-				const imgs = urls.split(',');
-				return imgs.length > 1 ? imgs[0] : urls;
-			} else {
-				return '';
-			}
-		},
-		async getRecomemdProd() {
-			const result = await getProds({
-				current: 1,
-				pageSize: 20
-			});
-			if (result.code === 200) {
-				this.prods = result.data.records;
-			}
+		onShow() {
+			this.user = getApp().globalData.user;
 		}
-	},
-	onShow() {
-		this.user = getApp().globalData.user;
-	}
-};
+	};
 </script>
 
 <style scoped>
-.content {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-}
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
 
-.uni-margin-wrap {
-	width: 690rpx;
-	border-radius: 16rpx;
-	overflow: hidden;
-}
+	.uni-margin-wrap {
+		width: 690rpx;
+		border-radius: 16rpx;
+		overflow: hidden;
+	}
 
-.swiper {
-	height: 300rpx;
-}
+	.swiper {
+		height: 300rpx;
+	}
 
-.swiper-item {
-	display: block;
-	height: 300rpx;
-	line-height: 300rpx;
-	text-align: center;
-	/* background-color: #fff; */
-}
+	.swiper-item {
+		display: block;
+		height: 300rpx;
+		line-height: 300rpx;
+		text-align: center;
+		/* background-color: #fff; */
+	}
 
-.home-operation {
-	width: 100%;
-	--grid-item-content-background-color: transparent;
-}
+	.home-operation {
+		width: 100%;
+		--grid-item-content-background-color: transparent;
+	}
 
-/* 积分商城 */
-.store-bar {
-	width: 690rpx;
-	margin: auto;
-	background-color: #fff;
-	border-radius: 16rpx;
-	overflow: hidden;
-	--grid-item-content-padding: 10rpx;
-}
+	/* 积分商城 */
+	.store-bar {
+		width: 690rpx;
+		margin: auto;
+		background-color: #fff;
+		border-radius: 16rpx;
+		overflow: hidden;
+		--grid-item-content-padding: 10rpx;
+	}
 
-.van-cell-text {
-	display: inline-block;
-	margin-right: 16rpx;
-}
+	.van-cell-text {
+		display: inline-block;
+		margin-right: 16rpx;
+	}
 
-.pro-bar {
-	padding: 0 16rpx;
-}
+	.pro-bar {
+		padding: 0 16rpx;
+	}
 
-.prod-text {
-	font-size: 22rpx;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-}
+	.prod-text {
+		font-size: 22rpx;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
 
-/* 积分商城 end*/
+	/* 积分商城 end*/
+	/* 商品展示 */
+	.pro-list {
+		clear: both;
+		position: relative;
+		width: 690rpx;
+		margin: 32rpx auto;
+	}
 
-/* 商品展示 */
-.pro-list {
-	clear: both;
-	position: relative;
-	width: 690rpx;
-	margin: 32rpx auto;
-}
+	.pro-unit:nth-child(2n) {
+		margin-left: 16rpx;
+	}
 
-.pro-unit:nth-child(2n) {
-	margin-left: 16rpx;
-}
-
-/* .pro-unit {
+	/* .pro-unit {
 	float: left;
 	width: 336rpx;
 	background-color: #fff;
