@@ -11,7 +11,7 @@
 						</view>
 						<view class="weekdays">
 							<view class="week-day" v-for="weekday in currentWeek" :key="weekday.text"
-								@tap="currentDay=weekday.value" :class="{'active':currentDay===weekday.value }">
+								@tap="handelChangeWeek(weekday)" :class="{'active':currentDay===weekday.value }">
 								{{weekday.text}}
 							</view>
 
@@ -34,43 +34,28 @@
 		<!-- 直播间预告 -->
 		<view class="live-banner">
 			<view class="live-tab-header">
-				<view class="left" @tap="changeTab(1)" :class="activeLive === 1 ? 'active' : ''">
+				<view class="left" @tap="changeTab(0)" :class="activeLive === 0 ? 'active' : ''">
 					<text class="tab-text">酷酷的侏罗纪家居</text>
 				</view>
-				<view class="right" style="text-align: right;" @tap="changeTab(2)"
-					:class="activeLive === 2 ? 'active' : ''">
+				<view class="right" style="text-align: right;" @tap="changeTab(1)"
+					:class="activeLive === 1 ? 'active' : ''">
 					<text class="tab-text">酷酷的侏罗纪家纺</text>
 				</view>
 			</view>
 			<view class="live-prods"
 				:style="
-          activeLive === 1
+          activeLive === 0
             ? 'border-top-right-radius: 20rpx;background-image: linear-gradient(to top left, #FFF7FF, #e8c2e3 68%, #E0AFD9)'
             : 'border-top-left-radius: 20rpx;background-image: linear-gradient(to top right, #FFF7FF, #e8c2e3 68%, #E0AFD9)'">
-				<!-- v-for="item in prods" :key="item.id" v-if="prods" -->
-				<van-cell title-width="262rpx" value-class="right-content" custom-class="pro-card" v-for="item in prods"
-					:key="item.id">
-					<template #title>
-						<view style="background-color: #f9f9f9; border-radius: 8rpx; width:232rpx ; height: 232rpx;">
-							<van-image fit="contain" src="https://img.yzcdn.cn/vant/cat.jpeg" width="224rpx"
-								height="224rpx" />
-						</view>
-					</template>
-					<template #default>
-						<view style="height: 140rpx;" class="title">{{item.productName}}</view>
-						<view>原价：￥{{item.price}}</view>
-						<view style="display: flex; align-items: center; justify-content: space-between;">
-							<view>
-								直播价：<text class="red-text">￥</text>
-								<text class="red-text price">{{item.lastPrice}}</text>
-							</view>
-							<van-button size="mini" round plain icon="/static/live/notice.png" color="#E0AFD9">开播提醒
-							</van-button>
-						</view>
-
-					</template>
-				</van-cell>
-
+				<AppointmentCard v-for="item in prods" :key="item.id" :item="item" />
+				<view class="custom-image" v-if="!prods ||  prods.length===0">
+					<van-empty image="/static/empty.png">
+						<template #description>
+							<view style="color: #fff;">暂无直播商品</view>
+							<view style="color: #fff;">敬请期待</view>
+						</template>
+					</van-empty>
+				</view>
 			</view>
 		</view>
 
@@ -85,7 +70,11 @@
 	import dayjs from 'dayjs'
 	import { getBanner } from '@/api/user';
 	import { pageLivePreview, updateLivePreview } from '@/api/live';
+	import { AppointmentCard } from './components/AppointmentCard.vue'
 	export default {
+		components: {
+			AppointmentCard
+		},
 		data() {
 			return {
 				banners: null,
@@ -94,6 +83,7 @@
 				currentDay: dayjs().format('YYYY-MM-DD'),
 				weekName: ['日', '一', '二', '三', '四', '五', '六'],
 				activeLive: 1,
+				// stauts: { 1: '开播提醒', 2: '直播中', 3: '直播结束' },
 				prods: null,
 				user: null
 			}
@@ -101,11 +91,15 @@
 		methods: {
 			toAppoint() {
 				uni.navigateTo({
-					url: '/pages/video/appointment/index'
+					url: '/pages/video/appointment/index?appletUserId=' + this.user.id
 				})
 			},
 			changeTab(key) {
 				this.activeLive = key
+				this.getCurrentLive()
+			},
+			handelChangeWeek(weekday) {
+				this.currentDay = weekday.value
 				this.getCurrentLive()
 			},
 			getCurrentWeek() {
@@ -120,6 +114,17 @@
 				}
 				return week
 			},
+			// async subscLive(item) {
+			// 	if (item.flag === 1 || item.flag === 0) {
+			// 		const { code } = await updateLivePreview({ id: item.productId, starter: item.flag === 1 ? 1 : 0 })
+			// 		if (code === 200) {
+			// 			uni.showToast({
+			// 				icon: 'none',
+			// 				title: '预约成功'
+			// 			})
+			// 		}
+			// 	}
+			// },
 			async getBanners() {
 				const result = await getBanner({ type: 1 });
 				if (result.code === 200) {
@@ -160,6 +165,7 @@
 		height: auto;
 		min-height: 100vh;
 		background: #FFFAF044;
+		overflow-x: hidden;
 	}
 
 	/* 日历 */
@@ -299,24 +305,11 @@
 	}
 
 	.live-prods {
-		height: 1200rpx;
+		min-height: 400rpx;
 		background-image: linear-gradient(to top left, #fdf3fd, #e8c2e3 68%, #e1d1da);
 		border-radius: 0 0 12rpx 12rpx;
 		--cell-value-color: #333;
 		padding: 12rpx;
-	}
-
-	.title {
-		font-size: 32rpx;
-	}
-
-	.red-text {
-		color: #FF4141;
-	}
-
-	.price {
-		font-size: 36rpx;
-		font-weight: 600;
 	}
 
 	.appointment-btn {
@@ -327,7 +320,7 @@
 		height: 108rpx;
 		border-radius: 22rpx;
 		top: 57%;
-		right: 24rpx;
+		right: 14rpx;
 		z-index: 5;
 		text-align: center;
 		font-weight: 600;
@@ -336,12 +329,15 @@
 	}
 </style>
 <style>
-	.right-content {
-		text-align: left !important;
+	.custom-image {
+		/* background-color: #fffffe; */
+		border-radius: 24rpx;
+		text-align: center;
+		margin: 24rpx;
 	}
 
-	.pro-card {
-		border-radius: 12rpx;
-		margin-top: 24rpx;
+	.van-empty__image {
+		width: 525rpx !important;
+		height: 185rpx !important;
 	}
 </style>

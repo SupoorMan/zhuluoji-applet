@@ -19,7 +19,7 @@
 				"navigationBarTitleText": "直播预告",
 				"enablePullDownRefresh": false,
 				"usingComponents": {
-					"van-cell-group": "/wxcomponents/vant/cell-group/index"
+					"van-empty": "/wxcomponents/vant/empty/index"
 				}
 			}
 		}, {
@@ -27,8 +27,10 @@
 			"style": {
 				"navigationBarTitleText": "我的预约",
 				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
 				"usingComponents": {
-					"van-cell-group": "/wxcomponents/vant/cell-group/index"
+					"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+					"van-empty": "/wxcomponents/vant/empty/index"
 				}
 			}
 		},
