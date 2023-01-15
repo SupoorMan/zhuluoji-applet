@@ -14,11 +14,9 @@
 								@tap="handelChangeWeek(weekday)" :class="{'active':currentDay===weekday.value }">
 								{{weekday.text}}
 							</view>
-
 						</view>
 					</view>
 				</swiper-item>
-
 			</swiper>
 		</view>
 		<!-- 轮播广告 -->
@@ -49,12 +47,10 @@
             : 'border-top-left-radius: 20rpx;background-image: linear-gradient(to top right, #FFF7FF, #e8c2e3 68%, #E0AFD9)'">
 				<AppointmentCard v-for="item in prods" :key="item.id" :item="item" />
 				<view class="custom-image" v-if="!prods ||  prods.length===0">
-					<van-empty image="/static/empty.png">
-						<template #description>
-							<view style="color: #fff;">暂无直播商品</view>
-							<view style="color: #fff;">敬请期待</view>
-						</template>
-					</van-empty>
+
+					<view style="color: #525151;">暂无直播商品</view>
+					<view style="color: #525151;">敬请期待</view>
+
 				</view>
 			</view>
 		</view>
@@ -266,22 +262,22 @@
 	.left::before,
 	.right::before {
 		content: "";
-		background: url(" /static/live/tab.png") no-repeat bottom center;
+		background: url("/static/live/tab.png") no-repeat bottom left;
 		background-size: contain;
 		position: absolute;
 		display: block;
-		width: 300rpx;
-		height: 100rpx;
+		width: 338rpx;
+		height: 120rpx;
 		top: 0;
 	}
 
 	.left::before {
 		transform: rotateY(180deg);
-		left: 0;
+		left: -16rpx;
 	}
 
 	.right::before {
-		right: 0;
+		right: -16rpx;
 	}
 
 	.left.active::before,
@@ -297,11 +293,12 @@
 	.left.active::before {
 		transform: rotateY(0deg);
 		z-index: 1;
+		left: 0;
 	}
 
 	.right.active::before {
-		transform:
-			rotateY(180deg);
+		transform: rotateY(180deg);
+		right: 0;
 	}
 
 	.live-prods {
@@ -310,6 +307,8 @@
 		border-radius: 0 0 12rpx 12rpx;
 		--cell-value-color: #333;
 		padding: 12rpx;
+		position: relative;
+		margin-top: -12rpx;
 	}
 
 	.appointment-btn {
@@ -319,7 +318,7 @@
 		width: 108rpx;
 		height: 108rpx;
 		border-radius: 22rpx;
-		top: 57%;
+		top: 59%;
 		right: 14rpx;
 		z-index: 5;
 		text-align: center;
@@ -327,17 +326,26 @@
 		padding: 14rpx 0 14rpx 8rpx;
 		letter-spacing: 6rpx;
 	}
-</style>
-<style>
+
 	.custom-image {
 		/* background-color: #fffffe; */
 		border-radius: 24rpx;
 		text-align: center;
 		margin: 24rpx;
+		position: relative;
+		padding-top: 160rpx;
 	}
 
-	.van-empty__image {
-		width: 525rpx !important;
-		height: 185rpx !important;
+	.custom-image::before {
+		content: '';
+		border-radius: 50%;
+		width: 344rpx;
+		height: 344rpx;
+		display: block;
+		position: absolute;
+		left: 152rpx;
+		top: 0;
+		opacity: 0.34;
+		background: linear-gradient(180deg, #fff, #cb72bb);
 	}
 </style>

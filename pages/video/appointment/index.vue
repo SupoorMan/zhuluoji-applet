@@ -12,44 +12,14 @@
 		</view>
 		<view v-if="list[activeLive] &&list[activeLive].length >0 && !loading" class="pro-list">
 			<AppointmentCard v-for="item in list[activeLive]" :key="item.id" :item="item" />
-			<!-- <van-cell title-width="262rpx" value-class="right-content" custom-class="pro-card"
-				v-for="item in list[activeLive]" :key="item.id">
-				<template #title>
-					<view style="background-color: #f9f9f9; border-radius: 8rpx; width:232rpx ; height: 232rpx;">
-						<van-image fit="contain" src="https://img.yzcdn.cn/vant/cat.jpeg" width="224rpx"
-							height="224rpx" />
-					</view>
-				</template>
-				<template #default>
-					<view style="height: 140rpx;" class="title">{{item.productName}} {{item.sizes}}</view>
-					<view>原价：￥{{item.price}}</view>
-					<view style="display: flex; align-items: center; justify-content: space-between;">
-						<view>
-							直播价：<text class="red-text">￥</text> <text class="red-text price">{{item.lastPrice}}</text>
-						</view>
-						<van-button size="mini" round icon="/static/live/notice-active.png" @click="subscLive(item)"
-							v-if="item.flag===0" color="#E0AFD9">
-							预约成功
-						</van-button>
-						<van-button size="mini" v-else-if="item.flag===3" round icon="/static/live/notice-active.png"
-							color="#757575">
-							已结束
-						</van-button>
-					</view>
-				</template>
-			</van-cell> -->
+
 		</view>
 		<view style="text-align: center;" class="" v-else>
 			<view class="custom-image">
-				<van-empty image="/static/empty.png">
-					<template #description>
-						<view>暂无预约商品</view>
-						<view>点击下方按钮新增商品吧</view>
-					</template>
-				</van-empty>
+				<view>暂无预约商品</view>
+				<view>点击下方按钮新增商品吧</view>
 			</view>
-			<van-button color="#DF8ABD" size="small" round @click="backPage">
-				预约直播商品</van-button>
+			<van-button color="#DF8ABD" size="small" round @click="backPage"> 预约直播商品</van-button>
 		</view>
 	</view>
 </template>
@@ -127,22 +97,33 @@
 	}
 </style>
 <style>
-	/* 	.right-content {
-		text-align: left !important;
-	}
-
-	.pro-card {
-		border-radius: 12rpx;
-	} */
 	.custom-image {
-		background-color: #fffffe;
+		/* background-color: #fffffe; */
 		border-radius: 24rpx;
 		text-align: center;
-		margin: 24rpx;
+		margin: 80rpx 24rpx;
+		position: relative;
+		padding-top: 130rpx;
+		height: 344rpx;
 	}
 
-	.van-empty__image {
-		width: 525rpx !important;
-		height: 185rpx !important;
+	.custom-image>view {
+		color: #333;
+		line-height: 1.8;
+		font-family: SiYuanHei, SiYuanHei-Normal;
+	}
+
+	.custom-image::before {
+		content: '';
+		border-radius: 50%;
+		width: 344rpx;
+		height: 344rpx;
+		display: block;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		top: 0;
+		opacity: 0.34;
+		background: linear-gradient(180deg, rgba(255, 255, 255, 0.00), #cb72bb);
 	}
 </style>

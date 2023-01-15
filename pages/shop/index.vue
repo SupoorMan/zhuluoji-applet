@@ -12,11 +12,12 @@
 			<van-row>
 				<van-col span="18">
 					<view class="user-info">
-						<van-image round height="100rpx" width="100rpx" :src="user.avatarUrl || ''" fit="cover" />
+						<van-image round height="100rpx" width="100rpx" :src="user ?  user.avatarUrl : ''"
+							fit="cover" />
 						<view class="user-desc">
 							<view v-if="user">{{ user.nickname }}</view>
 							<navigator v-else url="/pages/user/authorization/index">登录</navigator>
-							<view class="user-code">当前积分：{{ user.integral || '0' }}</view>
+							<view class="user-code">当前积分：{{ user ? user.integral : '0' }}</view>
 						</view>
 					</view>
 				</van-col>
@@ -35,7 +36,7 @@
 			</view>
 		</view>
 		<view class="page-list">
-			<van-tabs :active="activeCate" v-if="activeKey == 11" @change="changeTab">
+			<van-tabs :active="activeCate" v-if="activeKey === 11" @change="changeTab">
 				<!-- 全部商品 -->
 				<van-tab :title="tab.name" v-for="tab in proCate" :key="tab.key" :name="tab.key">
 					<view class="pro-list">
@@ -43,14 +44,14 @@
 					</view>
 				</van-tab>
 			</van-tabs>
-			<view class="pro-list" v-else-if="activeKey == 13">
-				<!-- 排行商品 -->
-
-				<RankCard v-for="(item, index) in prods" :key="item.key" :rank="index + 1" :item="item" />
+			<view class="pro-list" v-else-if="activeKey === 12">
+				<!-- 我能兑换、 -->
+				<ProCard class="pro-unit" v-for="(item, index) in prods" :key="item.key" :item="item" />
 			</view>
 			<view class="pro-list" v-else>
-				<!-- 我能兑换、新品 -->
-				<ProCard class="pro-unit" v-for="(item, index) in prods" :key="item.key" :item="item" />
+				<!-- 排行商品 新品-->
+
+				<RankCard v-for="(item, index) in prods" :key="item.key" :rank="index + 1" :item="item" />
 			</view>
 			<view class="custom-image" v-if="(!prods || prods.length === 0) && !loading">
 				<van-empty image="/static/empty.png">
@@ -67,13 +68,16 @@
 <script>
 	import ProCard from '@/components/ProCard.vue';
 	import RankCard from './components/RankCard.vue';
-	import {
-		getProds
-	} from '@/api/product.js';
+	import { getProds } from '@/api/product.js';
+	import { userStore } from '@/store'
+	import { mapState } from 'pinia'
 	export default {
 		components: {
 			ProCard,
 			RankCard
+		},
+		computed: {
+			...mapState(userStore, ['user'])
 		},
 		data() {
 			return {
@@ -120,7 +124,6 @@
 				},
 				tabProds: {},
 				loading: true,
-				user: null,
 				prods: null
 			};
 		},
@@ -141,7 +144,8 @@
 					case 12:
 						this.page = {
 							current: 1,
-							pageSize: 20
+							pageSize: 20,
+							integral: this.user.integral
 						};
 						break;
 					case 13:
@@ -203,9 +207,6 @@
 				await this.getRecomemdProd(this.page);
 			}
 		},
-		onShow() {
-			this.user = getApp().globalData.user;
-		}
 	};
 </script>
 
@@ -216,6 +217,7 @@
 		overflow-x: hidden;
 		display: flex;
 		flex-direction: column;
+		padding-bottom: 0 !important;
 	}
 
 	.search-pro {
@@ -274,13 +276,13 @@
 	}
 
 	.tab.active {
-		background-color: #fffff029;
+		background-color: #fffff066;
 		border-radius: 16rpx 16rpx 0 0;
 	}
 
 	.page-list {
 		padding: 24rpx;
-		background-color: #fffff029;
+		background-color: #fffff066;
 		flex: 1;
 		--tabs-nav-background-color: transparent;
 		--tabs-bottom-bar-color: #4d4d4d;
@@ -301,7 +303,7 @@
 	}
 
 	.pro-unit:nth-child(2n) {
-		margin-left: 16rpx;
+		margin-left: 24rpx;
 	}
 
 	.record-inter {

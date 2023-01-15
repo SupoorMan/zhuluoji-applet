@@ -1,108 +1,166 @@
 <template>
-	<view class="convert-list">
-		<view class="convert-card" v-for="order in list">
-			<view class="card-body">
-				<view class="card-image"><image :src="order.images" mode="aspectFit"></image></view>
-				<view class="card-content">
-					<view style="">
-						No: {{ order.orderNo }}
-						<text style="color:#ff6a5f;float: right;">{{ state[order.status] }}</text>
+	<view class="notice-page">
+		<view class="notice-list">
+			<view class="notice-card" v-for="notice in list" :key="notice.id">
+				<view class="card-header">
+					<view class="title">
+						<van-icon :name="source[notice.type].icon" :color="source[notice.type].color" size="20" />
+						<text :style="{'color': source[notice.type].color}">{{source[notice.type].text}}</text>
 					</view>
-					<view class="tag">
-						<van-tag color="#F1E6FF" text-color="#9300FF">{{ source[order.type] }}</van-tag>
+					<view style="font-size: 24rpx;">{{cutTime(notice.createTime)}}</view>
+				</view>
+				<view class="card-body">
+					<view class="notice-message">
+						{{notice.message}}
 					</view>
 				</view>
 			</view>
-			<view class="card-footer">
-				<text>{{ cutTime(order.createTime) }}</text>
-				<text>共计: {{ order.costs }} &nbsp;元</text>
+			<view v-if="list && list.length!==page.total"
+				style="padding: 24rpx; margin: 24rpx atuo;text-align: center;">
+				<text @click="loadMore">加载更多>></text>
 			</view>
+		</view>
+
+		<view v-if="list && list.length===0" class="empty">
+			抱歉 ,您暂无站内消息
 		</view>
 	</view>
 </template>
 
 <script>
-import { getNotice } from '@/api/user';
-import dayjs from 'dayjs';
-export default {
-	data() {
-		return {
-			page: {
-				current: 1,
-				pageSize: 20
+	import { getNotice } from '@/api/user';
+	import dayjs from 'dayjs';
+	export default {
+		data() {
+			return {
+				page: {
+					current: 1,
+					pageSize: 20,
+					total: 0
+				},
+				source: {
+					6: {
+						icon: 'points', //
+						color: '#FCBF40',
+						text: '积分通知'
+					},
+					7: {
+						icon: 'points', //
+						color: '#FCBF40',
+						text: '积分通知'
+					},
+					8: {
+						icon: 'points', //
+						color: '#FCBF40',
+						text: '积分通知'
+					},
+					0: {
+						icon: 'points', //
+						color: '#FCBF40',
+						text: '积分通知'
+					},
+					1: {
+						icon: 'setting-o',
+						color: '#737374',
+						text: '系统通知'
+					},
+					4: {
+						icon: 'gift-o', //
+						color: '#FF8141',
+						text: '积分兑换'
+					},
+					9: {
+						icon: 'logistics', //
+						color: '#418DFF',
+						text: '订单物流'
+					},
+					2: {
+						icon: 'video-o', //
+						color: '#BB81DA',
+						text: '直播预约'
+					},
+					10: {
+						icon: 'medal-o', // <van-icon name="medal-o" />
+						color: '#FF4141',
+						text: '等级通知'
+					},
+				},
+				list: null
+			};
+		},
+		methods: {
+			async getList() {
+				const { code, data } = await getNotice(this.page);
+				if (code === 200) {
+					if (this.page.current !== 1) {
+						this.list = [...this.list, ...data.records]
+					} else {
+						this.list = data.records;
+						this.page.total = data.total;
+					}
+				}
 			},
-			source: {
-				0: '微信',
-				1: '淘宝',
-				2: '小红书',
-				3: '抖音',
-				4: '其他'
+			cutTime(date) {
+				return dayjs(date).format('YY/MM/DD hh:mm');
 			},
-			state: {
-				0: '待审核',
-				1: '已兑换',
-				2: '不通过兑换'
-			},
-			list: null
-		};
-	},
-	methods: {
-		async getList() {
-			const { code, data } = await getNotice(this.page);
-			if (code === 200) {
-				this.list = data.records;
+			async loadMore() {
+				this.page.current += 1
+				await this.getList()
 			}
 		},
-		cutTime(date) {
-			return dayjs(date).format('YYYY-MM-DD hh:mm:ss');
+		onLoad(opt) {
+			this.getList();
 		}
-	},
-	onLoad(opt) {
-		this.getList();
-	}
-};
+	};
 </script>
 
 <style scoped>
-.convert-list {
-	height: atuo;
-	min-height: 100vh;
-}
-.convert-card {
-	background-color: #fff;
-	margin: 24rpx;
-	border-radius: 24rpx;
-	overflow: hidden;
-}
-.card-body {
-	display: flex;
-	align-items: flex-start;
-	padding: 24rpx;
-}
-.card-image {
-	width: 160rpx;
-	height: 160rpx;
-	margin-right: 16rpx;
-	background-color: #f7f7f7;
-}
-.card-image > image {
-	width: 160rpx;
-	height: 100%;
-	line-height: 160rpx;
-}
-.card-content {
-	flex: 1;
-}
-.tag {
-	padding-top: 30rpx;
-}
-.card-footer {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 16rpx 24rpx;
-	font-size: 23rpx;
-	color: #666;
-	background-color: #f9f9f9;
-}
+	.notice-page {
+		height: atuo;
+		min-height: 100vh;
+	}
+
+	.notice-list {
+		padding: 16rpx 0;
+	}
+
+	.notice-card {
+		background-color: #fff;
+		margin: 16rpx;
+		border-radius: 20rpx;
+		overflow: hidden;
+		padding: 16rpx 16rpx;
+	}
+
+	.card-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.title {
+		display: flex;
+		align-items: center;
+	}
+
+	.card-header text {
+		margin-left: 8rpx;
+	}
+
+	.card-body {
+		display: flex;
+		align-items: flex-start;
+		padding-top: 16rpx;
+	}
+
+	.notice-message {
+		border-left: 2rpx solid #79797940;
+		padding-left: 12rpx;
+		font-size: 24rpx;
+	}
+
+	.empty {
+		padding: 300rpx 0;
+		text-align: center;
+	}
 </style>

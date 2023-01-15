@@ -1,7 +1,9 @@
 <template>
 	<view class="user-page">
 		<van-nav-bar title="我的" class="navbar" fixed>
-			<van-icon name="chat-o" slot="left" size="20" />
+			<navigator :url="jumpPath('/pages/message/list')" slot="left">
+				<van-icon name="chat-o" size="20" />
+			</navigator>
 		</van-nav-bar>
 		<view class=""></view>
 		<!-- 用户 -->
@@ -9,11 +11,12 @@
 			<van-row>
 				<van-col span="18">
 					<view class="user-info">
-						<van-image round height="134rpx" width="134rpx" :src="user.avatarUrl || ''" fit="cover" />
+						<van-image round height="134rpx" width="134rpx"
+							:src="user && user.avatarUrl? user.avatarUrl : ''" fit="cover" />
 						<view class="user-desc">
 							<view v-if="user">{{ user.nickname }}</view>
 							<navigator v-else url="/pages/user/authorization/index">登录</navigator>
-							<view class="user-code">{{ user.uid || '' }}</view>
+							<view class="user-code">{{ user ? user.uid : '' }}</view>
 						</view>
 					</view>
 				</van-col>
@@ -33,18 +36,20 @@
 		<view class="level-card">
 			<view>当前等级</view>
 			<view class="level-content">
-				<text>LV{{ user.level || 0 }}</text>
-				<text>LV{{ user.level ? user.level + 1 : 1 }}</text>
+				<text>LV{{ user ? user.level : 0 }}</text>
+				<text v-if="user&& user.level<4">LV{{ user ? user.level + 1 : 1 }}</text>
 			</view>
-			<van-progress track-color="#f0e2ff" color="#fff" :show-pivot="false" percentage="30" />
-			<view class="level-tip">100/1000, 还差200经验值，便可升级</view>
+			<van-progress v-if="user && user.level<4" track-color="#f0e2ff" color="#fff" :show-pivot="false"
+				:percentage="(currentExpens/expensLv[user.level])*100" />
+			<view class="level-tip" v-if="user && user.level<4">{{currentExpens}}/{{expensLv[user.level]}},
+				还差{{expensLv[user.level] - currentExpens }}经验值，便可升级</view>
 			<view class="level-content">
 				<view class="content-unit">
-					<view>{{ user.growth || 0 }}</view>
+					<view>{{ user ? user.growth : 0 }}</view>
 					<view>成长值</view>
 				</view>
 				<view class="content-unit">
-					<view>{{ user.integral || 0 }}</view>
+					<view>{{ user ? user.integral : 0 }}</view>
 					<view>积分</view>
 				</view>
 			</view>
@@ -59,7 +64,7 @@
 					</view>
 					<view class="">订单转换</view>
 				</van-grid-item>
-				<van-grid-item use-slot link-type="navigateTo" :url="jumpPath('/pages/message/message')">
+				<van-grid-item use-slot link-type="navigateTo" :url="jumpPath('/pages/message/list')">
 					<view class="service-icon icon-2">
 						<van-icon name="comment-o" color="#fff" size="72rpx" />
 					</view>
@@ -78,7 +83,20 @@
 			<van-grid column-num="4" :border="false">
 				<van-grid-item icon="orders-o" text="订单" link-type="navigateTo"
 					:url="jumpPath('/pages/shop/order/list')" />
-				<van-grid-item icon="service-o" text="客服" />
+				<van-grid-item use-slot>
+					<view class="button">
+
+						<van-button open-type="contact" size="large">
+							<van-icon name="service-o" size="52rpx" color="#646566" />
+							<view style="color:#646566;padding-top: 10rpx; font-size: 24rpx;">
+								<text>
+									客服
+								</text>
+							</view>
+						</van-button>
+					</view>
+
+				</van-grid-item>
 				<van-grid-item icon="contact" text="用户" link-type="navigateTo"
 					:url="jumpPath('/pages/user/userInfo/userInfo')" />
 				<van-grid-item icon="records" text="建议分享" />
@@ -86,25 +104,48 @@
 				<van-grid-item icon="point-gift-o" text="敬请期待" />
 			</van-grid>
 		</view>
+		<button open-type="contact" id="contact"></button>
 	</view>
 </template>
 
 <script>
+	import { userStore } from '@/store'
+	import { mapState } from 'pinia'
 	export default {
 		data() {
 			return {
-				user: null,
+				expensLv: {
+					0: 1000,
+					1: 4000,
+					2: 5000,
+					3: 20000
+				},
 				expens: 1000 // 经验值
 			};
+		},
+		computed: {},
+		computed: {
+			...mapState(userStore, ['user']),
+			currentExpens() {
+				if (this.user && this.user.level) {
+					const curLevel = this.user.level
+					const expensArr = this.expensLv
+					let minExpens = 0
+					for (let o in expensArr) {
+						if (o < curLevel) {
+							minExpens += expensArr[o]
+						}
+					}
+					return this.user.growth - minExpens
+				}
+				return 0
+			},
 		},
 		methods: {
 			jumpPath(realpath) {
 				return this.user ? realpath : '/pages/user/authorization/index';
-			}
+			},
 		},
-		onShow() {
-			this.user = getApp().globalData.user;
-		}
 	};
 </script>
 
@@ -217,5 +258,13 @@
 		padding-top: 24rpx;
 		padding-bottom: 32rpx;
 		--grid-item-content-padding: 32rpx 0 0 0;
+		--button-default-border-color: transparent;
+		--button-default-background-color: transparent;
+	}
+</style>
+<style>
+	.tools .button button {
+		display: flex !important;
+		flex-direction: column;
 	}
 </style>

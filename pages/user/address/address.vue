@@ -33,88 +33,88 @@
 </template>
 
 <script>
-import { getAddressList } from '@/api/setting';
-import Dialog from '@/wxcomponents/vant/dialog/dialog';
-export default {
-	data() {
-		return {
-			list: []
-		};
-	},
-	methods: {
-		toEdit(item) {
-			uni.navigateTo({
-				url: '/pages/user/address/add',
-				success: function (res) {
-					// 通过eventChannel向被打开页面传送数据
-					res.eventChannel.emit('acceptDataFromOpenerPage', item);
-				}
-			});
+	import { getAddressList } from '@/api/setting';
+	import Dialog from '@/wxcomponents/vant/dialog/dialog';
+	export default {
+		data() {
+			return {
+				list: []
+			};
 		},
-		toAdd() {
-			uni.navigateTo({
-				url: '/pages/user/address/add'
-			});
-		},
-		onClose(event) {
-			const { position, instance } = event.detail;
-			switch (position) {
-				case 'cell':
-					instance.close();
-					break;
-				case 'right':
-					Dialog.confirm({
-						message: '确定删除吗？'
-					}).then(() => {
+		methods: {
+			toEdit(item) {
+				uni.navigateTo({
+					url: '/pages/user/address/add?id=' + item.id,
+					success: function(res) {
+						// 通过eventChannel向被打开页面传送数据
+						res.eventChannel.emit('acceptDataFromOpenerPage', item);
+					}
+				});
+			},
+			toAdd() {
+				uni.navigateTo({
+					url: '/pages/user/address/add'
+				});
+			},
+			onClose(event) {
+				const { position, instance } = event.detail;
+				switch (position) {
+					case 'cell':
 						instance.close();
-					});
-					break;
+						break;
+					case 'right':
+						Dialog.confirm({
+							message: '确定删除吗？'
+						}).then(() => {
+							instance.close();
+						});
+						break;
+				}
+			},
+			async getList() {
+				const { data } = await getAddressList();
+				this.list = data;
 			}
 		},
-		async getList() {
-			const { data } = await getAddressList();
-			this.list = data;
+		onShow() {
+			this.getList();
 		}
-	},
-	onShow() {
-		this.getList();
-	}
-};
+	};
 </script>
 
 <style>
-.address-page {
-	height: 100%;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	background: #f9f9f9;
-}
+	.address-page {
+		height: 100%;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		background: #f9f9f9;
+	}
 
-.addresslist {
-	flex: 1;
-	width: 100%;
-}
+	.addresslist {
+		flex: 1;
+		width: 100%;
+	}
 
-.address-unit {
-	position: relative;
-	padding-top: 32rpx;
-}
+	.address-unit {
+		position: relative;
+		padding-top: 32rpx;
+	}
 
-.delete {
-	background-color: #fc817c;
-	height: inherit;
-	width: 40px;
-	color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
-	font-size: 24rpx;
-}
+	.delete {
+		background-color: #fc817c;
+		height: inherit;
+		width: 40px;
+		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		font-size: 24rpx;
+	}
 
-.button {
-	width: 448rpx;
-	margin: 0 auto;
-}
+	.button {
+		width: 448rpx;
+		margin: 0 auto;
+	}
 </style>

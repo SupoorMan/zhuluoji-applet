@@ -11,7 +11,7 @@ export const pageLivePreview = async (params) => {
  *  @param {starter :0/1}
  */
 export const updateLivePreview = async (params) => {
-	return request.get('/activityDetail/update', params);
+	return request.post('/activityDetail/update', params);
 }
 /** 直播预约列表
  *

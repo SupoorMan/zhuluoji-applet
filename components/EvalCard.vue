@@ -20,7 +20,7 @@
 			</swiper>
 			{{ item.message }}
 			<div class="review-tools">
-				<view @click="replyToEval(item)" v-if="!noreply && item.homeId">
+				<view @click="replyToEval(item)" v-if="!noreply && (item.homeId ||item.activityId)">
 					<van-icon name="chat-o" size="32rpx" style="margin-right: 4rpx" />
 					回复
 				</view>

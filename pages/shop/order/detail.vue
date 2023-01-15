@@ -1,5 +1,5 @@
 <template>
-	<view class="order-detail-page">
+	<view class="order-detail-page" v-if="detail">
 		<view class="detail-content">
 			<OrderCard :order="detail" />
 			<van-cell title="运费">
@@ -15,7 +15,7 @@
 			<van-cell title="订单编号：" :border="false" title-width="200rpx">
 				<template #default>
 					<text>{{ detail.orderNo }}</text>
-					<text>复制</text>
+					<text @click="copyOrderNo">复制</text>
 				</template>
 			</van-cell>
 			<van-cell title="创建时间：" :border="false" title-width="200rpx">
@@ -39,25 +39,29 @@
 				</template>
 			</van-cell>
 		</view>
-		<van-cell-group inset custom-class="contract-cell">
-			<van-cell>
-				<template #title>
-					<view>遇到问题？</view>
-				</template>
-				<template #default>
-					<van-icon name="chat-o" color="#ff938a" />
-					<text>联系客服</text>
-				</template>
-			</van-cell>
-		</van-cell-group>
+		<view class="contract-cell">
+
+			<van-cell-group inset custom-class="">
+				<van-cell>
+					<template #title>
+						<view>遇到问题？</view>
+					</template>
+					<template #default>
+						<van-button open-type="contact" size="mini" icon="chat-o">联系客服</van-button>
+						<!-- <van-icon name="chat-o" color="#ff938a" />
+					<text>联系客服</text> -->
+					</template>
+				</van-cell>
+			</van-cell-group>
+		</view>
 		<!-- 推荐 -->
-		<Recommend />
+		<!-- <Recommend /> -->
 	</view>
 </template>
 
 <script>
 	import OrderCard from './components/OrderCard';
-	import Recommend from '../components/Recommend.vue';
+	// import Recommend from '../components/Recommend.vue';
 	import {
 		getOrders
 	} from '@/api/order';
@@ -65,7 +69,7 @@
 	export default {
 		components: {
 			OrderCard,
-			Recommend
+			// Recommend
 		},
 		data() {
 			return {
@@ -81,13 +85,13 @@
 					this.detail = data.records[0];
 				}
 			},
+			copyOrderNo() {},
 			getTime(time) {
 				return dayjs(time).format('YYYY-MM-DD hh:mm:ss')
 			}
 		},
 		onLoad(option) {
 			this.getDetail(option)
-
 		}
 	};
 </script>
@@ -95,22 +99,29 @@
 <style>
 	.order-detail-page {
 		height: auto;
+		min-height: 100vh;
 		padding-top: 24rpx;
 	}
 
 	.detail-content {
 		margin: 0 32rpx 24rpx 32rpx;
-		background-color: #fffff9;
+		background-color: #fffff970;
 		border-radius: 16rpx;
 		overflow: hidden;
-		--card-background-color: #fffff9;
-		--cell-background-color: #fffff9;
+		--card-background-color: #fffff970;
+		--cell-background-color: #fffff970;
 		--cell-line-height: 28rpx;
 		--cell-font-size: 26rpx;
 	}
 
 	.contract-cell {
 		margin-top: 24rpx;
-		--cell-background-color: #fffff9;
+		--cell-background-color: #fffff970;
+		--button-default-border-color: transparent;
+		--button-default-background-color: transparent;
+	}
+
+	.van-button:before {
+		border: 0;
 	}
 </style>

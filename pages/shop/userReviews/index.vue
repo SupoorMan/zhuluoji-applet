@@ -6,7 +6,6 @@
 					<van-cell-group>
 						<EvalCard v-for="(item, index) in recommendList" :key="item.id" :item="item" :index="[index]"
 							@addStar="addStar">
-
 						</EvalCard>
 					</van-cell-group>
 				</view>
@@ -64,7 +63,6 @@
 				returnTopId: null,
 				returnText: '',
 				focusReply: ''
-
 			};
 		},
 		methods: {
@@ -147,7 +145,6 @@
 					this.recommendList = result.data.records;
 				}
 			},
-
 			cutDate(date) {
 				return dayjs(item.createTime).format('YY-MM-DD')
 			},

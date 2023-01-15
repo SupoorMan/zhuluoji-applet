@@ -9,12 +9,15 @@
 				{{ order.integral }}
 				<text class="unit">积分</text>
 			</view>
-			<view slot="footer">
+			<view slot="footer" @click.stop>
+				<van-button size="mini" class="button" round open-type="contact"
+					v-if="order.status===1||order.status===2">找客服</van-button>
 				<van-button size="mini" class="button" round v-for="btn in buttons[order.status]" :key="btn.key"
 					@tap="clickButton(btn.key)">
 					{{ btn.name }}
 				</van-button>
-				<van-button size="mini" @click.prevent.stop="clickButton(6)">去评价</van-button>
+
+				<!-- <van-button size="mini" @click.prevent.stop="clickButton(6)">去评价</van-button> -->
 			</view>
 		</van-card>
 	</navigator>
@@ -51,14 +54,15 @@
 					3: "已完成",
 				},
 				buttons: {
-					1: [{
-							name: "找客服",
-							key: 1,
-						},
-						{
-							name: "催发货",
-							key: 2,
-						},
+					1: [
+						// {
+						// 	name: "找客服",
+						// 	key: 1,
+						// },
+						// {
+						// 	name: "催发货",
+						// 	key: 2,
+						// },
 						{
 							name: "改地址",
 							key: 3,
@@ -68,10 +72,11 @@
 							key: 4,
 						},
 					],
-					2: [{
-							name: "找客服",
-							key: 1,
-						},
+					2: [
+						// {
+						// 	name: "找客服",
+						// 	key: 1,
+						// },
 						{
 							name: "确认收货",
 							key: 5,
@@ -117,7 +122,6 @@
 								}
 							},
 						});
-
 						break;
 					case 5: // 确认收货
 						this.updateOrder({
@@ -127,7 +131,6 @@
 					case 6: // 去评价
 						uni.navigateTo({
 							url: "/pages/shop/userReviews/add?id=" + this.order.id,
-
 						});
 						return;
 					case 7: // 删除订单

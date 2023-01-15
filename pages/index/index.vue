@@ -2,7 +2,9 @@
 	<view class="content">
 		<!-- 标题 -->
 		<van-nav-bar title="侏罗纪家仙女VIP专属" class="navbar" fixed>
-			<van-icon name="chat-o" slot="left" size="20" />
+			<navigator :url="jumpPath('/pages/message/list')" slot="left">
+				<van-icon name="chat-o" size="20" />
+			</navigator>
 		</van-nav-bar>
 		<view></view>
 		<!-- 轮播 -->
@@ -17,17 +19,17 @@
 		</view>
 		<!-- 主要操作 -->
 		<view class="home-operation">
-			<van-grid column-num="5">
-				<van-grid-item icon="sign" icon-color="#fdaad2" text="每日签到" link-type="navigateTo"
+			<van-grid column-num="5" :border="false">
+				<van-grid-item icon="/static/home/sign.png" icon-color="#fdaad2" text="每日签到" link-type="navigateTo"
 					:url="jumpPath('/pages/user/daySignIn/daySignIn')" />
-				<van-grid-item icon="shop" icon-color="#f3b777" text="侏罗纪的家" link-type="navigateTo"
+				<van-grid-item icon="/static/home/home.png" icon-color="#f3b777" text="侏罗纪的家" link-type="navigateTo"
 					:url="jumpPath('/pages/home/index')" />
-				<van-grid-item icon="video" icon-color="#cea6fe" text="直播预告" link-type="navigateTo"
-					:url="jumpPath('/pages/user/daySignIn/daySignIn')" />
-				<van-grid-item icon="balance-list" icon-color="#aaf79d" text="订单转换" link-type="navigateTo"
+				<van-grid-item icon="/static/home/live.png" icon-color="#cea6fe" text="直播预告" link-type="switchTab"
+					:url="jumpPath('/pages/video/index')" />
+				<van-grid-item icon="/static/home/transfer.png" icon-color="#aaf79d" text="订单转换" link-type="navigateTo"
 					:url="jumpPath('/pages/user/transferOrder/transfer')" />
-				<van-grid-item icon="gift-card" icon-color="#fb8885" text="仙女买家秀" link-type="navigateTo"
-					:url="jumpPath('/pages/user/daySignIn/daySignIn')" />
+				<van-grid-item icon="/static/home/shows.png" icon-color="#fb8885" text="仙女买家秀" link-type="navigateTo"
+					:url="jumpPath('/pages/buyerShow/index')" />
 			</van-grid>
 		</view>
 		<!-- 积分商品推荐位 -->
@@ -38,11 +40,10 @@
 					<van-tag plain type="danger" round>新品</van-tag>
 				</view>
 			</van-cell>
-
 			<view class="pro-bar">
 				<van-grid :border="false">
 					<!-- https://img.yzcdn.cn/vant/cat.jpeg -->
-					<van-grid-item use-slot v-for="item in prods" :key="item.id" link-type="navigateTo"
+					<van-grid-item use-slot v-for="item in topProds" :key="item.id" link-type="navigateTo"
 						:url="'/pages/shop/detail?productId=' + item.id">
 						<div>
 							<van-image width="130rpx" height="130rpx" radius="4" fit="cover"
@@ -64,16 +65,22 @@
 	import ProCard from '@/components/ProCard.vue';
 	import { getProds } from '@/api/product.js';
 	import { getBanner } from '@/api/user';
+	import { userStore } from '@/store';
+	import { mapState } from 'pinia';
 	export default {
 		components: {
 			ProCard
 		},
 		data() {
 			return {
-				user: null,
+				// user: null,
 				prods: null,
+				topProds: null,
 				banners: []
 			};
+		},
+		computed: {
+			...mapState(userStore, ['user'])
 		},
 		onLoad(options) {
 			this.getRecomemdProd();
@@ -100,16 +107,14 @@
 			async getRecomemdProd() {
 				const result = await getProds({
 					current: 1,
-					pageSize: 20
+					pageSize: 54
 				});
 				if (result.code === 200) {
-					this.prods = result.data.records;
+					this.topProds = result.data.records.slice(0, 4)
+					this.prods = result.data.records.slice(4, result.data.records.length);
 				}
 			}
 		},
-		onShow() {
-			this.user = getApp().globalData.user;
-		}
 	};
 </script>
 

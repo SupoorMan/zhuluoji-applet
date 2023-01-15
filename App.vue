@@ -1,5 +1,6 @@
 <script>
 	import { userStore } from '@/store';
+	import { getUserIofo } from '@/api/user'
 	export default {
 		globalData: {
 			user: null
@@ -32,10 +33,10 @@
 				success: res => {
 					if (res.authSetting['scope.userInfo']) {
 						// 获取用户信息
-						_this.$request.get('/auser/getUser').then(res => {
+						getUserIofo().then(res => {
 							console.log(res);
 							_this.globalData.user = res.data;
-							// userStore().setUser(res.data)
+							userStore().setUser(res.data)
 						});
 					} else {
 						// _this.login(res.authSetting['scope.userInfo']);
@@ -55,7 +56,6 @@
 <style>
 	@import '/wxcomponents/vant/common/index.wxss';
 
-	*,
 	view {
 		box-sizing: border-box;
 		font-size: 28rpx;
@@ -70,7 +70,7 @@
 
 	/*每个页面公共css */
 	page>view {
-		background-image: linear-gradient(to top right, #f9f6f2, #ede5fc);
+		background-image: linear-gradient(75deg, #f9f6f2, #ede5fc);
 		color: #666;
 		padding-left: env(safe-area-inset-left);
 		padding-right: env(safe-area-inset-right);

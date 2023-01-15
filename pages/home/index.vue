@@ -117,7 +117,6 @@
 				user: null,
 			};
 		},
-
 		methods: {
 			backPage() {
 				uni.navigateBack({
@@ -251,7 +250,6 @@
 					topId: -1,
 					...opt,
 				}
-
 				const {
 					code,
 					data
@@ -400,12 +398,12 @@
 
 	/*视频 */
 	.video-box {
-		padding-top: 144rpx;
+		/* padding-top: 144rpx; */
 	}
 
 	video {
 		width: 660rpx;
-		height: 371rpx;
+		height: 660rpx;
 	}
 
 	/* 评论 */

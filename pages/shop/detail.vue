@@ -1,5 +1,5 @@
 <template>
-	<view class="prod-detail-page">
+	<view class="prod-detail-page" v-if="detail">
 		<!-- 标题 -->
 		<van-nav-bar title="积分商城" class="navbar" fixed left-arrow @click-left="backPage" />
 		<view></view>
@@ -16,7 +16,7 @@
 				<van-col span="12">
 					<view class="prod-title">{{ detail.productName }}</view>
 					<view class="price">
-						{{ detail.list[0].integral }}
+						{{detail.list.length>0? detail.list[0].integral: "-"}}
 						<text class="price-unit">积分</text>
 					</view>
 				</van-col>
@@ -29,7 +29,8 @@
 			</van-row>
 		</view>
 		<view class="prod-detail-info">
-			<van-field readonly label="规格:" :value="detail.list[0].sizes +detail.list[0].colors || '-'" :border="false"
+			<van-field readonly label="规格:"
+				:value="detail.list.length>0? detail.list[0].sizes +detail.list[0].colors : '-'" :border="false"
 				title-width="2.5em" label-class="detail-title" />
 			<van-field readonly label="类型:" :value="proCate[detail.productType]" :border="false" title-width="2.5em"
 				label-class="detail-title" />
@@ -38,7 +39,7 @@
 		</view>
 		<view class="prod-title-info">
 			<van-row>
-				<van-col span="12">用户评价（{{evals.total}}）</van-col>
+				<van-col span="12">用户评价（{{evals ? evals.total:'0'}}）</van-col>
 				<van-col span="12" style="text-align: right;">
 					<navigator :url="'/pages/shop/userReviews/index?productId=' + detail.id">
 						查看全部
@@ -102,7 +103,7 @@
 			async getDetail(option) {
 				const {
 					data
-				} = await getProdDetail(option);
+				} = await getProdDetail({ ...option, type: 0 });
 				this.detail = data;
 				if (data.productImage) {
 					this.proBanner = data.productImage.split(',');
@@ -116,9 +117,11 @@
 					pageSize: 1,
 					...options
 				})
-				this.evals = {
-					total: data.total,
-					first: data.total > 0 ? data.records[0] : {}
+				if (data) {
+					this.evals = {
+						total: data.total,
+						first: data.total > 0 ? data.records[0] : {}
+					}
 				}
 			},
 			onClickButton() {
