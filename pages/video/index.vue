@@ -7,7 +7,7 @@
 				<swiper-item indicator-dots="true" indicator-color="#fff" indicator-active-color="#F5C2A9">
 					<view class="swiper-item">
 						<view class="weekdays">
-							<view v-for="weekday in weekName" :key="weekday">{{weekday}}</view>
+							<view v-for="weekday in currentWeek" :key="weekday">{{weekday.weekName}}</view>
 						</view>
 						<view class="weekdays">
 							<view class="week-day" v-for="weekday in currentWeek" :key="weekday.text"
@@ -40,12 +40,11 @@
 					<text class="tab-text">酷酷的侏罗纪家纺</text>
 				</view>
 			</view>
-			<view class="live-prods"
-				:style="
+			<view class="live-prods" :style="
           activeLive === 0
-            ? 'border-top-right-radius: 20rpx;background-image: linear-gradient(to top left, #FFF7FF, #e8c2e3 68%, #E0AFD9)'
-            : 'border-top-left-radius: 20rpx;background-image: linear-gradient(to top right, #FFF7FF, #e8c2e3 68%, #E0AFD9)'">
-				<AppointmentCard v-for="item in prods" :key="item.id" :item="item" />
+            ? 'border-top-right-radius: 20rpx;'
+            : 'border-top-left-radius: 20rpx;'">
+				<AppointmentCard v-for="item in prods" :key="item.id" :item="item" :user="user" />
 				<view class="custom-image" v-if="!prods ||  prods.length===0">
 
 					<view style="color: #525151;">暂无直播商品</view>
@@ -57,15 +56,17 @@
 
 		<!-- 我的预约 -->
 		<view class="appointment-btn" hover-class="navigator-hover" @tap="toAppoint">
-			我的预约
+			我&nbsp;的<br />预&nbsp;约
 		</view>
 	</view>
 </template>
 
 <script>
+	import { userStore } from '@/store'
+	import { mapState } from 'pinia'
 	import dayjs from 'dayjs'
 	import { getBanner } from '@/api/user';
-	import { pageLivePreview, updateLivePreview } from '@/api/live';
+	import { pageLivePreview, updateLivePreview, getToday } from '@/api/live';
 	import { AppointmentCard } from './components/AppointmentCard.vue'
 	export default {
 		components: {
@@ -77,12 +78,13 @@
 				currentMonth: dayjs().format('YYYY年MM月'),
 				currentWeek: null,
 				currentDay: dayjs().format('YYYY-MM-DD'),
-				weekName: ['日', '一', '二', '三', '四', '五', '六'],
 				activeLive: 1,
-				// stauts: { 1: '开播提醒', 2: '直播中', 3: '直播结束' },
 				prods: null,
-				user: null
+				// user: null
 			}
+		},
+		computed: {
+			...mapState(userStore, ['user'])
 		},
 		methods: {
 			toAppoint() {
@@ -90,25 +92,32 @@
 					url: '/pages/video/appointment/index?appletUserId=' + this.user.id
 				})
 			},
-			changeTab(key) {
+			async changeTab(key) {
 				this.activeLive = key
-				this.getCurrentLive()
+				await this.getCurrentLive()
 			},
-			handelChangeWeek(weekday) {
+			async handelChangeWeek(weekday) {
 				this.currentDay = weekday.value
-				this.getCurrentLive()
+				await this.getCurrentLive()
 			},
-			getCurrentWeek() {
-				const days = 7;
-				const week = [];
-				for (let i = 1; i < days + 1; i++) {
-					const d = dayjs().startOf('week').add(i, 'day')
-					week.push({
-						text: d.format('DD'),
-						value: d.format('YYYY-MM-DD')
-					})
+			async getCurrentWeek() {
+				const { data: today } = await getToday()
+				if (today) {
+					this.currentMonth = dayjs(today).format('YYYY年MM月');
+					this.currentDay = dayjs(today).format('YYYY-MM-DD');
+					const days = 3;
+					const weekNameMap = { 0: '日', 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六' };
+					const week = [];
+					for (let i = -3; i <= days; i++) {
+						const d = dayjs(today).add(i, 'day')
+						week.push({
+							weekName: weekNameMap[d.format('d')],
+							text: d.format('DD'),
+							value: d.format('YYYY-MM-DD')
+						})
+					}
+					this.currentWeek = week
 				}
-				return week
 			},
 			// async subscLive(item) {
 			// 	if (item.flag === 1 || item.flag === 0) {
@@ -128,12 +137,13 @@
 				}
 			},
 			async getCurrentLive() {
+				console.log(this.currentDay)
 				const { data } = await pageLivePreview({
 					dates: this.currentDay,
 					status: 1,
 					type: 0,
 					sources: this.activeLive,
-					appletUserId: this.user.id
+					appletUserId: this.user ? this.user.id : ''
 				})
 				if (data.records) {
 					this.prods = data.records
@@ -141,17 +151,17 @@
 			}
 		},
 		onLoad(opt) {
-			this.currentWeek = this.getCurrentWeek()
+			this.getCurrentWeek()
 			this.getBanners()
 			if (this.user) {
 				this.getCurrentLive()
 			}
 		},
 		onShow() {
-			this.user = getApp().globalData.user;
-			if (this.user && !this.prods) {
-				this.getCurrentLive()
-			}
+			// this.user = getApp().globalData.user;
+			// if (this.user && !this.prods) {
+			// 	this.getCurrentLive()
+			// }
 		}
 	}
 </script>
@@ -160,17 +170,17 @@
 	.page-live {
 		height: auto;
 		min-height: 100vh;
-		background: #FFFAF044;
+		background: #f9f9f9;
 		overflow-x: hidden;
 	}
 
 	/* 日历 */
 	.live-week {
-		background-image: linear-gradient(to bottom, #FFFFFF, #E5ADE6);
+		background-image: linear-gradient(to bottom, #FFFFFF, #fdf4f7 59%, #fae3ec);
 		text-align: center;
 		line-height: 76rpx;
 		color: #333;
-		height: 284rpx;
+		height: 274rpx;
 	}
 
 	.month-title::after {
@@ -234,97 +244,105 @@
 		height: 100rpx;
 		position: relative;
 		font-size: 26rpx;
-		color: #B752B4;
-		line-height: 110rpx;
+		color: #813f8d;
+		line-height: 124rpx;
 	}
 
 	.live-tab-header>view.active {
-		font-size: 40rpx;
-		text-shadow: 4rpx 4rpx 8rpx #B752B4;
-		color: #fff;
+		font-size: 38rpx;
+		color: #956f98;
+		font-weight: 600;
+		line-height: 110rpx;
 	}
 
 	.live-tab-header>view>text {
 		position: relative;
 		font-family: Microsoft YaHei;
 		z-index: 2;
-		font-weight: 600;
 	}
 
 	.left {
-		padding-left: 30rpx;
+		padding-left: 40rpx;
 	}
 
 	.right {
-		padding-right: 30rpx
+		padding-right: 40rpx;
 	}
 
 	.left::before,
 	.right::before {
 		content: "";
+		/* border-radius: 58rpx 20rpx 0 0; */
+		/* background-color: #ffffff37; */
 		background: url("/static/live/tab.png") no-repeat bottom left;
 		background-size: contain;
 		position: absolute;
 		display: block;
-		width: 338rpx;
-		height: 120rpx;
-		top: 0;
+		width: 312rpx;
+		height: 82rpx;
+		top: 30rpx;
 	}
 
 	.left::before {
+		left: 0rpx;
 		transform: rotateY(180deg);
-		left: -16rpx;
 	}
 
 	.right::before {
-		right: -16rpx;
+		/* transform: rotateY(180deg); */
+		right: 0rpx;
 	}
 
 	.left.active::before,
 	.right.active::before {
-		background:
-			url("/static/live/03-19.png") no-repeat bottom left;
+		border-radius: 30rpx 128rpx 0 0;
+		background-color: #eaddea;
+		background: url("/static/live/tab-active.png") no-repeat bottom left;
 		background-size: contain;
-		background-position: -26rpx bottom;
-		width: 750rpx;
+		/* background-position: -26rpx bottom; */
+		width: 450rpx;
 		height: 100rpx;
+		top: 0;
 	}
 
 	.left.active::before {
 		transform: rotateY(0deg);
 		z-index: 1;
 		left: 0;
+		padding-left: 50rpx;
 	}
 
 	.right.active::before {
 		transform: rotateY(180deg);
 		right: 0;
+		padding-right: 50rpx;
 	}
 
 	.live-prods {
 		min-height: 400rpx;
-		background-image: linear-gradient(to top left, #fdf3fd, #e8c2e3 68%, #e1d1da);
+		background-color: #faeef3;
+		/* background-image: linear-gradient(to top left, #fdf3fd, #e8c2e3 68%, #fdf6fd); */
 		border-radius: 0 0 12rpx 12rpx;
 		--cell-value-color: #333;
 		padding: 12rpx;
 		position: relative;
-		margin-top: -12rpx;
+		/* margin-top: -12rpx; */
 	}
 
 	.appointment-btn {
 		background-color: #CB72BB;
 		color: #fff;
 		position: fixed;
-		width: 108rpx;
-		height: 108rpx;
+		/* width: 108rpx;
+		height: 108rpx; */
 		border-radius: 22rpx;
 		top: 59%;
 		right: 14rpx;
 		z-index: 5;
 		text-align: center;
 		font-weight: 600;
-		padding: 14rpx 0 14rpx 8rpx;
-		letter-spacing: 6rpx;
+		padding: 14rpx 24rpx 14rpx 24rpx;
+		/* letter-spacing: 6rpx; */
 	}
 
 	.custom-image {

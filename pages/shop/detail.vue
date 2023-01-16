@@ -7,7 +7,7 @@
 		<view class="uni-margin-wrap">
 			<swiper class="swiper" circular :indicator-dots="true" :autoplay="true">
 				<swiper-item v-for="bn in proBanner" :key="bn">
-					<image :src="bn" class="swiper-item" />
+					<image :src="bn" class="swiper-item" mode="aspectFit" />
 				</swiper-item>
 			</swiper>
 		</view>
@@ -29,13 +29,15 @@
 			</van-row>
 		</view>
 		<view class="prod-detail-info">
-			<van-field readonly label="规格:"
-				:value="detail.list.length>0? detail.list[0].sizes +detail.list[0].colors : '-'" :border="false"
-				title-width="2.5em" label-class="detail-title" />
-			<van-field readonly label="类型:" :value="proCate[detail.productType]" :border="false" title-width="2.5em"
-				label-class="detail-title" />
-			<van-field readonly label="发货:" value="3-15个工作日" :border="false" title-width="2.5em"
-				label-class="detail-title" />
+			<van-cell label="规格:" :value="detail.list.length>0? detail.list[0].sizes +detail.list[0].colors : '-'"
+				:border="false" title-width="2.5em" label-class="detail-title" />
+			<van-cell label="类型:" :border="false" title-width="2.5em" label-class="detail-title">
+				<template #default>
+					<text v-if="detail.productType">{{proCate[detail.productType]}}</text>
+					<text style="color:#F56171;">【积分兑换不退不换】</text>
+				</template>
+			</van-cell>
+			<van-cell label="发货:" value="3-15个工作日" :border="false" title-width="2.5em" label-class="detail-title" />
 		</view>
 		<view class="prod-title-info">
 			<van-row>
@@ -85,10 +87,10 @@
 			return {
 				detail: null,
 				proCate: {
-					1: '玻璃餐具',
-					2: '睡衣浴袍',
-					3: '床上用品',
-					4: '家居装点'
+					1: '餐具摆件',
+					// 2: '睡衣浴袍',
+					3: '床品家纺',
+					4: '生活日用'
 				},
 				proBanner: [],
 				evals: null // 评价对象 
@@ -149,11 +151,17 @@
 
 	.uni-margin-wrap {
 		border-radius: 8rpx 8rpx 0 0;
-		height: 320rpx;
+		height: 726rpx;
 		width: 726rpx;
 		background-color: #fff;
 		margin: 0 auto;
 		text-align: center;
+	}
+
+	.swiper,
+	.uni-margin-wrap image.swiper-item {
+		width: 726rpx;
+		height: 726rpx;
 	}
 
 	.prod-title-info {
@@ -179,7 +187,7 @@
 
 	.price-unit {
 		font-size: 24rpx;
-		background-color: #ffe4bf;
+		background-color: #ffe4bf70;
 		border-radius: 8rpx;
 		padding: 6rpx 8rpx;
 		color: #f56122;
@@ -202,6 +210,10 @@
 		background-color: #fff;
 		padding: 24rpx 0;
 		margin-top: 12rpx;
+	}
+
+	.van-cell__value {
+		text-align: left;
 	}
 
 	[alt] {

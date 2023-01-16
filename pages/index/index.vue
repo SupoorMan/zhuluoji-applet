@@ -20,16 +20,16 @@
 		<!-- 主要操作 -->
 		<view class="home-operation">
 			<van-grid column-num="5" :border="false">
-				<van-grid-item icon="/static/home/sign.png" icon-color="#fdaad2" text="每日签到" link-type="navigateTo"
-					:url="jumpPath('/pages/user/daySignIn/daySignIn')" />
-				<van-grid-item icon="/static/home/home.png" icon-color="#f3b777" text="侏罗纪的家" link-type="navigateTo"
-					:url="jumpPath('/pages/home/index')" />
-				<van-grid-item icon="/static/home/live.png" icon-color="#cea6fe" text="直播预告" link-type="switchTab"
-					:url="jumpPath('/pages/video/index')" />
-				<van-grid-item icon="/static/home/transfer.png" icon-color="#aaf79d" text="订单转换" link-type="navigateTo"
-					:url="jumpPath('/pages/user/transferOrder/transfer')" />
-				<van-grid-item icon="/static/home/shows.png" icon-color="#fb8885" text="仙女买家秀" link-type="navigateTo"
-					:url="jumpPath('/pages/buyerShow/index')" />
+				<van-grid-item icon="/static/home/sign.png" icon-color="#fdaad2" icon-size="32" text="每日签到"
+					link-type="navigateTo" :url="jumpPath('/pages/user/daySignIn/daySignIn')" />
+				<van-grid-item icon="/static/home/home.png" icon-color="#f3b777" icon-size="32" text="侏罗纪的家"
+					link-type="navigateTo" :url="jumpPath('/pages/home/index')" />
+				<van-grid-item icon="/static/home/live.png" icon-color="#cea6fe" icon-size="32" text="直播预告"
+					link-type="switchTab" :url="jumpPath('/pages/video/index')" />
+				<van-grid-item icon="/static/home/transfer.png" icon-color="#aaf79d" icon-size="32" text="订单转换"
+					link-type="navigateTo" :url="jumpPath('/pages/user/transferOrder/transfer')" />
+				<van-grid-item icon="/static/home/shows.png" icon-color="#fb8885" icon-size="32" text="仙女买家秀"
+					link-type="navigateTo" :url="jumpPath('/pages/buyerShow/index')" />
 			</van-grid>
 		</view>
 		<!-- 积分商品推荐位 -->

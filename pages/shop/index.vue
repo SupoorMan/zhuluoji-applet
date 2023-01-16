@@ -101,19 +101,19 @@
 					}
 				],
 				proCate: [{
-						name: '玻璃餐具',
+						name: '餐具摆件',
 						key: '0'
 					},
+					// {
+					// 	name: '睡衣浴袍',
+					// 	key: '1'
+					// },
 					{
-						name: '睡衣浴袍',
-						key: '1'
-					},
-					{
-						name: '床上用品',
+						name: '床品家纺',
 						key: '2'
 					},
 					{
-						name: '家居装点',
+						name: '生活日用',
 						key: '3'
 					}
 				],
@@ -145,7 +145,7 @@
 						this.page = {
 							current: 1,
 							pageSize: 20,
-							integral: this.user.integral
+							integral: this.user ? this.user.integral : 99999
 						};
 						break;
 					case 13:

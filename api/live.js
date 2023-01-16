@@ -19,3 +19,9 @@ export const updateLivePreview = async (params) => {
 export const getAppointment = async (params) => {
 	return request.get('/activityDetail/subscribe', params);
 }
+/** 获取今日日期
+ *
+ */
+export const getToday = async () => {
+	return request.get('/configInfo/time');
+}

@@ -1,15 +1,16 @@
 <template>
 	<view class="show-page">
-		<image :src="activity ? activity.images :''" mode="widthFix" style="width: 100%;height: auto;" />
+		<!-- <image :src="activity ? activity.images :''" mode="widthFix" style="width: 100%;height: auto;" /> -->
 		<!-- 我的预约 -->
 		<view class="join-btn" hover-class="navigator-hover" @tap="toAdd">
-			立即参与
+			立&nbsp;即<br />参&nbsp;与
+		</view>
+		<!-- v-if="shows" -->
+		<view class="" style="display: flex; justify-content: flex-end; padding: 24rpx 32rpx 0;width: 100%;">
+			<van-icon name="description" color="#cea6fe" />
+			&nbsp;活动细则
 		</view>
 		<view class="show-list" v-if="shows">
-			<view class="" style="display: flex; justify-content: flex-end; padding: 24rpx 32rpx 0">
-				<van-icon name="description" color="#cea6fe" />
-				&nbsp;活动细则
-			</view>
 			<ShowCard v-for="item in shows" :item="item" :key="item.id" />
 		</view>
 
@@ -39,12 +40,13 @@
 				const { data } = await getActivity({ type: 1, status: 1, current: 1, pageSize: 1 })
 				if (data.records && data.records.length > 0) {
 					this.activity = data.records[0]
-					const activityDate = data.records[0].days.split(',')
-					const diffTime1 = dayjs().diff(dayjs(activityDate[0]))
-					const diffTime2 = dayjs().diff(dayjs(activityDate[1]))
-					if (diffTime1 >= 0 && diffTime2 <= 0) {
-						await this.getCurrentShows()
-					}
+					await this.getCurrentShows()
+					// const activityDate = data.records[0].days.split(',')
+					// const diffTime1 = dayjs().diff(dayjs(activityDate[0]))
+					// const diffTime2 = dayjs().diff(dayjs(activityDate[1]))
+					// if (diffTime1 >= 0 && diffTime2 <= 0) {
+					// 	await this.getCurrentShows()
+					// }
 				}
 			},
 			async getCurrentShows() {

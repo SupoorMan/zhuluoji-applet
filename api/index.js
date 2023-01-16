@@ -1,5 +1,6 @@
 // const baseUrl = "http://47.96.64.19:8888" ;
-const baseUrl = "http://192.168.31.152:8888";
+// const baseUrl = "http://192.168.31.152:8888";
+const baseUrl = "http://192.168.3.91:8888";
 
 function https({
 	method,
@@ -7,9 +8,7 @@ function https({
 	data,
 	header = {}
 }) {
-
 	header = {
-
 		"Access-Control-Allow-Headers": 'token',
 		'content-type': method === 'POST' ? 'application/json' : 'application/x-www-form-urlencoded',
 		...header,
@@ -70,7 +69,5 @@ const request = {
 			}
 		})
 	}
-
 }
-
 export default request

@@ -19,40 +19,6 @@
 			}
 		},
 		{
-			"path": "pages/buyerShow/index",
-			"style": {
-				"navigationBarTitleText": "仙女买家秀",
-				"enablePullDownRefresh": false,
-			}
-		},
-		{
-			"path": "pages/buyerShow/add",
-			"style": {
-				"navigationBarTitleText": "仙女买家秀",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"usingComponents": {
-					"van-uploader": "/wxcomponents/vant/uploader/index"
-				}
-			}
-		},
-		{
-			"path": "pages/buyerShow/detail",
-			"style": {
-				"navigationBarTitleText": "仙女买家秀",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-			}
-		},
-		{
-			"path": "pages/video/appointment/index",
-			"style": {
-				"navigationBarTitleText": "我的预约",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-			}
-		},
-		{
 			"path": "pages/shop/index",
 			"style": {
 				"navigationBarTitleText": "积分商城",
@@ -64,7 +30,8 @@
 					"van-empty": "/wxcomponents/vant/empty/index"
 				}
 			}
-		}, {
+		},
+		{
 			"path": "pages/shop/detail",
 			"style": {
 				"navigationBarTitleText": "积分商城",
@@ -78,45 +45,16 @@
 					"van-goods-action-button": "/wxcomponents/vant/goods-action-button/index"
 				}
 			}
-		}, {
-			"path": "pages/shop/order/addOrder",
+		},
+		{
+			"path": "pages/video/appointment/index",
 			"style": {
-				"navigationBarTitleText": "确认订单",
+				"navigationBarTitleText": "我的预约",
 				"enablePullDownRefresh": false,
-				"usingComponents": {
-					"van-cell-group": "/wxcomponents/vant/cell-group/index",
-					"van-field": "/wxcomponents/vant/field/index",
-					"van-popup": "/wxcomponents/vant/popup/index",
-					"van-radio-group": "/wxcomponents/vant/radio-group/index",
-					"van-radio": "/wxcomponents/vant/radio/index",
-					"van-picker": "/wxcomponents/vant/picker/index",
-					"van-dialog": "/wxcomponents/vant/dialog/index"
-				}
+				"navigationStyle": "custom"
 			}
 		},
 		{
-			"path": "pages/shop/userReviews/index",
-			"style": {
-				"navigationBarTitleText": "用户评价",
-				"enablePullDownRefresh": false,
-				"usingComponents": {
-					"van-cell-group": "/wxcomponents/vant/cell-group/index",
-					"van-tab": "/wxcomponents/vant/tab/index",
-					"van-tabs": "/wxcomponents/vant/tabs/index"
-				}
-			}
-		}, {
-			"path": "pages/shop/userReviews/add",
-			"style": {
-				"navigationBarTitleText": "新增评价",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"usingComponents": {
-					"van-checkbox": "/wxcomponents/vant/checkbox/index",
-					"van-uploader": "/wxcomponents/vant/uploader/index"
-				}
-			}
-		}, {
 			"path": "pages/user/index",
 			"style": {
 				"navigationBarTitleText": "我的",
@@ -169,7 +107,7 @@
 			"path": "pages/user/authorization/index",
 			"style": {
 				"navigationBarTitleText": "授权",
-				"enablePullDownRefresh": false,
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -183,28 +121,6 @@
 					"van-switch": "/wxcomponents/vant/switch/index",
 					"van-popup": "/wxcomponents/vant/popup/index",
 					"van-area": "/wxcomponents/vant/area/index"
-				}
-			}
-		},
-		{
-			"path": "pages/shop/order/list",
-			"style": {
-				"navigationBarTitleText": "订单",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"usingComponents": {
-					"van-empty": "/wxcomponents/vant/empty/index",
-					"van-cell-group": "/wxcomponents/vant/cell-group/index"
-				}
-			}
-		},
-		{
-			"path": "pages/shop/order/detail",
-			"style": {
-				"navigationBarTitleText": "订单详情",
-				"enablePullDownRefresh": false,
-				"usingComponents": {
-					"van-cell-group": "/wxcomponents/vant/cell-group/index"
 				}
 			}
 		},
@@ -255,6 +171,104 @@
 			}
 		}
 	],
+	"subPackages": [{
+			"root": "pages/buyerShow",
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "仙女买家秀",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "add",
+					"style": {
+						"navigationBarTitleText": "仙女买家秀",
+						"enablePullDownRefresh": false,
+						"navigationStyle": "custom",
+						"usingComponents": {
+							"van-uploader": "/wxcomponents/vant/uploader/index"
+						}
+					}
+				},
+				{
+					"path": "detail",
+					"style": {
+						"navigationBarTitleText": "仙女买家秀",
+						"enablePullDownRefresh": false,
+						"navigationStyle": "custom"
+					}
+				}
+			]
+		}, {
+			"root": "pages/shop/order",
+			"pages": [{
+					"path": "addOrder",
+					"style": {
+						"navigationBarTitleText": "确认订单",
+						"enablePullDownRefresh": false,
+						"usingComponents": {
+							"van-cell-group": "/wxcomponents/vant/cell-group/index",
+							"van-field": "/wxcomponents/vant/field/index",
+							"van-popup": "/wxcomponents/vant/popup/index",
+							"van-radio-group": "/wxcomponents/vant/radio-group/index",
+							"van-radio": "/wxcomponents/vant/radio/index",
+							"van-picker": "/wxcomponents/vant/picker/index",
+							"van-dialog": "/wxcomponents/vant/dialog/index"
+						}
+					}
+				},
+				{
+					"path": "list",
+					"style": {
+						"navigationBarTitleText": "订单",
+						"enablePullDownRefresh": false,
+						"navigationStyle": "custom",
+						"usingComponents": {
+							"van-empty": "/wxcomponents/vant/empty/index",
+							"van-cell-group": "/wxcomponents/vant/cell-group/index"
+						}
+					}
+				},
+				{
+					"path": "detail",
+					"style": {
+						"navigationBarTitleText": "订单详情",
+						"enablePullDownRefresh": false,
+						"usingComponents": {
+							"van-cell-group": "/wxcomponents/vant/cell-group/index"
+						}
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/shop/userReviews",
+			"pages": [{
+				"path": "index",
+				"style": {
+					"navigationBarTitleText": "用户评价",
+					"enablePullDownRefresh": false,
+					"usingComponents": {
+						"van-cell-group": "/wxcomponents/vant/cell-group/index",
+						"van-tab": "/wxcomponents/vant/tab/index",
+						"van-tabs": "/wxcomponents/vant/tabs/index"
+					}
+				}
+			}, {
+				"path": "add",
+				"style": {
+					"navigationBarTitleText": "新增评价",
+					"enablePullDownRefresh": false,
+					"navigationStyle": "custom",
+					"usingComponents": {
+						"van-checkbox": "/wxcomponents/vant/checkbox/index",
+						"van-uploader": "/wxcomponents/vant/uploader/index"
+					}
+				}
+			}, ]
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
@@ -292,7 +306,7 @@
 			"pagePath": "pages/video/index",
 			"iconPath": "static/tabbar/video.png",
 			"selectedIconPath": "static/tabbar/video-active.png",
-			"text": "直播预定"
+			"text": "直播预告"
 		}, {
 			"pagePath": "pages/user/index",
 			"iconPath": "static/tabbar/user.png",
