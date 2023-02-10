@@ -10,7 +10,6 @@
 			</view>
 			<view class="tab-list" v-if="orders && orders.length > 0">
 				<view class="order-card" v-for="order in orders" :key="order.id">
-
 					<OrderCard :order="order" class="" />
 				</view>
 			</view>

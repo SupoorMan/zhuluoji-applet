@@ -30,12 +30,14 @@
 <script>
 	import { getNotice } from '@/api/user';
 	import dayjs from 'dayjs';
+	import { mapState } from 'pinia'
+	import { userStore } from '../../store';
 	export default {
 		data() {
 			return {
 				page: {
 					current: 1,
-					pageSize: 20,
+					pageSize: 10,
 					total: 0
 				},
 				source: {
@@ -88,9 +90,12 @@
 				list: null
 			};
 		},
+		computed: {
+			...mapState(userStore, ['user'])
+		},
 		methods: {
 			async getList() {
-				const { code, data } = await getNotice(this.page);
+				const { code, data } = await getNotice({ ...this.page, appletUserId: this.user.id });
 				if (code === 200) {
 					if (this.page.current !== 1) {
 						this.list = [...this.list, ...data.records]
@@ -101,7 +106,7 @@
 				}
 			},
 			cutTime(date) {
-				return dayjs(date).format('YY/MM/DD hh:mm');
+				return dayjs(date).format('YY/MM/DD HH:mm');
 			},
 			async loadMore() {
 				this.page.current += 1

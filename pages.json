@@ -81,6 +81,15 @@
 				}
 			}
 		}, {
+			"path": "pages/user/userInfo/nickname",
+			"style": {
+				"navigationBarTitleText": "更新用户名",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-field": "/wxcomponents/vant/field/index"
+				}
+			}
+		}, {
 			"path": "pages/user/address/address",
 			"style": {
 				"navigationBarTitleText": "收货地址",
@@ -139,7 +148,7 @@
 		}, {
 			"path": "pages/user/transferOrder/transfer",
 			"style": {
-				"navigationBarTitleText": "订单转化",
+				"navigationBarTitleText": "订单转换",
 				"enablePullDownRefresh": false,
 				"usingComponents": {
 					"van-cell-group": "/wxcomponents/vant/cell-group/index",
@@ -153,8 +162,11 @@
 		{
 			"path": "pages/user/transferOrder/list",
 			"style": {
-				"navigationBarTitleText": "转化记录",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "转换记录",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-empty": "/wxcomponents/vant/empty/index"
+				}
 			}
 		}, {
 			"path": "pages/home/index",
@@ -162,6 +174,19 @@
 				"navigationBarTitleText": "侏罗纪的家",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
+				"usingComponents": {
+					"van-tab": "/wxcomponents/vant/tab/index",
+					"van-divider": "/wxcomponents/vant/divider/index",
+					"van-cell-group": "/wxcomponents/vant/cell-group/index",
+					"van-tabs": "/wxcomponents/vant/tabs/index"
+				}
+			}
+		}, {
+			"path": "pages/shop/rules/interRules",
+			"style": {
+				"navigationBarTitleText": "赚积分",
+				"enablePullDownRefresh": false,
+				// "navigationStyle": "custom",
 				"usingComponents": {
 					"van-tab": "/wxcomponents/vant/tab/index",
 					"van-divider": "/wxcomponents/vant/divider/index",
@@ -198,6 +223,20 @@
 						"enablePullDownRefresh": false,
 						"navigationStyle": "custom"
 					}
+				},
+				{
+					"path": "rule",
+					"style": {
+						"navigationBarTitleText": "仙女买家秀",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "ownShow",
+					"style": {
+						"navigationBarTitleText": "我的买家秀",
+						"enablePullDownRefresh": false
+					}
 				}
 			]
 		}, {
@@ -211,8 +250,8 @@
 							"van-cell-group": "/wxcomponents/vant/cell-group/index",
 							"van-field": "/wxcomponents/vant/field/index",
 							"van-popup": "/wxcomponents/vant/popup/index",
-							"van-radio-group": "/wxcomponents/vant/radio-group/index",
 							"van-radio": "/wxcomponents/vant/radio/index",
+							"van-radio-group": "/wxcomponents/vant/radio-group/index",
 							"van-picker": "/wxcomponents/vant/picker/index",
 							"van-dialog": "/wxcomponents/vant/dialog/index"
 						}
@@ -236,7 +275,11 @@
 						"navigationBarTitleText": "订单详情",
 						"enablePullDownRefresh": false,
 						"usingComponents": {
-							"van-cell-group": "/wxcomponents/vant/cell-group/index"
+							"van-cell-group": "/wxcomponents/vant/cell-group/index",
+							"van-popup": "/wxcomponents/vant/popup/index"
+							// "van-radio-group": "/wxcomponents/vant/radio-group/index",
+							// "van-radio": "/wxcomponents/vant/radio/index",
+							// "van-empty": "/wxcomponents/vant/empty/index"
 						}
 					}
 				}
@@ -266,7 +309,7 @@
 						"van-uploader": "/wxcomponents/vant/uploader/index"
 					}
 				}
-			}, ]
+			}]
 		}
 	],
 	"globalStyle": {
@@ -284,7 +327,10 @@
 			"van-col": "/wxcomponents/vant/col/index",
 			"van-icon": "/wxcomponents/vant/icon/index",
 			"van-image": "/wxcomponents/vant/image/index",
-			"van-divider": "/wxcomponents/vant/divider/index"
+			"van-divider": "/wxcomponents/vant/divider/index",
+			"van-empty": "/wxcomponents/vant/empty/index",
+			"van-radio-group": "/wxcomponents/vant/radio-group/index",
+			"van-radio": "/wxcomponents/vant/radio/index"
 		}
 	},
 	"tabBar": {

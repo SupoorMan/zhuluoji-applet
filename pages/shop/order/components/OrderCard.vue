@@ -1,5 +1,5 @@
 <template>
-	<navigator :url="'/pages/shop/order/detail?id=' + order.id">
+	<view @click="toDetail">
 		<van-card :thumb="firstImage" custom-class="pro-card">
 			<view slot="title" class="title">
 				<view>{{ order.productName }}</view>
@@ -11,22 +11,20 @@
 			</view>
 			<view slot="footer" @click.stop>
 				<van-button size="mini" class="button" round open-type="contact"
-					v-if="order.status===1||order.status===2">找客服</van-button>
+					v-if="order.status===1||order.status===2">&nbsp;找客服&nbsp;</van-button>
 				<van-button size="mini" class="button" round v-for="btn in buttons[order.status]" :key="btn.key"
 					@tap="clickButton(btn.key)">
-					{{ btn.name }}
+					&nbsp;{{ btn.name }}&nbsp;
 				</van-button>
 
 				<!-- <van-button size="mini" @click.prevent.stop="clickButton(6)">去评价</van-button> -->
 			</view>
 		</van-card>
-	</navigator>
+	</view>
 </template>
 
 <script>
-	import {
-		updateStatus
-	} from "@/api/order";
+	import { updateStatus } from "@/api/order";
 	import Dialog from "@/wxcomponents/vant/dialog/dialog";
 	export default {
 		props: {
@@ -99,6 +97,11 @@
 			};
 		},
 		methods: {
+			toDetail() {
+				uni.navigateTo({
+					url: '/pages/shop/order/detail?id=' + this.order.id
+				})
+			},
 			updateOrder(record) {
 				updateStatus({
 					...this.order,
@@ -110,6 +113,15 @@
 					case 2: // 催发货
 						break;
 					case 3: // 改地址
+						const order = this.order
+						uni.navigateTo({
+							url: '/pages/shop/order/addOrder?id=' + order.id,
+							success: function(res) {
+								// 通过eventChannel向被打开页面传送数据
+								res.eventChannel.emit('acceptDataFromOpenerPage', order);
+							}
+						})
+						// this.$emit('changeAddress')
 						break;
 					case 4: // 取消订单
 						uni.showModal({
@@ -194,5 +206,11 @@
 
 	.button {
 		--button-mini-font-size: 22rpx;
+		--button-mini-min-width: 120rpx;
+		padding: 0 8rpx;
+	}
+
+	.van-button {
+		padding: 0 12rpx !important;
 	}
 </style>

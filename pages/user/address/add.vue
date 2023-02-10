@@ -1,26 +1,45 @@
 <template>
 	<view class="add-address" v-if="add">
 		<van-cell-group>
-			<van-field required label="收件人" :value="add.receiver" placeholder="请输入收件人" border="false"
+			<!-- <van-field required label="收件人" :value="add.receiver" placeholder="请输入收件人" border="false"
 				@change="onChange($event, 'receiver')" />
-			<van-field required label="手机号" type="number" :value="add.phone" placeholder="请输入手机号" border="false"
-				@change="onChange($event, 'phone')" />
+ -->
+			<van-cell required label="收件人" border="false">
+				<template #default>
+					<input type="text" :value="add.receiver" placeholder="请输入收件人"
+						@change="onChange($event, 'receiver')">
+				</template>
+			</van-cell>
+
+			<!-- <van-field required label="手机号" type="number" :value="add.phone+''" placeholder="请输入手机号" border="false"
+				@change="onChange($event, 'phone')" /> -->
+			<van-cell required label="手机号" border="false">
+				<template #default>
+					<input type="text" :value="add.phone" placeholder="请输入手机号" @change="onChange($event, 'phone')">
+				</template>
+			</van-cell>
+
 			<van-cell required label="选择地址" :value="add.province + add.city + add.area" placeholder="选择地址"
 				border="false" is-link readonly @tap="showSelectAddress = true" />
-			<van-field required label="详细地址" :value="add.address" placeholder="请输入详细地址" type="textarea" autosize
-				border="false" @change="onChange($event, 'address')" />
+			<!-- <van-field required label="详细地址" :value="add.详细地址+''" placeholder="请输入详细地址" type="textarea" autosize
+				border="false" @change="onChange($event, 'address')" /> -->
+			<van-cell required label="详细地址" border="false">
+				<template #default>
+					<input type="text" :value="add.address" placeholder="请输入详细地址" @change="onChange($event, 'address')">
+				</template>
+			</van-cell>
 			<van-cell title="设为默认">
 				<template #default>
-					<van-switch :checked="add.defaults === 1" @change="setDefault" size="40rpx"
-						active-color="#e5d4ff" />
+					<switch :checked="add.defaults === 1" @change="setDefault" style="transform:scale(0.7)"
+						color="#e5d4ff" />
 				</template>
 			</van-cell>
 		</van-cell-group>
 		<!-- <van-cell-group inset> -->
 		<view class="read-address">
-			<view class="title">粘贴文本识别</view>
+			<!-- <view class="title">粘贴文本识别</view> -->
 			<view>
-				<textarea v-model="copyValue"></textarea>
+				<textarea v-model="copyValue" placeholder="粘贴文本识别:地址 名称 电话"></textarea>
 				<van-button size="mini" color="#c5abff" class="read-button" style="float: right;" @tap="getArea">
 					识别信息
 				</van-button>
@@ -87,14 +106,23 @@
 				const phone = result.groups.address.match(regPhone);
 				if (result.groups) {
 					const { province, city, area, address } = result.groups;
-					this.add = {
+					const newAddr = {
 						...this.add,
 						province,
 						city,
 						area,
 						address: phone ? address.replace(phone, '') : address,
-						phone: phone ? phone[0] : ''
-					};
+						phone: phone ? phone[0] : '',
+					}
+					const context = newAddr.address.split(' ')
+					this.add = null;
+					this.add = context.length > 1 ? {
+						...newAddr,
+						receiver: context[1],
+						address: context[
+							0]
+					} : newAddr;
+					this.$forceUpdate()
 				}
 				console.log(result, receiver, phone);
 			},
@@ -183,9 +211,12 @@
 	}
 
 	.read-button {
-		border: 2rpx solid #454545;
+		/* border: 2rpx solid #454545; */
 		border-radius: 24rpx;
 		overflow: hidden;
-		padding: auto 12rpx;
+		/* padding: 0 12rpx; */
+		background-color: #c5abff;
+		--button-mini-min-width: 140rpx;
+		--button-mini-font-size: 24rpx;
 	}
 </style>

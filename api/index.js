@@ -1,7 +1,6 @@
 // const baseUrl = "http://47.96.64.19:8888" ;
-// const baseUrl = "http://192.168.31.152:8888";
-const baseUrl = "http://192.168.3.91:8888";
-
+const baseUrl = "https://www.shuzhuyun.com/zhuluoji";
+// const baseUrl = "http://192.168.31.152:8888/zhuluoji";
 function https({
 	method,
 	url,

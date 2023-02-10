@@ -1,14 +1,23 @@
 <template>
-	<view>
-		<van-cell center="true" value-class="time-text" use-label-slot :value="cutDate(item.createTime)">
+	<view class="eval-card">
+		<van-cell center="true" use-label-slot :border="false" title-width="90%">
 			<template #icon>
 				<van-image round width="30" height="30" :src="item.avatarUrl" style="margin-right: 10rpx" />
 			</template>
 			<template #title>
-				<view class="van-cell-text">{{ item.nickname }}</view>
+				<view style="display: flex;justify-content: space-between;align-items: center;">
+
+					<view class="van-cell-text">{{ item.nickname }}</view>
+					<view>
+
+						<text class="time-text">{{cutDate(item.createTime)}}</text>
+						<van-icon slot="right-icon" name="ellipsis" class="custom-icon" />
+					</view>
+				</view>
 				<text style="color: #edba00; font-size: 24rpx">Level{{ item.level }}</text>
 			</template>
-			<van-icon slot="right-icon" name="ellipsis" class="custom-icon" />
+			<template #default>
+			</template>
 		</van-cell>
 		<view class="eval-message" :style="noreply ? 'padding-right:0;' : ''">
 			<swiper class="eval-imgs" circular v-if="item.images">
@@ -19,8 +28,8 @@
 				</swiper-item>
 			</swiper>
 			{{ item.message }}
-			<div class="review-tools">
-				<view @click="replyToEval(item)" v-if="!noreply && (item.homeId ||item.activityId)">
+			<div class="review-tools" v-if="!noreply && (item.homeId ||item.activityId)">
+				<view @click="replyToEval(item)">
 					<van-icon name="chat-o" size="32rpx" style="margin-right: 4rpx" />
 					回复
 				</view>
@@ -79,6 +88,12 @@
 </script>
 
 <style scoped>
+	.eval-card {
+		--cell-vertical-padding: 8rpx;
+		--cell-line-height: 40rpx;
+		padding-bottom: 16rpx;
+	}
+
 	.van-cell-text {
 		font-size: 26rpx;
 		line-height: 1.2;
@@ -103,6 +118,7 @@
 		align-items: center;
 		justify-content: flex-end;
 		margin-top: 16rpx;
+		margin-bottom: 16rpx;
 	}
 
 	.review-tools>view {
@@ -116,5 +132,9 @@
 	.time-text {
 		font-size: 24rpx;
 		margin-right: 16rpx;
+	}
+
+	view.van-cell__value {
+		font-size: 24rpx !important;
 	}
 </style>

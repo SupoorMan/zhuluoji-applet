@@ -13,8 +13,9 @@
 					<view class="user-info">
 						<van-image round height="134rpx" width="134rpx"
 							:src="user && user.avatarUrl? user.avatarUrl : ''" fit="cover" />
-						<view class="user-desc">
-							<view v-if="user">{{ user.nickname }}</view>
+						<view class="user-desc ">
+							<navigator v-if="user" :url="jumpPath('/pages/user/userInfo/userInfo')">{{ user.nickname }}
+							</navigator>
 							<navigator v-else url="/pages/user/authorization/index">登录</navigator>
 							<view class="user-code">{{ user ? user.uid : '' }}</view>
 						</view>
@@ -22,11 +23,15 @@
 				</van-col>
 				<van-col span="6">
 					<view style="margin-top: 70rpx;text-align: right;">
-						<navigator :url="jumpPath('/pages/user/daySignIn/daySignIn')" class="sign-btn">
+						<navigator :url="jumpPath('/pages/user/daySignIn/daySignIn')" class="sign-btn"
+							v-if="!todayIsSign">
 							<van-button icon="edit" size="small" round color="#fc817c">
 								签到
 							</van-button>
 						</navigator>
+						<van-button icon="edit" size="small" round color="#fc817c" v-else>
+							已签到
+						</van-button>
 					</view>
 				</van-col>
 			</van-row>
@@ -40,9 +45,9 @@
 				<text v-if="user&& user.level<4">LV{{ user ? user.level + 1 : 1 }}</text>
 			</view>
 			<van-progress v-if="user && user.level<4" track-color="#f0e2ff" color="#fff" :show-pivot="false"
-				:percentage="(currentExpens/expensLv[user.level])*100" />
-			<view class="level-tip" v-if="user && user.level<4">{{currentExpens}}/{{expensLv[user.level]}},
-				还差{{expensLv[user.level] - currentExpens }}经验值，便可升级</view>
+				:percentage="(user.growth/expensLv[user.level])*100" />
+			<view class="level-tip" v-if="user && user.level<4">{{user.growth}}/{{expensLv[user.level]}},
+				还差{{expensLv[user.level] - user.growth }}经验值，便可升级</view>
 			<view class="level-content">
 				<view class="content-unit">
 					<view>{{ user ? user.growth : 0 }}</view>
@@ -70,11 +75,12 @@
 					</view>
 					<view class="">信息中心</view>
 				</van-grid-item>
-				<van-grid-item use-slot link-type="navigateTo" :url="jumpPath('/pages/shop/order/afterSales')">
+				<van-grid-item use-slot link-type="navigateTo"
+					:url="jumpPath(user&& user.id ?'/pages/video/appointment/index?appletUserId=' + user.id:'')">
 					<view class="service-icon icon-3">
-						<van-icon name="logistics" color="#fff" size="72rpx" />
+						<van-icon name="todo-list-o" color="#fff" size="72rpx" />
 					</view>
-					<view class="">商品售后</view>
+					直播预约
 				</van-grid-item>
 			</van-grid>
 		</view>
@@ -85,17 +91,15 @@
 					:url="jumpPath('/pages/shop/order/list')" />
 				<van-grid-item use-slot>
 					<view class="button">
-
 						<van-button open-type="contact" size="large">
-							<van-icon name="service-o" size="52rpx" color="#646566" />
-							<view style="color:#646566;padding-top: 10rpx; font-size: 24rpx;">
+							<van-icon name="service-o" size="48rpx" color="#646566" />
+							<view style="color:#646566;padding-top: 8rpx; font-size: 24rpx;">
 								<text>
 									客服
 								</text>
 							</view>
 						</van-button>
 					</view>
-
 				</van-grid-item>
 				<van-grid-item icon="contact" text="用户" link-type="navigateTo"
 					:url="jumpPath('/pages/user/userInfo/userInfo')" />
@@ -110,42 +114,45 @@
 
 <script>
 	import { userStore } from '@/store'
-	import { mapState } from 'pinia'
+	import { mapActions, mapState } from 'pinia'
 	export default {
 		data() {
 			return {
 				expensLv: {
 					0: 1000,
-					1: 4000,
-					2: 5000,
-					3: 20000
+					1: 5000, // 4000,
+					2: 10000, // 5000,
+					3: 30000 // 20000
 				},
 				expens: 1000 // 经验值
 			};
 		},
-		computed: {},
 		computed: {
-			...mapState(userStore, ['user']),
-			currentExpens() {
-				if (this.user && this.user.level) {
-					const curLevel = this.user.level
-					const expensArr = this.expensLv
-					let minExpens = 0
-					for (let o in expensArr) {
-						if (o < curLevel) {
-							minExpens += expensArr[o]
-						}
-					}
-					return this.user.growth - minExpens
-				}
-				return 0
-			},
+			...mapState(userStore, ['user', 'todayIsSign']),
+			// currentExpens() {
+			// 	if (this.user && this.user.level) {
+			// 		const curLevel = this.user.level
+			// 		const expensArr = this.expensLv
+			// 		let minExpens = 0
+			// 		for (let o in expensArr) {
+			// 			if (o < curLevel) {
+			// 				minExpens += expensArr[o]
+			// 			}
+			// 		}
+			// 		return this.user.growth - minExpens
+			// 	}
+			// 	return 0
+			// },
 		},
 		methods: {
+			...mapActions(userStore, ['getUser']),
 			jumpPath(realpath) {
 				return this.user ? realpath : '/pages/user/authorization/index';
 			},
 		},
+		onShow() {
+			this.getUser()
+		}
 	};
 </script>
 

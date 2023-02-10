@@ -2,7 +2,7 @@
 	<view class="address-page">
 		<view class="addresslist">
 			<view class="address-unit" v-for="item in list" :key="item.id">
-				<van-swipe-cell @close="onClose" async-close rightWidth="40">
+				<van-swipe-cell @close="onClose" async-close rightWidth="40" :name="item.id">
 					<van-cell-group inset>
 						<van-cell use-label-slot center is-link @tap="toEdit(item)">
 							<template #title>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-	import { getAddressList } from '@/api/setting';
+	import { getAddressList, delAddress } from '@/api/setting';
 	import Dialog from '@/wxcomponents/vant/dialog/dialog';
 	export default {
 		data() {
@@ -57,7 +57,8 @@
 				});
 			},
 			onClose(event) {
-				const { position, instance } = event.detail;
+				const { position, instance, name } = event.detail;
+				let addrs = this.list
 				switch (position) {
 					case 'cell':
 						instance.close();
@@ -65,8 +66,19 @@
 					case 'right':
 						Dialog.confirm({
 							message: '确定删除吗？'
-						}).then(() => {
+						}).then(async () => {
+							const { code } = await delAddress({ id: name })
+							if (code === 200) {
+								uni.showToast({
+									icon: 'success',
+									title: '删除成功'
+								})
+							}
 							instance.close();
+							const index = addrs.findIndex(n => n.id === name)
+							if (index > -1) {
+								addrs.splice(index, 1)
+							}
 						});
 						break;
 				}

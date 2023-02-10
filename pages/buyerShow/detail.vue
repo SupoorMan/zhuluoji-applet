@@ -49,14 +49,14 @@
 					<textarea fixed auto-height v-model="returnText" @input="onRecommendChange"
 						:focus="returnTopId !== ''" @blur="onBulrReply" @confirm="onRecommendClick"
 						@focus="isEnterEval=true" :placeholder="
-              returnTopId ? focusReply : '喜欢就评论支持一下吧~(至少15字)'
+              returnTopId ? focusReply : '喜欢就评论支持一下吧~'
             " />
 				</view>
 				<view class="eval-operation" v-if="!isEnterEval">
-					<view>
-						<van-icon name="share-o" size="24" />
-						<text>分享</text>
-					</view>
+					<van-button color="#fff" open-type="share">
+						<van-icon name="share-o" size="24" color="#666" />
+						<!-- <text style="color:#666">分享</text> -->
+					</van-button>
 					<view @tap="addStar">
 						<van-icon :name="detail.flag=== 1? 'like' :'like-o'" color="#ff6a5f" size="24" />
 						<text v-if="detail.starter>0">{{ detail.starter }}</text>
@@ -116,13 +116,13 @@
 			},
 			async onRecommendClick() {
 				// 新增评论
-				if (this.returnText.length < 15) {
+				if (this.returnText.length < 2) {
 					uni.showToast({
 						icon: "none",
-						title: "评论至少15字",
+						title: "评论不少于2字",
 					});
 				}
-				if (this.returnText && this.returnText.length > 14) {
+				if (this.returnText && this.returnText.length > 1) {
 					const newEval = {
 						activityId: this.detail.activityId,
 						message: this.returnText,
@@ -229,6 +229,7 @@
 	.level-text {
 		margin-top: 8rpx;
 		font-size: 24rpx;
+		color: #fcd144;
 	}
 
 	.time-text {

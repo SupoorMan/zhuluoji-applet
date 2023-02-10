@@ -12,7 +12,7 @@
 			<swiper class="swiper" circular :indicator-dots="true" :autoplay="true">
 				<swiper-item v-for="bn in banners" :key="bn.id">
 					<view class="swiper-item">
-						<van-image :src="bn.url" width="690rpx" height="300rpx"></van-image>
+						<van-image :src="bn.url" width="690rpx" height="300rpx" @tap="toPage(bn.links)"></van-image>
 					</view>
 				</swiper-item>
 			</swiper>
@@ -20,15 +20,15 @@
 		<!-- 主要操作 -->
 		<view class="home-operation">
 			<van-grid column-num="5" :border="false">
-				<van-grid-item icon="/static/home/sign.png" icon-color="#fdaad2" icon-size="32" text="每日签到"
+				<van-grid-item icon="/static/home/sign.png" icon-color="#fdaad2" icon-size="36" text="每日签到"
 					link-type="navigateTo" :url="jumpPath('/pages/user/daySignIn/daySignIn')" />
-				<van-grid-item icon="/static/home/home.png" icon-color="#f3b777" icon-size="32" text="侏罗纪的家"
+				<van-grid-item icon="/static/home/home.png" icon-color="#f3b777" icon-size="36" text="侏罗纪的家"
 					link-type="navigateTo" :url="jumpPath('/pages/home/index')" />
-				<van-grid-item icon="/static/home/live.png" icon-color="#cea6fe" icon-size="32" text="直播预告"
+				<van-grid-item icon="/static/home/live.png" icon-color="#cea6fe" icon-size="36" text="直播预告"
 					link-type="switchTab" :url="jumpPath('/pages/video/index')" />
-				<van-grid-item icon="/static/home/transfer.png" icon-color="#aaf79d" icon-size="32" text="订单转换"
+				<van-grid-item icon="/static/home/transfer.png" icon-color="#aaf79d" icon-size="36" text="订单转换"
 					link-type="navigateTo" :url="jumpPath('/pages/user/transferOrder/transfer')" />
-				<van-grid-item icon="/static/home/shows.png" icon-color="#fb8885" icon-size="32" text="仙女买家秀"
+				<van-grid-item icon="/static/home/shows.png" icon-color="#fb8885" icon-size="36" text="仙女买家秀"
 					link-type="navigateTo" :url="jumpPath('/pages/buyerShow/index')" />
 			</van-grid>
 		</view>
@@ -37,7 +37,7 @@
 			<van-cell label="更多商品，更多惊喜" :border="false">
 				<view slot="title">
 					<view class="van-cell-text">积分商城</view>
-					<van-tag plain type="danger" round>新品</van-tag>
+					<van-tag plain type="danger" round>推荐</van-tag>
 				</view>
 			</van-cell>
 			<view class="pro-bar">
@@ -93,6 +93,16 @@
 					this.banners = result.data;
 				}
 			},
+			toPage(url) {
+				uni.navigateTo({
+					url,
+					fail() {
+						uni.switchTab({
+							url
+						})
+					}
+				})
+			},
 			jumpPath(realpath) {
 				return this.user ? realpath : '/pages/user/authorization/index';
 			},
@@ -110,8 +120,8 @@
 					pageSize: 54
 				});
 				if (result.code === 200) {
-					this.topProds = result.data.records.slice(0, 4)
-					this.prods = result.data.records.slice(4, result.data.records.length);
+					this.topProds = result.data.records.filter(n => !!n.recommend)
+					this.prods = result.data.records.filter(n => !n.recommend);
 				}
 			}
 		},
@@ -169,7 +179,7 @@
 	}
 
 	.prod-text {
-		font-size: 22rpx;
+		font-size: 24rpx;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;

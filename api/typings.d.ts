@@ -86,6 +86,8 @@ declare namespace API {
 		/** 消费价格 */
 		costs?: string;
 		createTime?: string;
+		/** 价值积分 */
+		integral?: number;
 		id?: number;
 		/** 订单图片证明 */
 		images?: string;

@@ -23,3 +23,15 @@ export const getShowDetail = async (params) => {
 export const addEvaluate = async (params) => {
 	return request.post('/activityEvaluate/add', params);
 }
+/** 买家秀列表
+ *  @param {API.PageParams}
+ */
+export const getShows = async (params) => {
+	return request.get('/activityDetail/page', params);
+}
+/** 删除买家秀
+ *  @param {API.PageParams}
+ */
+export const delShows = async (params) => {
+	return request.get('/activityDetail/delete', params);
+}

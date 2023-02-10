@@ -2,11 +2,7 @@
 	<view class="order-detail-page" v-if="detail">
 		<view class="detail-content">
 			<OrderCard :order="detail" />
-			<van-cell title="运费">
-				<template #default>
-					<text>运费（到付）：￥{{ detail.expressFee }}</text>
-				</template>
-			</van-cell>
+			<van-cell title="运费" value="包邮"></van-cell>
 			<van-cell title="收货信息：" :border="false" title-width="200rpx">
 				<template #default>
 					<text>{{ detail.receiveAddress }}</text>
@@ -15,19 +11,21 @@
 			<van-cell title="订单编号：" :border="false" title-width="200rpx">
 				<template #default>
 					<text>{{ detail.orderNo }}</text>
-					<text @click="copyOrderNo">复制</text>
+					<text @click="copyOrderNo">|复制</text>
 				</template>
 			</van-cell>
+			<van-cell title="运单号：" :border="false" title-width="200rpx" v-show="detail.status>1">
+				<template #default>
+					<text>{{ detail.transferNo }}</text>
+				</template>
+			</van-cell>
+
 			<van-cell title="创建时间：" :border="false" title-width="200rpx">
 				<template #default>
 					<text>{{ getTime(detail.createTime) }}</text>
 				</template>
 			</van-cell>
-			<!-- <van-cell title="付款时间：" :border="false" title-width="200rpx">
-				<template #default>
-					<text>{{ getTime(detail.payTime) }}</text>
-				</template>
-			</van-cell> -->
+
 			<van-cell title="发货时间：" :border="false" title-width="200rpx" v-show="detail.status>1">
 				<template #default>
 					<text>{{ detail.updateTime }}</text>
@@ -48,39 +46,32 @@
 					</template>
 					<template #default>
 						<van-button open-type="contact" size="mini" icon="chat-o">联系客服</van-button>
-						<!-- <van-icon name="chat-o" color="#ff938a" />
-					<text>联系客服</text> -->
 					</template>
 				</van-cell>
 			</van-cell-group>
 		</view>
-		<!-- 推荐 -->
-		<!-- <Recommend /> -->
+
 	</view>
 </template>
 
 <script>
 	import OrderCard from './components/OrderCard';
-	// import Recommend from '../components/Recommend.vue';
-	import {
-		getOrders
-	} from '@/api/order';
+	import { getOrders } from '@/api/order';
 	import dayjs from 'dayjs';
 	export default {
 		components: {
-			OrderCard,
-			// Recommend
+			OrderCard
 		},
 		data() {
 			return {
-				detail: null
+				detail: null,
+				showSelectAddress: false,
+				filedValue: ''
 			};
 		},
 		methods: {
 			async getDetail(opt) {
-				const {
-					data
-				} = await getOrders(opt)
+				const { data } = await getOrders(opt)
 				if (data) {
 					this.detail = data.records[0];
 				}
@@ -92,7 +83,7 @@
 		},
 		onLoad(option) {
 			this.getDetail(option)
-		}
+		},
 	};
 </script>
 

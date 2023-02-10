@@ -117,10 +117,39 @@
 						}
 					})
 				}
-			}
+			},
+			async getDetail() {
+				const { data } = await getShowDetail({ ...opt, ...this.page });
+				if (data) {
+					if (this.page.current === 1) {
+						this.detail = {
+							avatarUrl: data.avatarUrl,
+							nickname: data.nickname,
+							level: data.level,
+							flag: data.flag,
+							id: data.activityDetail.id,
+							starter: data.activityDetail.starter,
+							activityId: data.activityDetail.activityId,
+							createTime: dayjs(data.activityDetail.createTime).fromNow(),
+							title: data.activityProduct.productName,
+							details: data.activityProduct.details,
+						};
+						this.evals = data.list.records
+						this.page.total = data.list.total
+						this.images = data.activityProduct.images.split(",");
+					} else {
+						this.evals = [...this.evals, ...data.list.records]
+						this.page.total = data.list.total
+					}
+				}
+			},
 		},
 		onLoad(opt) {
-			this.add.activityId = opt.activityId
+			if (opt.id) {
+				this.getDetail()
+			} else {
+				this.add.activityId = opt.activityId
+			}
 		}
 	};
 </script>

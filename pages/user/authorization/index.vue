@@ -36,7 +36,7 @@
 				var that = this;
 				uni.getUserInfo({
 					success(res) {
-						console.log(res);
+						// console.log(res);
 						that.wxlogin(event.detail.userInfo);
 					},
 					fail() {

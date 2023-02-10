@@ -25,5 +25,5 @@ export const getBanner = async (data) => {
  * @description 获取消息
  */
 export const getNotice = async (data) => {
-	return await request.get('/appletNotify/page');
+	return await request.get('/appletNotify/page', data);
 }

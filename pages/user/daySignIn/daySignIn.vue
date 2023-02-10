@@ -24,9 +24,9 @@
 
 					<van-calendar readonly :show-confirm="false" :show-title="false" :poppable="false"
 						:show-mark="false" color="transparent" type="multiple" :row-height="calendarLineHeight"
-						:default-date="signDays" class="calendar" />
+						:default-date="signDays" class="calendar" :min-date="monthStart" :max-date="monthEnd" />
 					<view class="sign-btn" @tap="setSign">
-						<div class="btn-text">立即签到</div>
+						<div class="btn-text"> {{!todayIsSign?'立即签到':'已签到'}}</div>
 						<text class="btn-tip">每日签到可得1积分</text>
 					</view>
 				</view>
@@ -84,18 +84,17 @@
 			return {
 				signDays: [],
 				totalDays: 0,
-				calendarLineHeight: uni.upx2px(80)
+				calendarLineHeight: uni.upx2px(80),
+				monthStart: dayjs().startOf('month'),
+				monthEnd: dayjs().endOf('month'),
+				hasSign: false,
 			};
 		},
 		computed: {
-			...mapState(userStore, ['user'])
+			...mapState(userStore, ['user', 'todayIsSign'])
 		},
 		methods: {
-			...mapActions(userStore, ['setUser']),
-			onConfirm(event) {
-				this.signDays = event.detail
-				console.log(event.detail)
-			},
+			...mapActions(userStore, ['setUser', 'updateSign']),
 			async getSigns() {
 				const { data } = await getSignDays({
 					date: dayjs().format('YYYY-MM-DD')
@@ -109,7 +108,6 @@
 					}
 				})
 				this.signDays = [...signDays]
-				console.log(this.signDays)
 			},
 			getDaysArrayByMonth() { // 当月每日日期
 				//获取当前月份包含的天数
@@ -142,6 +140,7 @@
 						showCancel: false
 					})
 				}
+				this.updateSign(true)
 				await this.getSigns()
 				getUserIofo().then(res => {
 					getApp().globalData.user = res.data

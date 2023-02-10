@@ -15,18 +15,23 @@
 						直播价：<text class="red-text">￥</text>
 						<text class="red-text price">{{item.lastPrice}}</text>
 					</view>
-					<van-button size="mini" round icon="/static/live/notice-active.png" @click="subscLive(item)"
+					<van-tag size="medium" v-if="item.flag===0" color="#E0AFD9" round @click="subscLive(item)">
+						<van-icon name="/static/live/notice-active.png" color="#E0AFD9" />
+						预约成功
+					</van-tag>
+					<!-- <van-button size="mini" round icon="/static/live/notice-active.png" @click="subscLive(item)"
 						v-if="item.flag===0" color="#E0AFD9">
 						预约成功
-					</van-button>
-					<van-button size="mini" v-else-if="item.flag===3" round icon="/static/live/notice-active.png"
-						color="#757575">
+					</van-button> -->
+					<van-tag size="medium" v-else-if="item.flag===3" round color="#757575">
+						<van-icon name="/static/live/notice-active.png" color="#757575" />
 						已结束
-					</van-button>
-					<van-button size="mini" round plain v-else icon="/static/live/notice.png" color="#E0AFD9"
+					</van-tag>
+
+					<van-tag size="medium" round plain v-else icon="/static/live/notice.png" color="#E0AFD9"
 						@click="subscLive(item)">
 						{{stauts[item.flag]}}
-					</van-button>
+					</van-tag>
 				</view>
 			</view>
 

@@ -1,14 +1,21 @@
 <template>
-	<view class="info-page">
+	<view class="info-page" v-if="user">
+		<view class="">
+			<button open-type="chooseAvatar" @chooseavatar="getAvatar" class="avar-btn">
+				<image :src="user.avatarUrl" style="width: 120rpx;height: 120rpx; border-radius: 120rpx;"></image>
+				<br>
+				<text>点击上传</text>
+			</button>
+		</view>
 		<view class="title">
 			<van-icon name="label" color="#cea6fe" />
 			基础信息
 		</view>
-		<van-cell is-link title="昵称" :value="user.nickname || '用户名'" link-type="navigateTo" url="/pages/input/index" />
+		<van-cell is-link title="昵称" :value="user.nickname || '用户名'" link-type="navigateTo"
+			url="/pages/user/userInfo/nickname" />
 		<van-cell is-link title="性别" :value="user.gender === 0 ? '女' : '男'" @click="showSelectSex = true" />
 		<van-cell is-link title="生日" :value="user.birthday || '请选择生日'" @click="showSelectYear = true" />
 		<van-cell is-link title="地区" :value="user.address || '请选择地区'" @click="showSelectAddress = true" />
-
 		<van-cell v-if="!user.phone" is-link title="手机号" value="授权手机号" link-type="navigateTo"
 			url="/pages/user/authorization/index" />
 		<van-cell v-else title="手机号" :value="user.phone" />
@@ -81,7 +88,8 @@
 				areaList: areaList,
 				fieldValue: '',
 				changeZhType: '',
-				inputAccout: '', // 绑定的账号
+				inputAccout: '', // 绑定的账号,
+				delayUpdate: null
 			};
 		},
 		computed: {
@@ -89,12 +97,17 @@
 		},
 		methods: {
 			...mapActions(userStore, ['setUser']),
+			async getAvatar(event) {
+				if (event.detail.avatarUrl) {
+					await this.update({ avatarUrl: event.detail.avatarUrl })
+				}
+			},
 			async selectSex(event) {
 				const {
 					value,
 					index
 				} = event.detail;
-				console.log(value, index);
+				// console.log(value, index);
 				const success = await this.update({
 					gender: value.value
 				});
@@ -165,6 +178,21 @@
 		line-height: 80rpx;
 		padding-left: 32rpx;
 		font-weight: 600;
+	}
+
+	.avar-btn {
+		width: 120rpx;
+		height: 180rpx;
+		/* border-radius: 120rpx; */
+		padding: 0;
+		line-height: 1.2;
+		font-size: 24rpx;
+		background-color: transparent;
+		color: #818181;
+	}
+
+	.avar-btn::after {
+		border: 0;
 	}
 
 	.account-input {

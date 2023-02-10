@@ -30,14 +30,14 @@
 		</view>
 		<view class="prod-detail-info">
 			<van-cell label="规格:" :value="detail.list.length>0? detail.list[0].sizes +detail.list[0].colors : '-'"
-				:border="false" title-width="2.5em" label-class="detail-title" />
-			<van-cell label="类型:" :border="false" title-width="2.5em" label-class="detail-title">
+				:border="false" title-width="3em" />
+			<van-cell label="类型:" :border="false" title-width="3em">
 				<template #default>
 					<text v-if="detail.productType">{{proCate[detail.productType]}}</text>
 					<text style="color:#F56171;">【积分兑换不退不换】</text>
 				</template>
 			</van-cell>
-			<van-cell label="发货:" value="3-15个工作日" :border="false" title-width="2.5em" label-class="detail-title" />
+			<van-cell label="发货:" value="3-15个工作日" :border="false" title-width="3em" />
 		</view>
 		<view class="prod-title-info">
 			<van-row>
@@ -61,12 +61,12 @@
 		</view>
 		<view class="prod-photo-info">
 			<van-divider contentPosition="center" dashed>图文详情</van-divider>
-			<rich-text style="width: 750rpx;" :nodes="detail.details"></rich-text>
+			<rich-text style="width: 750rpx;font-size: 0;" :nodes="detail.details"></rich-text>
 		</view>
 		<!-- 商品介绍 -->
 		<van-goods-action>
-			<van-goods-action-icon icon="share-o" text="分享" color="#AE71D5" icon-class="icon-action"
-				text-class="text-action" @click="onClickIcon" />
+			<van-goods-action-icon icon="share-o" text="分享" color="#AE71D5" open-type="share" icon-class="icon-action"
+				text-class="text-action" />
 			<van-goods-action-icon icon="like-o" text="收藏" icon-class="icon-action" text-class="text-action"
 				color="#AE71D5" @click="onClickIcon" />
 			<van-goods-action-button text="去兑换" @click="onClickButton"
@@ -76,12 +76,10 @@
 </template>
 
 <script>
-	import {
-		getProdDetail
-	} from '@/api/product';
-	import {
-		getEvals
-	} from '@/api/review';
+	import { getProdDetail } from '@/api/product';
+	import { getEvals } from '@/api/review';
+	import { userStore } from '@/store'
+	import { mapState } from 'pinia'
 	export default {
 		data() {
 			return {
@@ -96,25 +94,31 @@
 				evals: null // 评价对象 
 			};
 		},
+		computed: {
+			...mapState(userStore, ['user'])
+		},
 		methods: {
 			backPage() {
 				uni.navigateBack({
 					delta: 1
 				});
 			},
+			onShareAppMessage() {
+				return {
+					title: this.detail.productName,
+					imageUrl: this.detail.productImage,
+					path: '/pages/shop/detail?productId=' + this.detail.id,
+				}
+			},
 			async getDetail(option) {
-				const {
-					data
-				} = await getProdDetail({ ...option, type: 0 });
+				const { data } = await getProdDetail({ ...option, type: 0 });
 				this.detail = data;
 				if (data.productImage) {
 					this.proBanner = data.productImage.split(',');
 				}
 			},
 			async getEval(options) {
-				const {
-					data
-				} = await getEvals({
+				const { data } = await getEvals({
 					current: 1,
 					pageSize: 1,
 					...options
@@ -127,6 +131,12 @@
 				}
 			},
 			onClickButton() {
+				if (!this.user) {
+					uni.navigateTo({
+						url: '/pages/user/authorization/index'
+					})
+					return
+				}
 				const prod = this.detail;
 				uni.navigateTo({
 					url: '/pages/shop/order/addOrder',
@@ -204,6 +214,7 @@
 		overflow: hidden;
 		margin-top: 12rpx;
 		margin-bottom: 12rpx;
+		--cell-label-font-size: 28rpx;
 	}
 
 	.prod-photo-info {
@@ -213,7 +224,7 @@
 	}
 
 	.van-cell__value {
-		text-align: left;
+		text-align: left !important;
 	}
 
 	[alt] {
@@ -228,5 +239,14 @@
 	.text-action {
 		color: #ae71d5;
 		font-size: 24rpx;
+	}
+
+	.prod-photo-info p {
+		display: none;
+	}
+
+	..van-goods-action {
+		padding-left: 24rpx;
+		padding-right: 24rpx;
 	}
 </style>

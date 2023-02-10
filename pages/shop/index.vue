@@ -25,7 +25,7 @@
 					<navigator class="record-inter" url="/pages/shop/order/list" hover-class="navigator-hover">
 						兑换记录
 					</navigator>
-					<view class="record-inter">赚积分</view>
+					<navigator class="record-inter" url="/pages/shop/rules/interRules">赚积分</navigator>
 				</van-col>
 			</van-row>
 		</view>

@@ -15,7 +15,7 @@
 						<text class="pro-price">{{ item.integral }}</text>
 						<text class="pro-price-unit">积分</text>
 					</van-col>
-					<van-col span="8">
+					<van-col span="8" style="text-align: right;">
 						<van-tag plain size="medium" color="#ff6a5f" round>兑换</van-tag>
 					</van-col>
 				</van-row>
@@ -72,7 +72,8 @@
 	}
 
 	.prod-text {
-		font-size: 22rpx;
+		font-size: 28rpx;
+		text-shadow: 0rpx 0rpx 1rpx #333;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;

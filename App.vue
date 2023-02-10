@@ -1,5 +1,6 @@
 <script>
 	import { userStore } from '@/store';
+	import { getTodaySign } from '@/api/signIn.js'
 	import { getUserIofo } from '@/api/user'
 	export default {
 		globalData: {
@@ -37,6 +38,12 @@
 							console.log(res);
 							_this.globalData.user = res.data;
 							userStore().setUser(res.data)
+							// 查询用户是否签到
+							getTodaySign().then(res => {
+								if (res.code === 200) {
+									userStore().updateSign(!!res.data)
+								}
+							})
 						});
 					} else {
 						// _this.login(res.authSetting['scope.userInfo']);
@@ -80,6 +87,8 @@
 	.navbar {
 		width: 100%;
 		--nav-bar-background-color: transparent;
+		--nav-bar-arrow-size: 40rpx;
+		--nav-bar-icon-color: #333;
 		padding-bottom: var(--nav-bar-height);
 		z-index: 2;
 		position: relative;
