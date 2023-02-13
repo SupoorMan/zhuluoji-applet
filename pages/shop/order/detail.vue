@@ -38,7 +38,6 @@
 			</van-cell>
 		</view>
 		<view class="contract-cell">
-
 			<van-cell-group inset custom-class="">
 				<van-cell>
 					<template #title>

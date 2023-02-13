@@ -10,14 +10,21 @@
 			<van-cell-group :border="false">
 				<van-cell required label="下单平台" title-width="6.2em" :value="sourceText||'请选择'" placeholder="订单来源"
 					is-link @tap="showSource = true" />
-				<van-field required label="手机号码" :value="sourceText" placeholder="手机号"
-					@change="onChange($event, 'phone')" />
-				<van-field required label="订单编号" :value="add.orderNo" placeholder="请输入订单编号"
-					@change="onChange($event, 'orderNo')" />
-				<!-- <van-field required label="消费价格" type="number" :value="add.costs" placeholder="请输入消费价格" border="false"
-					@change="onChange($event, 'costs')" /> -->
-				<!-- <van-field label="备注" :value="add.remark" placeholder="请输入备注" type="textarea" autosize border="false"
-					@change="onChange($event, 'remark')" /> -->
+				<!-- <van-field required label="手机号码" :value="add.phone" placeholder="手机号"
+					@change="onChange($event, 'phone')" /> -->
+				<van-cell required label="手机号" border="false">
+					<template #default>
+						<input type="text" :value="add.phone" placeholder="请输入手机号" @change="onChange($event, 'phone')">
+					</template>
+				</van-cell>
+				<van-cell required label="订单编号" border="false">
+					<template #default>
+						<input type="text" :value="add.orderNo" placeholder="请输入订单编号"
+							@change="onChange($event, 'orderNo')">
+					</template>
+				</van-cell>
+				<!-- <van-field required label="订单编号" :value="add.orderNo" placeholder="请输入订单编号"
+					@change="onChange($event, 'orderNo')" /> -->
 				<van-cell title="订单图片" :border="false" title-width="6.2em">
 					<template #default>
 						<van-uploader @after-read="afterRead" max-count="1" :file-list="fileList"
@@ -27,7 +34,7 @@
 
 				<view class="tip-text">
 					<text>
-						您知悉并同意您下单的店铺在每一次转换中,根据您填写的订单号将
+						*您知悉并同意您下单的店铺在每一次转换中,根据您填写的订单号将
 						该笔订单的商品名称和金额提供给"侏罗纪仙女VIP专属"用于订单转换和展示
 					</text>
 				</view>
@@ -49,7 +56,6 @@
 
 		<view class="image-view">
 			<view class="trans-content">
-
 				<image style="height: 1330rpx;width: 750rpx;margin-left: -30rpx;"
 					src="https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1675049191531_trans_rule2.png"
 					mode="aspectFit"></image>
@@ -63,6 +69,7 @@
 					mode="aspectFit"></image>
 			</view>
 		</view>
+		<van-dialog id="van-dialog" />
 		<!-- 来源 -->
 		<van-popup :show="showSource" round position="bottom" @close="showSource = false">
 			<van-picker show-toolbar :columns="columns" @confirm="selectSource" @cancel="showSource = false" />
@@ -124,7 +131,7 @@
 				this.$forceUpdate()
 			},
 			onChange(event, fieldName) {
-				this.add[fieldName] = event.detail;
+				this.add[fieldName] = event.detail.value;
 			},
 			handleDelete(event) {
 				const { index } = event.detail;
@@ -147,12 +154,32 @@
 				}
 				const { code, data } = await addOConvert(this.add);
 				if (code === 200) {
-					uni.showToast({
-						icon: "none",
+					this.$dialog.confirm({
+						context: this,
 						title: "提交成功",
-						success: () => {
-							uni.navigateBack({ delta: 1 });
-						},
+						message: "是否继续转换订单",
+					}).then(() => {
+						// on confirm
+						this.add = {
+							images: "",
+							orderNo: '',
+							phone: "",
+							status: 0,
+							type: "",
+						}
+						this.sourceText = ''
+						this.fileList = []
+						this.$forceUpdate()
+					}).catch(() => {
+						// on close	
+						uni.navigateBack({
+							delta: 1,
+						});
+					});
+				} else {
+					uni.showToast({
+						icon: "error",
+						title: data,
 					});
 				}
 			},
@@ -185,7 +212,7 @@
 	.trans-page {
 		height: auto;
 		min-height: 100vh;
-		background: url('https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1675049227267_trans_bg.png') top center;
+		background: url('https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1676019729534_trans_bg.png') top center;
 		background-size: contain;
 	}
 
@@ -214,7 +241,7 @@
 	}
 
 	.tip-text::before {
-		content: '';
+		/* 	content: '';
 		position: relative;
 		width: 16rpx;
 		height: 16rpx;
@@ -222,6 +249,7 @@
 		border: 2rpx solid #6170AA;
 		display: inline-block;
 		margin-right: 16rpx;
+		 */
 	}
 
 	.tip {

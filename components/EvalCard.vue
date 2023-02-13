@@ -6,10 +6,8 @@
 			</template>
 			<template #title>
 				<view style="display: flex;justify-content: space-between;align-items: center;">
-
 					<view class="van-cell-text">{{ item.nickname }}</view>
 					<view>
-
 						<text class="time-text">{{cutDate(item.createTime)}}</text>
 						<van-icon slot="right-icon" name="ellipsis" class="custom-icon" />
 					</view>
@@ -92,6 +90,7 @@
 		--cell-vertical-padding: 8rpx;
 		--cell-line-height: 40rpx;
 		padding-bottom: 16rpx;
+		padding-top: 16rpx;
 	}
 
 	.van-cell-text {

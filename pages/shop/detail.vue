@@ -16,11 +16,11 @@
 				<van-col span="12">
 					<view class="prod-title">{{ detail.productName }}</view>
 					<view class="price">
-						{{detail.list.length>0? detail.list[0].integral: "-"}}
+						{{ currentSpecs.integral }}
 						<text class="price-unit">积分</text>
 					</view>
 				</van-col>
-				<van-col span="12" style="text-align: right;">
+				<van-col span="12" style="text-align: right">
 					<view>剩余{{ detail.totals }}份</view>
 					<view class="price">
 						<text class="price-unit">每人限购 {{ detail.purchaseLimit }} 件</text>
@@ -29,40 +29,49 @@
 			</van-row>
 		</view>
 		<view class="prod-detail-info">
-			<van-cell label="规格:" :value="detail.list.length>0? detail.list[0].sizes +detail.list[0].colors : '-'"
-				:border="false" title-width="3em" />
+			<van-cell label="规格:" :value=" detail.list.length > 0 ? detail.list[0].sizes + detail.list[0].colors : '-' "
+				is-link :border="false" title-width="3em" @click="showSpecs = true" />
 			<van-cell label="类型:" :border="false" title-width="3em">
 				<template #default>
-					<text v-if="detail.productType">{{proCate[detail.productType]}}</text>
-					<text style="color:#F56171;">【积分兑换不退不换】</text>
+					<text v-if="detail.productType">{{
+						proCate[detail.productType]
+					}}</text>
+					<text style="color: #f56171">【积分兑换不退不换】</text>
 				</template>
 			</van-cell>
 			<van-cell label="发货:" value="3-15个工作日" :border="false" title-width="3em" />
 		</view>
+		<van-popup :show="showSpecs" round position="bottom" @close="showSpecs = false" v-if="specsColumns">
+			<van-picker show-toolbar :columns="specsColumns" @confirm="selectSpecs" @cancel="showSpecs = false" />
+		</van-popup>
 		<view class="prod-title-info">
 			<van-row>
-				<van-col span="12">用户评价（{{evals ? evals.total:'0'}}）</van-col>
-				<van-col span="12" style="text-align: right;">
+				<van-col span="12">用户评价（{{ evals? evals.total : "0" }}）</van-col>
+				<van-col span="12" style="text-align: right">
 					<navigator :url="'/pages/shop/userReviews/index?productId=' + detail.id">
 						查看全部
 						<van-icon name="arrow" />
 					</navigator>
 				</van-col>
 			</van-row>
-			<view v-if="evals && evals.total>0">
-				<view style="display: flex;align-items: center;">
+			<view v-if="evals && evals.total > 0">
+				<view style="display: flex; align-items: center">
 					<van-image width="24" height="24" :src="evals.first.avatarUrl" round
-						style="margin-top: 20rpx;margin-right: 8rpx;" />
-					<text>{{evals.first.nickname}} ,</text>
-					<text style="color:#edba00;font-size:24rpx;">LV{{evals.first.level}}</text>
+						style="margin-top: 20rpx; margin-right: 8rpx" />
+					<text>{{ evals.first.nickname }} ,</text>
+					<text style="color: #edba00; font-size: 24rpx">LV{{ evals.first.level }}</text>
 				</view>
-				<view>{{evals.first.message}}</view>
+				<view>{{ evals.first.message }}</view>
 			</view>
 		</view>
+		<van-dialog id="van-dialog" />
 		<view class="prod-photo-info">
 			<van-divider contentPosition="center" dashed>图文详情</van-divider>
-			<rich-text style="width: 750rpx;font-size: 0;" :nodes="detail.details"></rich-text>
+			<rich-text style="width: 750rpx; font-size: 0" :nodes="detail.details"></rich-text>
 		</view>
+		<van-popup :show="showSpecs" round position="bottom" @close="showSpecs = false" v-if="specsColumns">
+			<van-picker show-toolbar :columns="specsColumns" @confirm="selectSpecs" @cancel="showSpecs = false" />
+		</van-popup>0
 		<!-- 商品介绍 -->
 		<van-goods-action>
 			<van-goods-action-icon icon="share-o" text="分享" color="#AE71D5" open-type="share" icon-class="icon-action"
@@ -76,81 +85,99 @@
 </template>
 
 <script>
-	import { getProdDetail } from '@/api/product';
-	import { getEvals } from '@/api/review';
-	import { userStore } from '@/store'
-	import { mapState } from 'pinia'
+	import { getProdDetail } from "@/api/product";
+	import { getEvals } from "@/api/review";
+	import { userStore } from "@/store";
+	import { mapState } from "pinia";
 	export default {
 		data() {
 			return {
 				detail: null,
+				showSpecs: false,
+				specsColumns: null,
+				currentSpecs: null,
 				proCate: {
-					1: '餐具摆件',
+					1: "餐具摆件",
 					// 2: '睡衣浴袍',
-					3: '床品家纺',
-					4: '生活日用'
+					3: "床品家纺",
+					4: "生活日用",
 				},
 				proBanner: [],
-				evals: null // 评价对象 
+				evals: null, // 评价对象
 			};
 		},
 		computed: {
-			...mapState(userStore, ['user'])
+			...mapState(userStore, ["user"]),
 		},
 		methods: {
 			backPage() {
 				uni.navigateBack({
-					delta: 1
+					delta: 1,
 				});
+			},
+			selectSpecs(event) {
+				this.currentSpecs = event.detail.value;
+				this.showSpecs = false;
 			},
 			onShareAppMessage() {
 				return {
 					title: this.detail.productName,
 					imageUrl: this.detail.productImage,
-					path: '/pages/shop/detail?productId=' + this.detail.id,
-				}
+					path: "/pages/shop/detail?productId=" + this.detail.id,
+				};
 			},
 			async getDetail(option) {
 				const { data } = await getProdDetail({ ...option, type: 0 });
 				this.detail = data;
+				if (data.list && data.list.length > 0) {
+					this.specsColumns = data.list.map((m) => ({
+						value: m.id,
+						text: m.sizes ?
+							m.colors ?
+							m.sizes + "[" + m.colors + "]" :
+							m.sizes : m.colors,
+						integral: m.integral,
+					}));
+					this.currentSpecs = this.specsColumns[0];
+				}
 				if (data.productImage) {
-					this.proBanner = data.productImage.split(',');
+					this.proBanner = data.productImage.split(",");
 				}
 			},
 			async getEval(options) {
 				const { data } = await getEvals({
 					current: 1,
 					pageSize: 1,
-					...options
-				})
+					...options,
+				});
 				if (data) {
 					this.evals = {
 						total: data.total,
-						first: data.total > 0 ? data.records[0] : {}
-					}
+						first: data.total > 0 ? data.records[0] : {},
+					};
 				}
 			},
 			onClickButton() {
 				if (!this.user) {
 					uni.navigateTo({
-						url: '/pages/user/authorization/index'
-					})
-					return
+						url: "/pages/user/authorization/index",
+					});
+					return;
 				}
 				const prod = this.detail;
 				uni.navigateTo({
-					url: '/pages/shop/order/addOrder',
+					url: "/pages/shop/order/addOrder",
 					success: function(res) {
 						// 通过eventChannel向被打开页面传送数据
-						res.eventChannel.emit('acceptDataFromOpenerPage', prod);
-					}
+						res.eventChannel.emit("acceptDataFromOpenerPage", prod);
+					},
 				});
-			}
+			},
 		},
 		onLoad(options) {
 			this.getDetail(options);
-			this.getEval(options)
-		}
+			this.getEval(options);
+		},
 	};
 </script>
 
@@ -245,7 +272,7 @@
 		display: none;
 	}
 
-	..van-goods-action {
+	.van-goods-action {
 		padding-left: 24rpx;
 		padding-right: 24rpx;
 	}

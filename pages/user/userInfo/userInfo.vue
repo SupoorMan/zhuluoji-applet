@@ -55,6 +55,7 @@
 	import { updateUser } from '@/api/user.js';
 	import { areaList } from 'area-data';
 	import dayjs from 'dayjs';
+	import { deleteFile, uploadFile } from "@/api/file";
 	import { userStore } from '@/store';
 	import { mapActions, mapState } from 'pinia';
 	export default {
@@ -99,7 +100,10 @@
 			...mapActions(userStore, ['setUser']),
 			async getAvatar(event) {
 				if (event.detail.avatarUrl) {
-					await this.update({ avatarUrl: event.detail.avatarUrl })
+					const { code, data } = await uploadFile({ area: "user" }, { url: event.detail.avatarUrl });
+					if (code === 200) {
+						await this.update({ avatarUrl: data })
+					}
 				}
 			},
 			async selectSex(event) {
@@ -107,7 +111,6 @@
 					value,
 					index
 				} = event.detail;
-				// console.log(value, index);
 				const success = await this.update({
 					gender: value.value
 				});

@@ -69,7 +69,7 @@
 			</view>
 			<view class="rule-card">
 				<image
-					src="https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1675215471403_getInter_trans .pngs"
+					src="https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1676014787065_getInter_trans.png"
 					mode="aspectFit"></image>
 				<view class="card-body">
 					<view class="title-text">订单转化</view>
@@ -85,15 +85,26 @@
 </template>
 
 <script>
+	import { userStore } from '@/store'
+	import { mapState } from 'pinia'
 	export default {
 		data() {
 			return {}
 		},
+		computed: {
+			...mapState(userStore, ['user'])
+		},
 		methods: {
 			jumpTo(url) {
-				uni.navigateTo({
-					url
-				})
+				if (!this.user) {
+					uni.navigateTo({
+						url: '/pages/user/authorization/index'
+					})
+				} else {
+					uni.navigateTo({
+						url
+					})
+				}
 			}
 		}
 	}
@@ -107,7 +118,7 @@
 	}
 
 	.rule-content {
-		background: url('https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1675131060393_getInter_bg.png') no-repeat top center;
+		background: url('https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1676014636485_getInter_bg.png') no-repeat top center;
 		background-size: contain;
 		padding-top: 40rpx;
 		/* padding-top: 1rpx; */

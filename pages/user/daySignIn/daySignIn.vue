@@ -4,7 +4,7 @@
 		<view class="">
 			<view class="top-inter">
 				<view class="inter-content">
-					<text class="inter-text">{{ user ? user.integral : 0 }}</text>
+					<text class="inter-text">{{ user? user.integral : 0 }}</text>
 					<van-icon name="/static/shop/inter-icon.png" size="40rpx" />
 				</view>
 				<navigator class="inter-btn" open-type="switchTab" url="/pages/shop/index">
@@ -26,7 +26,7 @@
 						:show-mark="false" color="transparent" type="multiple" :row-height="calendarLineHeight"
 						:default-date="signDays" class="calendar" :min-date="monthStart" :max-date="monthEnd" />
 					<view class="sign-btn" @tap="setSign">
-						<div class="btn-text"> {{!todayIsSign?'立即签到':'已签到'}}</div>
+						<div class="btn-text"> {{!todayIsSign ? '立即签到' : '已签到'}}</div>
 						<text class="btn-tip">每日签到可得1积分</text>
 					</view>
 				</view>
@@ -76,7 +76,6 @@
 <script>
 	import { getSignDays, signDay } from '@/api/signIn.js'
 	import dayjs from 'dayjs'
-	import { getUserIofo } from '@/api/user';
 	import { userStore } from '@/store'
 	import { mapActions, mapState } from 'pinia'
 	export default {
@@ -94,7 +93,7 @@
 			...mapState(userStore, ['user', 'todayIsSign'])
 		},
 		methods: {
-			...mapActions(userStore, ['setUser', 'updateSign']),
+			...mapActions(userStore, ['setUser', 'updateSign', 'getUser']),
 			async getSigns() {
 				const { data } = await getSignDays({
 					date: dayjs().format('YYYY-MM-DD')
@@ -142,11 +141,7 @@
 				}
 				this.updateSign(true)
 				await this.getSigns()
-				getUserIofo().then(res => {
-					getApp().globalData.user = res.data
-					this.setUser(res.data)
-					// this.user = res.data
-				})
+				this.getUser()
 			}
 		},
 		onLoad(opt) {
@@ -411,6 +406,11 @@
 	.sign-tip-grid {
 		margin-top: 24rpx;
 		line-height: 1.8;
+	}
+
+	.van-grid-item__content {
+		border-radius: 12rpx;
+		overflow: hidden;
 	}
 
 	.grid-item {

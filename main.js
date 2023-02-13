@@ -10,8 +10,9 @@
 // app.use(pinia)
 import App from './App'
 import request from './api/index.js'
-import * as dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn'
+import dialog from "./utils/dialog.js";
+import * as dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 dayjs.locale('zh-cn');
 // #ifndef VUE3
 import Vue from 'vue'
@@ -20,6 +21,7 @@ const pinia = createPinia()
 Vue.use(PiniaVuePlugin)
 Vue.config.productionTip = false
 Vue.prototype.$request = request
+Vue.prototype.$dialog = dialog
 App.mpType = 'app'
 const app = new Vue({
 	...App,
@@ -33,6 +35,7 @@ import { createSSRApp } from 'vue'
 export function createApp() {
 	const app = createSSRApp(App)
 	app.config.globalProperties.$request = request
+	app.config.globalProperties.$dialog = dialog
 	app.use(createPinia())
 	return {
 		app

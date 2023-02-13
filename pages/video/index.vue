@@ -2,17 +2,17 @@
 	<view class="page-live">
 		<!-- 日历 -->
 		<view class="live-week">
-			<view class="month-title">{{currentMonth}}</view>
+			<view class="month-title">{{ currentMonth }}</view>
 			<swiper class="week-swiper">
 				<swiper-item indicator-dots="true" indicator-color="#fff" indicator-active-color="#F5C2A9">
 					<view class="swiper-item">
 						<view class="weekdays">
-							<view v-for="weekday in currentWeek" :key="weekday">{{weekday.weekName}}</view>
+							<view v-for="weekday in currentWeek" :key="weekday">{{ weekday.weekName }}</view>
 						</view>
 						<view class="weekdays">
 							<view class="week-day" v-for="weekday in currentWeek" :key="weekday.text"
-								@tap="handelChangeWeek(weekday)" :class="{'active':currentDay===weekday.value }">
-								{{weekday.text}}
+								@tap="handelChangeWeek(weekday)" :class="{ 'active': currentDay === weekday.value }">
+								{{ weekday.text }}
 							</view>
 						</view>
 					</view>
@@ -41,15 +41,13 @@
 				</view>
 			</view>
 			<view class="live-prods" :style="
-          activeLive === 0
-            ? 'border-top-right-radius: 20rpx;'
-            : 'border-top-left-radius: 20rpx;'">
+		activeLive === 0
+			? 'border-top-right-radius: 20rpx;'
+			: 'border-top-left-radius: 20rpx;'">
 				<AppointmentCard v-for="item in prods" :key="item.id" :item="item" :user="user" />
-				<view class="custom-image" v-if="!prods ||  prods.length===0">
-
+				<view class="custom-image" v-if="!prods || prods.length === 0">
 					<view style="color: #525151;">暂无直播商品</view>
 					<view style="color: #525151;">敬请期待</view>
-
 				</view>
 			</view>
 		</view>
@@ -66,7 +64,7 @@
 	import { mapState } from 'pinia'
 	import dayjs from 'dayjs'
 	import { getBanner } from '@/api/user';
-	import { pageLivePreview, updateLivePreview, getToday } from '@/api/live';
+	import { pageLivePreview, getToday } from '@/api/live';
 	import { AppointmentCard } from './components/AppointmentCard.vue'
 	export default {
 		components: {
@@ -89,7 +87,8 @@
 		methods: {
 			toAppoint() {
 				uni.navigateTo({
-					url: '/pages/video/appointment/index?appletUserId=' + this.user.id
+					url: this.user ? '/pages/video/appointment/index?appletUserId=' + this.user.id :
+						'/pages/user/authorization/index'
 				})
 			},
 			async changeTab(key) {
@@ -119,17 +118,6 @@
 					this.currentWeek = week
 				}
 			},
-			// async subscLive(item) {
-			// 	if (item.flag === 1 || item.flag === 0) {
-			// 		const { code } = await updateLivePreview({ id: item.productId, starter: item.flag === 1 ? 1 : 0 })
-			// 		if (code === 200) {
-			// 			uni.showToast({
-			// 				icon: 'none',
-			// 				title: '预约成功'
-			// 			})
-			// 		}
-			// 	}
-			// },
 			async getBanners() {
 				const result = await getBanner({ type: 1 });
 				if (result.code === 200) {
@@ -157,12 +145,7 @@
 				this.getCurrentLive()
 			}
 		},
-		onShow() {
-			// this.user = getApp().globalData.user;
-			// if (this.user && !this.prods) {
-			// 	this.getCurrentLive()
-			// }
-		}
+		onShow() {}
 	}
 </script>
 

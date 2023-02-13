@@ -1,10 +1,16 @@
 // /livePreview/page
 import request from './index';
+/** 查询买家秀详情 
+ *  @param {API.PageActDetailParams}
+ */
+export const pageShowPreview = async (params) => {
+	return request.get('/activityDetail/page', params);
+}
 /** 查询直播预告详情 
  *  @param {API.PageActDetailParams}
  */
 export const pageLivePreview = async (params) => {
-	return request.get('/activityDetail/page', params);
+	return request.get('/activityDetail/pageLive', params);
 }
 /** 订阅直播预约
  *  @param {id :productId}

@@ -1,7 +1,9 @@
 <template>
 	<navigator :url="'/pages/shop/detail?productId=' + item.id" class="pro-card top" :class="'top-' + rank">
 		<van-card :thumb="firstImage">
-			<view slot="title" class="title">{{ item.productName }}</view>
+			<view slot="title" class="title">
+				{{ item.productName }}
+			</view>
 			<view slot="desc" class="desc">
 				<view class="price-body">
 					<text class="price">{{ item.integral }}</text>
@@ -48,7 +50,8 @@
 		border: 2rpx solid #bdbdbd;
 		overflow: hidden;
 		position: relative;
-		--card-thumb-size: 216rpx;
+		--card-thumb-size: 270rpx;
+		--card-padding: 0;
 	}
 
 	.pro-card.top-1,
@@ -68,9 +71,9 @@
 		content: '';
 		display: inline-block;
 		position: absolute;
-		height: 40rpx;
-		width: 29rpx;
-		left: 30rpx;
+		height: 48rpx;
+		width: 40rpx;
+		left: 24rpx;
 		top: -4rpx;
 		text-align: center;
 		color: #fff;
@@ -96,7 +99,12 @@
 	}
 
 	.title {
-		height: 162rpx;
+		height: 202rpx;
+		padding-top: 20rpx;
+		padding-left: 8rpx;
+		font-size: 32rpx;
+		font-weight: bloder;
+		color: #737374;
 	}
 
 	.order-status {
@@ -112,6 +120,7 @@
 		display: flex;
 		align-content: center;
 		justify-content: space-between;
+		padding: 0 8rpx;
 	}
 
 	.price {

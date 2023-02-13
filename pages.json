@@ -40,6 +40,9 @@
 				"usingComponents": {
 					"van-cell-group": "/wxcomponents/vant/cell-group/index",
 					"van-field": "/wxcomponents/vant/field/index",
+					"van-popup": "/wxcomponents/vant/popup/index",
+					"van-picker": "/wxcomponents/vant/picker/index",
+					"van-dialog": "/wxcomponents/vant/dialog/index",
 					"van-goods-action": "/wxcomponents/vant/goods-action/index",
 					"van-goods-action-icon": "/wxcomponents/vant/goods-action-icon/index",
 					"van-goods-action-button": "/wxcomponents/vant/goods-action-button/index"
@@ -153,6 +156,7 @@
 				"usingComponents": {
 					"van-cell-group": "/wxcomponents/vant/cell-group/index",
 					"van-uploader": "/wxcomponents/vant/uploader/index",
+					"van-dialog": "/wxcomponents/vant/dialog/index",
 					"van-popup": "/wxcomponents/vant/popup/index",
 					"van-picker": "/wxcomponents/vant/picker/index",
 					"van-field": "/wxcomponents/vant/field/index"

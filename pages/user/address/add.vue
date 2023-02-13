@@ -79,7 +79,7 @@
 		},
 		methods: {
 			onChange(event, fieldName) {
-				this.add[fieldName] = event.detail;
+				this.add[fieldName] = event.detail.value;
 			},
 			setDefault(event) {
 				this.add.defaults = event.detail ? 1 : 0;

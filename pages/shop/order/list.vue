@@ -28,6 +28,8 @@
 <script>
 	import OrderCard from './components/OrderCard';
 	import { getOrders } from '@/api/order';
+	import { userStore } from '@/store';
+	import { mapState } from 'pinia';
 	export default {
 		components: { OrderCard },
 		data() {
@@ -47,6 +49,9 @@
 				orders: null
 			};
 		},
+		computed: {
+			...mapState(userStore, ['user'])
+		},
 		methods: {
 			backPage() {
 				uni.navigateBack({ delta: 1 });
@@ -57,7 +62,7 @@
 				this.getList(this.page);
 			},
 			async getList(params) {
-				const { data, code } = await getOrders(params);
+				const { data, code } = await getOrders({ ...params, appletUserId: this.user.id });
 				if (code === 200) {
 					this.orders = data.records;
 				}

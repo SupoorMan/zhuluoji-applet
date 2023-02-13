@@ -1,5 +1,5 @@
 <template>
-	<view class="order-detail-page" v-if="detail">
+	<view class="order-detail-page" v-if="detail && currentSpecs">
 		<view style="background: #fff">
 			<view class="detail-content">
 				<van-card num="1" :desc="'简介:' + (detail.introduction||'-')" :title="detail.productName"
@@ -7,12 +7,13 @@
 				</van-card>
 				<van-divider />
 				<van-cell title="消费积分" :value="currentSpecs.integral" :border="false" />
+				<van-cell v-if="user" title="可用积分" :value="user.integral" :border="false" />
 			</view>
 		</view>
 		<view class="contract-cell">
 			<van-cell-group :border="false">
-				<van-cell v-if="!editId" is-link title="规格" title-width="100rpx"
-					:value="currentSpecs ? currentSpecs.text : '-'" @click="showSpecs = true">
+				<van-cell v-if="!editId" is-link title="规格" title-width="100rpx" :value="currentSpecs.text"
+					@click="showSpecs = true">
 				</van-cell>
 				<van-cell v-else title="规格" title-width="100rpx" :value="currentSpecs.text">
 				</van-cell>
@@ -50,11 +51,13 @@
 			<van-popup :show="showSpecs" round position="bottom" @close="showSpecs = false" v-if="specsColumns">
 				<van-picker show-toolbar :columns="specsColumns" @confirm="selectSpecs" @cancel="showSpecs = false" />
 			</van-popup>
-			<van-dialog id="van-dialog" />
+
 		</view>
 		<view class="btn-box">
 			<van-button @click="handelSubmit" round block color="#F9CD90">{{editId ? '确认修改':'确认兑换'}}</van-button>
 		</view>
+		<!-- <van-dialog id="van-dialog" /> -->
+		<van-dialog id="vandialog" />
 	</view>
 </template>
 
@@ -63,11 +66,16 @@
 	import Recommend from "../components/Recommend.vue";
 	import { addOrder2, updateOrderAddr } from "@/api/order";
 	import { getAddressList, getConfigInfos } from "@/api/setting";
-	import Dialog from "@/wxcomponents/vant/dialog/dialog";
+	// import Dialog from "@/wxcomponents/vant/dialog/dialog.js";
+	import { mapState } from "pinia";
+	import { userStore } from "@/store";
 	export default {
 		components: {
 			OrderCard,
 			Recommend,
+		},
+		computed: {
+			...mapState(userStore, ['user'])
 		},
 		data() {
 			return {
@@ -137,10 +145,7 @@
 			},
 			async handelSubmit() {
 				if (!this.selectAddress) {
-					uni.showToast({
-						title: '请选择配送地址',
-						icon: 'none'
-					})
+					this.showSelectAddress = true
 					return false
 				}
 				if (this.editId) {
@@ -150,7 +155,10 @@
 				}
 			},
 			async addOrder() {
-				Dialog.confirm({
+				console.log(this.$dialog)
+				this.$dialog.confirm({
+						selector: '#vandialog',
+						context: this,
 						message: "确认使用" + this.currentSpecs.integral + "积分兑换",
 					})
 					.then(async () => {
@@ -165,7 +173,9 @@
 							status: 1,
 						});
 						if (result.code === 200) {
-							Dialog.alert({
+							this.$dialog.alert({
+								selector: '#vandialog',
+								context: this,
 								title: "兑换成功",
 								message: "可至“我的订单”中查看详情",
 							}).then(() => {
@@ -188,9 +198,11 @@
 			async updateOrder() {
 				const { code, data } = await updateOrderAddr({ id: this.editId, receiveAddress: this.filedValue })
 				if (code === 200) {
-					Dialog.alert({
+					this.$dialog.alert({
+						selector: '#vandialog',
+						context: this,
 						title: "修改地址成功",
-						message: "可至“我的订单”中查看详情",
+						message: "可至“用户-收货地址”中查看详情",
 					}).then(() => {
 						// on close
 						uni.navigateBack({
@@ -209,7 +221,7 @@
 			eventChannel.on("acceptDataFromOpenerPage", function(data) {
 				if (data) {
 					_this.detail = data;
-					console.log(data)
+					// console.log(data)
 					if (data.list && data.list.length > 0) {
 						_this.specsColumns = data.list.map((m) => ({
 							value: m.id,
