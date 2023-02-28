@@ -34,12 +34,12 @@
 		components: { OrderCard },
 		data() {
 			return {
-				activeKey: 1,
+				activeKey: '',
 				tabs: [
-					{ name: '全部', key: 1 },
-					{ name: '已完成', key: 2 },
-					{ name: '待收货', key: 3 },
-					{ name: '已取消', key: 4 }
+					{ name: '全部', key: '' },
+					{ name: '待收货', key: 2 },
+					{ name: '已完成', key: 3 },
+					// { name: '已取消', key: 4 }
 				],
 				page: {
 					current: 1,

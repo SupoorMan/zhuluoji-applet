@@ -11,6 +11,12 @@ export const getActivity = async (params) => {
 export const addShow = async (params) => {
 	return request.post('/activityDetail/addBuyShow', params);
 }
+/** 更新买家秀
+ *  @param {API.activityProduct}
+ */
+export const updateShow = async (params) => {
+	return request.post('/activityProduct/update', params);
+}
 /** 查询买家秀详情
  *  @param {API.ActivityBuyShow}
  */
@@ -22,6 +28,12 @@ export const getShowDetail = async (params) => {
  */
 export const addEvaluate = async (params) => {
 	return request.post('/activityEvaluate/add', params);
+}
+/** 删除买家秀评价
+ *  @param {API.IdParams}
+ */
+export const delEvaluate = async (params) => {
+	return request.get('/activityEvaluate/delete', params);
 }
 /** 买家秀列表
  *  @param {API.PageParams}

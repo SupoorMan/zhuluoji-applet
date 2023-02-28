@@ -9,7 +9,8 @@
 					<view class="van-cell-text">{{ item.nickname }}</view>
 					<view>
 						<text class="time-text">{{cutDate(item.createTime)}}</text>
-						<van-icon slot="right-icon" name="ellipsis" class="custom-icon" />
+						<van-icon slot="right-icon" name="ellipsis" class="custom-icon" @tap="moreOpt(item)"
+							v-if="item.appletUserId===user.id" />
 					</view>
 				</view>
 				<text style="color: #edba00; font-size: 24rpx">Level{{ item.level }}</text>
@@ -44,6 +45,8 @@
 
 <script>
 	import dayjs from "dayjs";
+	import { userStore } from "../store";
+	import { mapState } from 'pinia';
 	export default {
 		props: {
 			item: {
@@ -61,6 +64,7 @@
 			},
 		},
 		computed: {
+			...mapState(userStore, ['user']),
 			imgs() {
 				if (this.item && this.item.images) {
 					return this.item.images.split(',')
@@ -81,6 +85,9 @@
 			addStar() {
 				this.$emit("addStar", this.index);
 			},
+			moreOpt() {
+				this.$emit("moreOpt", this.index);
+			}
 		},
 	};
 </script>

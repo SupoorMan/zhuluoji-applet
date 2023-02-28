@@ -10,8 +10,8 @@
 				<text class="unit">积分</text>
 			</view>
 			<view slot="footer" @click.stop>
-				<van-button size="mini" class="button" round open-type="contact"
-					v-if="order.status===1||order.status===2">&nbsp;找客服&nbsp;</van-button>
+				<!-- 			<van-button size="mini" class="button" round open-type="contact"
+					v-if="order.status === 1 || order.status === 2">&nbsp;找客服&nbsp;</van-button> -->
 				<van-button size="mini" class="button" round v-for="btn in buttons[order.status]" :key="btn.key"
 					@tap="clickButton(btn.key)">
 					&nbsp;{{ btn.name }}&nbsp;
@@ -25,7 +25,6 @@
 
 <script>
 	import { updateStatus } from "@/api/order";
-	import Dialog from "@/wxcomponents/vant/dialog/dialog";
 	export default {
 		props: {
 			order: {
@@ -52,11 +51,10 @@
 					3: "已完成",
 				},
 				buttons: {
-					1: [
-						// {
-						// 	name: "找客服",
-						// 	key: 1,
-						// },
+					1: [{
+							name: "找客服",
+							key: 1,
+						},
 						// {
 						// 	name: "催发货",
 						// 	key: 2,
@@ -65,25 +63,24 @@
 							name: "改地址",
 							key: 3,
 						},
-						{
-							name: "取消订单",
-							key: 4,
-						},
-					],
-					2: [
 						// {
-						// 	name: "找客服",
-						// 	key: 1,
+						// 	name: "取消订单",
+						// 	key: 4,
 						// },
+					],
+					2: [{
+							name: "找客服",
+							key: 1,
+						},
 						{
 							name: "确认收货",
 							key: 5,
 						},
 					],
-					3: [{
-						name: "去评价",
-						key: 6,
-					}, ],
+					// 3: [{
+					// 	name: "去评价",
+					// 	key: 6,
+					// }, ],
 					"-1": [{
 							name: "删除订单",
 							key: 7,

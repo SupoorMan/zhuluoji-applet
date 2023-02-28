@@ -44,7 +44,8 @@
 		<van-popup :show="showSpecs" round position="bottom" @close="showSpecs = false" v-if="specsColumns">
 			<van-picker show-toolbar :columns="specsColumns" @confirm="selectSpecs" @cancel="showSpecs = false" />
 		</van-popup>
-		<view class="prod-title-info">
+		<!-- 用户评价 隐藏 -->
+		<!-- 		<view class="prod-title-info">
 			<van-row>
 				<van-col span="12">用户评价（{{ evals? evals.total : "0" }}）</van-col>
 				<van-col span="12" style="text-align: right">
@@ -63,8 +64,8 @@
 				</view>
 				<view>{{ evals.first.message }}</view>
 			</view>
-		</view>
-		<van-dialog id="van-dialog" />
+		</view> -->
+
 		<view class="prod-photo-info">
 			<van-divider contentPosition="center" dashed>图文详情</van-divider>
 			<rich-text style="width: 750rpx; font-size: 0" :nodes="detail.details"></rich-text>
@@ -81,6 +82,7 @@
 			<van-goods-action-button text="去兑换" @click="onClickButton"
 				color="linear-gradient(to right, #F4E2FF, #D695FF)" />
 		</van-goods-action>
+		<van-dialog id="van-dialog" />
 	</view>
 </template>
 
@@ -96,6 +98,7 @@
 				showSpecs: false,
 				specsColumns: null,
 				currentSpecs: null,
+				opt: null,
 				proCate: {
 					1: "餐具摆件",
 					// 2: '睡衣浴袍',
@@ -133,9 +136,9 @@
 					this.specsColumns = data.list.map((m) => ({
 						value: m.id,
 						text: m.sizes ?
-							m.colors ?
-							m.sizes + "[" + m.colors + "]" :
-							m.sizes : m.colors,
+							(m.colors ?
+								m.sizes + "[" + m.colors + "]" :
+								m.sizes) : m.colors,
 						integral: m.integral,
 					}));
 					this.currentSpecs = this.specsColumns[0];
@@ -175,15 +178,24 @@
 			},
 		},
 		onLoad(options) {
-			this.getDetail(options);
-			this.getEval(options);
+			this.opt = options;
+			// this.getEval(options); <!-- 用户评价 隐藏 -->
 		},
+		onShow() {
+			if (this.opt) {
+				this.getDetail(this.opt);
+			}
+		},
+		onUnload() {
+			this.opt = null
+		}
 	};
 </script>
 
 <style>
 	.prod-detail-page {
-		height: 100%;
+		height: auto;
+		min-height: 100vh;
 	}
 
 	.uni-margin-wrap {
@@ -204,7 +216,7 @@
 	.prod-title-info {
 		background-color: #fff;
 		width: 726rpx;
-		margin: 0 auto;
+		margin: 0 auto 8rpx auto;
 		border-radius: 0 0 8rpx 8rpx;
 		padding: 6rpx 24rpx 24rpx 24rpx;
 		line-height: 80rpx;

@@ -112,7 +112,7 @@
 				const { file } = event.detail;
 				// 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
 				const { code, data } = await uploadFile({
-						area: "商品评价",
+						area: "productEval",
 					},
 					file
 				);
@@ -150,7 +150,7 @@
 				const { code } = await addEvaluate({
 					message: this.content, // 评价消息
 					productId: this.detail.productId, // 积分商品id
-					state: 1, // 状态: 0.正常 1.删除 2.隐藏
+					state: 0, // 状态: 0.正常 1.删除 2.隐藏
 					status: this.noName ? 1 : 0,
 					type: this.activeTag.toString(), // 评价类型
 					images: this.fileList && this.fileList.length > 0 ?

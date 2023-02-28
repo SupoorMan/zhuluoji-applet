@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
-import { getUserIofo } from '../api/user.js'
+import { getUserIofo, getNoticeCount } from '../api/user.js'
 import { getTodaySign } from '@/api/signIn.js'
 export const userStore = defineStore('user', {
 	state: () => {
 		return {
 			user: null,
-			todayIsSign: false // 今日是否签到
+			todayIsSign: false, // 今日是否签到
+			noticeCount: 0 // 未读消息数量
 		}
 	},
 	actions: {
@@ -22,11 +23,19 @@ export const userStore = defineStore('user', {
 							this.updateSign(!!res.data)
 						}
 					})
+					getNoticeCount().then(res => {
+						if (res.code === 200) {
+							this.updateNoticeCount(res.data)
+						}
+					})
 				}
 			})
 		},
 		updateSign(data) {
 			this.todayIsSign = data
+		},
+		updateNoticeCount(data) {
+			this.noticeCount = data
 		},
 	}
 })

@@ -25,7 +25,7 @@
 				</view>
 				<view class="">
 					<text>+1积分</text>
-					<view class="rule-btn" @tap="jumpTo('/pages/shop/index')">去预约</view>
+					<view class="rule-btn" @tap="jumpTo('/pages/video/index')">去预约</view>
 				</view>
 			</view>
 			<view class="rule-card">
@@ -98,11 +98,16 @@
 			jumpTo(url) {
 				if (!this.user) {
 					uni.navigateTo({
-						url: '/pages/user/authorization/index'
+						url: '/pages/user/authorization/index',
 					})
 				} else {
 					uni.navigateTo({
-						url
+						url,
+						fail() {
+							uni.switchTab({
+								url
+							})
+						}
 					})
 				}
 			}

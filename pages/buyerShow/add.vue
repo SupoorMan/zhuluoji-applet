@@ -32,8 +32,8 @@
 </template>
 
 <script>
-	import { addShow } from '@/api/activity';
 	import { deleteFile, uploadFile } from '@/api/file';
+	import { getShowDetail, addShow, updateShow } from "@/api/activity";
 	export default {
 		data() {
 			return {
@@ -45,6 +45,10 @@
 					"context": "",
 					"images": "",
 					"title": ""
+				},
+				page: {
+					current: 1,
+					pageSize: 1,
 				},
 				fileList: null
 			};
@@ -78,7 +82,7 @@
 					file
 				} = event.detail;
 				// 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
-				const { code, data } = await uploadFile({ area: '买家秀' }, file);
+				const { code, data } = await uploadFile({ area: 'buyerShow' }, file);
 				if (code === 200) {
 					if (this.fileList) {}
 					this.fileList = this.fileList ? [...this.fileList, {
@@ -96,6 +100,20 @@
 				}
 			},
 			async addEval() {
+				if (!this.add.title || this.add.title.length < 2) {
+					uni.showToast({
+						icon: "none",
+						title: '标题至少2字'
+					})
+					return;
+				}
+				if (!this.fileList || this.fileList.length < 1) {
+					uni.showToast({
+						icon: "none",
+						title: '至少上传一张图片'
+					})
+					return;
+				}
 				if (!this.add.context || this.add.context.length < 2) {
 					uni.showToast({
 						icon: "none",
@@ -103,10 +121,17 @@
 					})
 					return;
 				}
-				const images = this.fileList ? this.fileList.map(m => m.url) : []
+				const images = this.fileList ? this.fileList.map(m => m.url) : [];
 				const {
 					code
-				} = await addShow({ ...this.add, images: images.toString() })
+				} = this.add.activityId ? await addShow({ ...this.add, images: images.toString() }) :
+					await updateShow({
+						id: this.add.id,
+						productName: this.add.title,
+						details: this.add.context,
+						type: 4,
+						images: images.toString()
+					})
 				if (code === 200) {
 					uni.showToast({
 						title: '发布成功',
@@ -118,35 +143,18 @@
 					})
 				}
 			},
-			async getDetail() {
+			async getDetail(opt) {
 				const { data } = await getShowDetail({ ...opt, ...this.page });
 				if (data) {
-					if (this.page.current === 1) {
-						this.detail = {
-							avatarUrl: data.avatarUrl,
-							nickname: data.nickname,
-							level: data.level,
-							flag: data.flag,
-							id: data.activityDetail.id,
-							starter: data.activityDetail.starter,
-							activityId: data.activityDetail.activityId,
-							createTime: dayjs(data.activityDetail.createTime).fromNow(),
-							title: data.activityProduct.productName,
-							details: data.activityProduct.details,
-						};
-						this.evals = data.list.records
-						this.page.total = data.list.total
-						this.images = data.activityProduct.images.split(",");
-					} else {
-						this.evals = [...this.evals, ...data.list.records]
-						this.page.total = data.list.total
-					}
+					const { productName, details, id } = data.activityProduct
+					this.add = { title: productName, context: details, id }
+					this.fileList = data.activityProduct.images.split(",").map(n => ({ url: n }));
 				}
 			},
 		},
 		onLoad(opt) {
 			if (opt.id) {
-				this.getDetail()
+				this.getDetail(opt)
 			} else {
 				this.add.activityId = opt.activityId
 			}

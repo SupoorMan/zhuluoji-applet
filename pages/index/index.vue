@@ -3,7 +3,7 @@
 		<!-- 标题 -->
 		<van-nav-bar title="侏罗纪家仙女VIP专属" class="navbar" fixed>
 			<navigator :url="jumpPath('/pages/message/list')" slot="left">
-				<van-icon name="chat-o" size="20" />
+				<van-icon name="chat-o" size="20" :dot="noticeCount>0" />
 			</navigator>
 		</van-nav-bar>
 		<view></view>
@@ -80,7 +80,7 @@
 			};
 		},
 		computed: {
-			...mapState(userStore, ['user'])
+			...mapState(userStore, ['user', 'noticeCount'])
 		},
 		onLoad(options) {
 			this.getRecomemdProd();

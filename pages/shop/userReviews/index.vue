@@ -5,12 +5,14 @@
 				<view class="review-list">
 					<van-cell-group>
 						<EvalCard v-for="(item, index) in recommendList" :key="item.id" :item="item" :index="[index]"
-							@addStar="addStar">
+							@addStar="addStar" @moreOpt="moreOpt" v-show="!item.hide">
 						</EvalCard>
 					</van-cell-group>
 				</view>
 			</van-tab>
 		</van-tabs>
+		<van-share-sheet :show="showMoreOpt" title="更多操作" :options="options" @select="onSelect"
+			@close="showMoreOpt=false" />
 		<!-- <view class="return-recommend">
 			<view class="recommend-content">
 				<view class="eval-area">
@@ -31,7 +33,8 @@
 		getEvals,
 		getEvalsCount,
 		updateEvaluate,
-		addEvaluate
+		addEvaluate,
+		delEvaluate
 	} from '@/api/review';
 	import dayjs from 'dayjs';
 	export default {
@@ -57,12 +60,19 @@
 				page: {
 					current: 1,
 					pageSize: 20,
+					state: 0,
 					productId: ''
 				},
 				recommendList: null,
 				returnTopId: null,
 				returnText: '',
-				focusReply: ''
+				focusReply: '',
+				showMoreOpt: false, // 是否展示评论更多操作
+				current: null,
+				options: [{
+					name: '删除',
+					icon: 'https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/icon/1676355956647_delete.png'
+				}],
 			};
 		},
 		methods: {
@@ -109,18 +119,58 @@
 					this.$forceUpdate();
 				}
 			},
+			moreOpt(index) {
+				this.showMoreOpt = true
+				this.current = index
+			},
+			async onSelect(option) {
+				switch (option.detail.name) {
+					case '删除':
+						await this.deleteEval();
+						return;
+					default:
+						break;
+				}
+			},
+			async deleteEval() {
+				const index = this.current
+				const item =
+					this.current.length > 1 ?
+					this.recommendList[index[0]].list[index[1]] :
+					this.recommendList[index[0]];
+				const { code, data } = await delEvaluate({ id: item.id });
+				if (code === 200) {
+					uni.showToast({
+						icon: "success",
+						title: "删除成功"
+					})
+					this.showMoreOpt = false
+					if (index.length > 1) {
+						this.recommendList[index[0]].list[index[
+							1]] = { ...item, hide: true }
+					} else {
+						this.recommendList[index[0]] = { ...item, hide: true }
+					}
+					this.$forceUpdate();
+				} else {
+					uni.showToast({
+						icon: "error",
+						title: data
+					})
+				}
+			},
 			onRecommendChange(event) {
 				this.returnText = event.detail.value;
 			},
 			async onRecommendClick() {
 				// 新增评论
-				if (this.returnText.length < 15) {
+				if (this.returnText.length < 2) {
 					uni.showToast({
 						icon: "none",
-						title: "评论至少15字",
+						title: "评论至少2字",
 					});
 				}
-				if (this.returnText && this.returnText.length > 14) {
+				if (this.returnText && this.returnText.length > 1) {
 					const {
 						code,
 						data
@@ -152,7 +202,7 @@
 				this.activeNames = event.detail;
 			},
 			async getCount(option) {
-				const result = await getEvalsCount(option);
+				const result = await getEvalsCount({ ...option, state: 0 });
 				if (result.code === 200) {
 					this.reviewType = this.reviewType.map(m => {
 						m = {

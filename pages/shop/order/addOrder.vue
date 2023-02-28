@@ -46,12 +46,10 @@
 				<van-empty v-else description="抱歉,您没有配置收货地址">
 					<van-button round color="#c5abff" @click="toAddr">添加地址</van-button>
 				</van-empty>
-
 			</van-popup>
 			<van-popup :show="showSpecs" round position="bottom" @close="showSpecs = false" v-if="specsColumns">
 				<van-picker show-toolbar :columns="specsColumns" @confirm="selectSpecs" @cancel="showSpecs = false" />
 			</van-popup>
-
 		</view>
 		<view class="btn-box">
 			<van-button @click="handelSubmit" round block color="#F9CD90">{{editId ? '确认修改':'确认兑换'}}</van-button>

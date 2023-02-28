@@ -20,7 +20,6 @@
 				<text @click="loadMore">加载更多>></text>
 			</view>
 		</view>
-
 		<view v-if="list && list.length===0" class="empty">
 			抱歉 ,您暂无站内消息
 		</view>
@@ -28,9 +27,9 @@
 </template>
 
 <script>
-	import { getNotice } from '@/api/user';
+	import { getNotice, readNotice } from '@/api/user';
 	import dayjs from 'dayjs';
-	import { mapState } from 'pinia'
+	import { mapActions, mapState } from 'pinia'
 	import { userStore } from '../../store';
 	export default {
 		data() {
@@ -91,9 +90,10 @@
 			};
 		},
 		computed: {
-			...mapState(userStore, ['user'])
+			...mapState(userStore, ['user', 'noticeCount'])
 		},
 		methods: {
+			...mapActions(userStore, ['updateNoticeCount']),
 			async getList() {
 				const { code, data } = await getNotice({ ...this.page, appletUserId: this.user.id });
 				if (code === 200) {
@@ -105,6 +105,10 @@
 					}
 				}
 			},
+			async UpdateRead() {
+				await readNotice();
+				this.updateNoticeCount(0);
+			},
 			cutTime(date) {
 				return dayjs(date).format('YY/MM/DD HH:mm');
 			},
@@ -115,6 +119,9 @@
 		},
 		onLoad(opt) {
 			this.getList();
+			if (this.noticeCount) {
+				this.UpdateRead()
+			}
 		}
 	};
 </script>

@@ -4,22 +4,23 @@
 		<view></view>
 		<view class="home-tabs">
 			<view class="home-tab-header">
-				<view @tap="active = 1" :class="active === 1 ? 'left' : ''">
-					<text class="tab-text">roomtour</text>
-				</view>
-				<view style="text-align: right" @tap="active = 2" :class="active === 2 ? 'right' : ''">
+				<view @tap="active = 2" :class="active === 2 ? 'left' : ''">
 					<text class="tab-text">图纸分享</text>
 				</view>
+				<view class=""></view>
+				<!-- <view @tap="active = 1" :class="active === 1 ? 'left' : ''">
+					<text class="tab-text">roomtour</text>
+				</view> 
+				<view style="text-align: right" @tap="active = 2" :class="active === 2 ? 'right' : ''">
+					<text class="tab-text">图纸分享</text>
+				</view> -->
 			</view>
-			<view class="home-tab" :style="
-          active === 1
-            ? 'border-top-right-radius: 20rpx;'
-            : 'border-top-left-radius: 20rpx;'
-        ">
-				<view v-show="active === 1" class="video-box">
-					<!-- roomtour 视频 -->
-					<video :src="roomTour.images" width="100%" height="100%" v-if="roomTour" />
-				</view>
+			<view class="home-tab"
+				:style="active === 1  ? 'border-top-right-radius: 20rpx;'  : 'border-top-left-radius: 20rpx;' ">
+				<!-- <view v-show="active === 1" class="video-box"> -->
+				<!-- roomtour 视频 -->
+				<!-- <video :src="roomTour.images" width="100%" height="100%" v-if="roomTour" /> -->
+				<!-- </view> -->
 				<view v-show="active === 2">
 					<van-tabs color="#BB81DA75" title-inactive-color="#666" type="card" :active="activeType"
 						@change="onTypeChange">
@@ -53,7 +54,7 @@
 			</van-cell-group>
 		</view>
 		<!-- 评论列表 -->
-		<view v-else-if="active === 1">
+		<!-- 		<view v-else-if="active === 1">
 			<van-divider />
 			<view class="recommend-tabs">
 				<view class="re-tab" :class="retabActive === item ? 'active' : ''" v-for="item in recommendType"
@@ -63,17 +64,12 @@
 			</view>
 			<view class="review-list" v-if="recommendList.length > 0">
 				<van-cell-group :border="false">
-					<EvalCard class="eval-card" v-for="(item, index) in recommendList" :key="item.id" :item="item"
-						:index="[index]" @replyToEval="replyToEval" @addStar="addStar">
-						<van-cell-group v-if="item.list.length > 0">
-							<EvalCard v-for="(child, s) in item.list" :key="child.id" :item="child" :index="[index, s]"
-								noreply @addStar="addStar" />
-						</van-cell-group>
-					</EvalCard>
+					<Recommends :recommendList="recommendList" @replyToEval="replyToEval" @addStar="addStar" />
+
 				</van-cell-group>
 			</view>
-		</view>
-		<view class="return-recommend" v-show="active === 1">
+		</view> -->
+		<!-- 	<view class="return-recommend" v-show="active === 1">
 			<view class="recommend-content">
 				<view class="eval-area">
 					<van-icon name="edit" />
@@ -83,13 +79,13 @@
 				</view>
 				<view class="eval-btn" @click="onRecommendClick" hover-class="navigator-hover">确定</view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
 <script>
 	import dayjs from "dayjs";
-	import EvalCard from "@/components/EvalCard.vue";
+	import Recommends from "./components/Recommends.vue";
 	import {
 		getHomePage,
 		getHomeDetail,
@@ -102,14 +98,15 @@
 	import { userStore } from "@/store";
 	export default {
 		components: {
-			EvalCard,
+			Recommends,
 		},
 		data() {
 			return {
-				active: 1,
+				active: 2,
 				activeType: 0, // 选中的图片类型
 				recommendType: ["精选评论", "最新评论", "我的点赞"],
 				retabActive: "精选评论",
+				showMoreOpt: true,
 				roomTour: null,
 				typeList: null,
 				recommendList: [],
@@ -158,29 +155,6 @@
 					this.focusReply = "";
 				}
 			},
-			async addStar(index) {
-				const item =
-					index.length > 1 ?
-					this.recommendList[index[0]].list[index[1]] :
-					this.recommendList[index[0]];
-				const { code } = await updateHomeEval({
-					...item,
-					starter: item.flag === 1 ? 0 : 1,
-				});
-				if (code === 200) {
-					const newItem = {
-						...item,
-						starter: item.flag === 1 ? item.starter - 1 : item.starter + 1,
-						flag: item.flag === 1 ? 0 : 1,
-					};
-					if (index.length > 1) {
-						this.recommendList[index[0]].list[index[1]] = newItem;
-					} else {
-						this.recommendList[index[0]] = newItem;
-					}
-					this.$forceUpdate();
-				}
-			},
 			onTypeChange(event) {
 				this.activeType = event.detail.name;
 			},
@@ -196,7 +170,7 @@
 						};
 					}
 					return m;
-				});
+				}).reverse();
 			},
 			onRecommendChange(event) {
 				this.returnText = event.detail.value;
@@ -362,7 +336,7 @@
 	}
 
 	.prod-list {
-		padding-top: 32rpx;
+		padding: 32rpx 26rpx;
 		--cell-group-inset-padding: 0;
 		--card-background-color: #fff;
 	}
@@ -428,10 +402,6 @@
 		padding-bottom: calc(env(safe-area-inset-bottom) + 88rpx);
 		margin-top: 40rpx;
 		--cell-background-color: transparent;
-	}
-
-	.eval-card {
-		margin-bottom: 16rpx;
 	}
 
 	.return-recommend {

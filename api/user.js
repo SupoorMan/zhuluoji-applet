@@ -27,3 +27,15 @@ export const getBanner = async (data) => {
 export const getNotice = async (data) => {
 	return await request.get('/appletNotify/page', data);
 }
+/**
+ * @description 获取消息数量
+ */
+export const getNoticeCount = async (data) => {
+	return await request.get('/appletNotify/count', data);
+}
+/**
+ * @description 更新已读
+ */
+export const readNotice = async (data) => {
+	return await request.get('/appletNotify/read', data);
+}

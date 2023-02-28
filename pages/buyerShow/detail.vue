@@ -28,21 +28,24 @@
 				{{ detail.details }}
 			</view>
 		</view>
-		<view class="recommend-list" v-if="evals">
-			<!-- <view class="recommend-counts">共 {{page.total}} 条评论</view> -->
-			<EvalCard v-for="(item, index) in evals" :key="item.id" :item="item" :index="[index]"
-				@replyToEval="replyToEval" @addStar="addStar">
+		<!-- <view class="recommend-list" v-if="evals"> -->
+		<!-- <view class="recommend-counts">共 {{page.total}} 条评论</view> -->
+		<!-- <EvalCard v-for="(item, index) in evals" :key="item.id" :item="item" :index="[index]" v-show="!item.hide"
+				@replyToEval="replyToEval" @addStar="addStar" @moreOpt="moreOpt">
 				<van-cell-group v-if="item.list.length > 0">
 					<EvalCard v-for="(child, s) in item.list" :key="child.id" :item="child" :index="[index, s]" noreply
-						@addStar="addStar" />
+						@addStar="addStar" v-show="!child.hide" />
 				</van-cell-group>
 			</EvalCard>
 			<view v-if="evals && evals.length<page.total"
 				style="padding: 24rpx; margin: 24rpx atuo;text-align: center;">
 				<text @click="loadMoreEvals">点击加载更多评论</text>
 			</view>
-		</view>
-		<view class="return-recommend" v-if="detail">
+			<van-share-sheet :show="showMoreOpt" title="更多操作" :options="options" @select="onSelect"
+				@close="showMoreOpt=false" />
+		</view> -->
+		<!-- 回复和评价输入框 -->
+		<!-- 	<view class="return-recommend" v-if="detail">
 			<view class="recommend-content">
 				<view class="eval-area">
 					<van-icon name="edit" />
@@ -55,7 +58,6 @@
 				<view class="eval-operation" v-if="!isEnterEval">
 					<van-button color="#fff" open-type="share">
 						<van-icon name="share-o" size="24" color="#666" />
-						<!-- <text style="color:#666">分享</text> -->
 					</van-button>
 					<view @tap="addStar">
 						<van-icon :name="detail.flag=== 1? 'like' :'like-o'" color="#ff6a5f" size="24" />
@@ -64,14 +66,14 @@
 				</view>
 				<view v-else class="eval-btn" @click="onRecommendClick" hover-class="navigator-hover">确定</view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
 <script>
 	import EvalCard from "@/components/EvalCard.vue";
 	import { updateLivePreview } from '@/api/live';
-	import { getShowDetail, addEvaluate } from "@/api/activity";
+	import { getShowDetail, addEvaluate, delEvaluate } from "@/api/activity";
 	import { userStore } from '@/store';
 	import { mapState } from 'pinia';
 	import dayjs from "dayjs";
@@ -90,7 +92,13 @@
 				returnText: '',
 				returnTopId: '',
 				isEnterEval: false,
-				focusReply: ''
+				focusReply: '',
+				showMoreOpt: false, // 是否展示评论更多操作
+				current: null,
+				options: [{
+					name: '删除',
+					icon: 'https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/icon/1676355956647_delete.png'
+				}],
 			};
 		},
 		computed: {
@@ -135,7 +143,7 @@
 						uni.showToast({
 							title: '评论成功'
 						})
-						const { nickname, level, avatarUrl } = this.user
+						const { nickname, level, avatarUrl, appletUserId: id } = this.user
 						this.returnText = "";
 						this.returnTopId = "";
 						this.focusReply = "";
@@ -145,9 +153,50 @@
 							list: [],
 							nickname,
 							level,
-							avatarUrl
+							avatarUrl,
+							appletUserId
 						}, ...this.evals]
 					}
+				}
+			},
+			moreOpt(index) {
+				this.showMoreOpt = true
+				this.current = index
+			},
+			async onSelect(option) {
+				switch (option.detail.name) {
+					case '删除':
+						await this.deleteEval();
+						return;
+					default:
+						break;
+				}
+			},
+			async deleteEval() {
+				const index = this.current
+				const item =
+					this.current.length > 1 ?
+					this.evals[index[0]].list[index[1]] :
+					this.evals[index[0]];
+				const { code, data } = await delEvaluate({ id: item.id });
+				if (code === 200) {
+					uni.showToast({
+						icon: "success",
+						title: "删除成功"
+					})
+					this.showMoreOpt = false
+					if (index.length > 1) {
+						this.evals[index[0]].list[index[
+							1]] = { ...item, hide: true }
+					} else {
+						this.evals[index[0]] = { ...item, hide: true }
+					}
+					this.$forceUpdate();
+				} else {
+					uni.showToast({
+						icon: "error",
+						title: data
+					})
 				}
 			},
 			async addStar(item) {

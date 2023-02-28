@@ -57,12 +57,12 @@
 		<view class="image-view">
 			<view class="trans-content">
 				<image style="height: 1330rpx;width: 750rpx;margin-left: -30rpx;"
-					src="https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1675049191531_trans_rule2.png"
+					src="https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1677147452133_trans_rule2.2.png"
 					mode="aspectFit"></image>
 			</view>
 			<view class="trans-content">
 				<image style="height: 564rpx;width: 750rpx;margin-left: -30rpx;"
-					src="https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1675048337824_trans_level.png"
+					src="https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1677147409363_trans_level2.png"
 					mode="aspectFit"></image>
 				<image style="height: 1993rpx;width: 750rpx;margin-left: -30rpx;"
 					src="https://shuzhucloud-zhuluoji.oss-cn-hangzhou.aliyuncs.com/static/1675049107885_trans_rule1.png"
@@ -156,8 +156,8 @@
 				if (code === 200) {
 					this.$dialog.confirm({
 						context: this,
-						title: "提交成功",
-						message: "是否继续转换订单",
+						title: "温馨提示",
+						message: "您的申请已提交，可至“兑换记录”查看。是否继续转换订单？",
 					}).then(() => {
 						// on confirm
 						this.add = {

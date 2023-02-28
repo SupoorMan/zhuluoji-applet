@@ -11,12 +11,13 @@
 			<van-cell title="订单编号：" :border="false" title-width="200rpx">
 				<template #default>
 					<text>{{ detail.orderNo }}</text>
-					<text @click="copyOrderNo">|复制</text>
+					<text @click="copyOrderNo(detail.orderNo)"> | 复制</text>
 				</template>
 			</van-cell>
 			<van-cell title="运单号：" :border="false" title-width="200rpx" v-show="detail.status>1">
 				<template #default>
 					<text>{{ detail.transferNo }}</text>
+					<text @click="copyOrderNo(detail.transferNo)"> | 复制</text>
 				</template>
 			</van-cell>
 
@@ -47,6 +48,10 @@
 						<van-button open-type="contact" size="mini" icon="chat-o">联系客服</van-button>
 					</template>
 				</van-cell>
+				<p class="" style="margin-top: 20rpx;">
+
+					* 如需查询物流信息,请复制运单号至快递公众号或官网查询,感谢理解.
+				</p>
 			</van-cell-group>
 		</view>
 
@@ -75,7 +80,11 @@
 					this.detail = data.records[0];
 				}
 			},
-			copyOrderNo() {},
+			copyOrderNo(data) {
+				wx.setClipboardData({
+					data
+				})
+			},
 			getTime(time) {
 				return dayjs(time).format('YYYY-MM-DD hh:mm:ss')
 			}

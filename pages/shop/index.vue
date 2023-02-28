@@ -4,7 +4,8 @@
 			<template #left>
 				<view class="search-pro">
 					<van-icon name="search" size="30rpx" />
-					<input type="text" placeholder="输入商品名称" class="search-input" />
+					<input type="text" placeholder="输入商品名称" class="search-input" @confirm="searchProd"
+						@blur="searchProd" />
 				</view>
 			</template>
 		</van-nav-bar>
@@ -56,7 +57,7 @@
 			<view class="custom-image" v-if="(!prods || prods.length === 0) && !loading">
 				<van-empty image="/static/empty.png">
 					<template #description>
-						<view>抱歉，暂无商品</view>
+						<view>{{!!productName ?　"抱歉,没有搜索到["+productName+"]相关商品":"抱歉，暂无商品"}}</view>
 						<view>小编正在整理货仓，尽请期待</view>
 					</template>
 				</van-empty>
@@ -120,8 +121,9 @@
 				page: {
 					current: 1,
 					pageSize: 20,
-					productType: '0'
+					productType: '0',
 				},
+				productName: '',
 				tabProds: {},
 				loading: true,
 				prods: null
@@ -131,6 +133,12 @@
 			setTimeout(() => this.getRecomemdProd(this.page), 100);
 		},
 		methods: {
+			searchProd(event) {
+				if (this.productName !== event.detail.value) {
+					this.productName = event.detail.value
+					this.changeType(this.activeKey)
+				}
+			},
 			changeType(active) {
 				this.activeKey = active;
 				switch (active) {
@@ -138,7 +146,7 @@
 						this.page = {
 							current: 1,
 							pageSize: 20,
-							productType: '0'
+							productType: '0',
 						};
 						break;
 					case 12:
@@ -163,13 +171,14 @@
 						};
 						break;
 				}
-				this.getRecomemdProd(this.page);
+				this.getRecomemdProd({ ...this.page, productName: this.productName });
 			},
 			async getRecomemdProd(params) {
 				this.loading = true;
 				if (this.activeKey == 11) {
 					if (this.tabProds[params.productType]) {
-						this.prods = this.tabProds[params.productType];
+						this.prods = !!this.productName ? this.tabProds[params.productType].filter(n => n.productName
+							.includes(this.productName)) : this.tabProds[params.productType];
 						this.loading = false;
 						return;
 					}
