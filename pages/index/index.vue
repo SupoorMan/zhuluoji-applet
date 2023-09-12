@@ -94,14 +94,16 @@
 				}
 			},
 			toPage(url) {
-				uni.navigateTo({
-					url,
-					fail() {
-						uni.switchTab({
-							url
-						})
-					}
-				})
+				if (this.user) {
+					uni.navigateTo({
+						url,
+						fail() {
+							uni.switchTab({
+								url
+							})
+						}
+					})
+				}
 			},
 			jumpPath(realpath) {
 				return this.user ? realpath : '/pages/user/authorization/index';

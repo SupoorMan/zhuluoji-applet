@@ -1,9 +1,8 @@
 <template>
 	<view class="pro-card" :key="item.id" v-show="item.flag!==1 || ! showCancel">
-
 		<van-cell title-width="262rpx" custom-class="pro-card">
 			<template #title>
-				<view style="background-color: #f9f9f9; border-radius: 8rpx; width:232rpx ; height: 232rpx;">
+				<view style="border-radius: 16rpx; width:232rpx ; height: 232rpx;">
 					<van-image fit="contain" :src="item.images" width="224rpx" height="224rpx" />
 				</view>
 			</template>
@@ -11,17 +10,21 @@
 				<view class="right-content">
 					<view style="height: 140rpx;" class="title">
 						{{item.productName}}
-						<view><text style="color: #787878;">
+						<view style="line-height: 44rpx;">
+							<text style="color: #787878;">
 								{{item.sizes}}
-							</text></view>
-						<view><text style="color: #787878;" v-if="item.stamps">
+							</text>
+							<br />
+							<text style="color: #787878;" v-if="item.stamps">
 								开播时间: {{cutDate(item) }}
-							</text></view>
+							</text>
+						</view>
 					</view>
-					<view><text style="color: #787878;">原价： </text> <text
+					<view style="line-height: 40rpx;margin-top: 16rpx;"><text style="color: #787878;">原价： </text> <text
 							style="text-decoration: line-through;">￥{{item.price}}</text>
 					</view>
-					<view style="display: flex; align-items: center; justify-content: space-between;">
+					<view
+						style="display: flex; align-items: center; justify-content: space-between;line-height: 40rpx;">
 						<view>
 							<text style="color: #787878;">直播价：</text><text class="red-text">￥</text>
 							<text class="red-text price">{{item.lastPrice}}</text>
@@ -41,7 +44,6 @@
 							<van-icon name="/static/live/notice-active.png" color="#757575" />
 							已结束
 						</van-tag>
-
 						<van-tag size="medium" round plain v-else color="#E0AFD9" @tap="subscLive(item)">
 							<van-icon name="/static/live/notice.png" color="#E0AFD9" />
 							{{stauts[item.flag]}}
@@ -103,6 +105,7 @@
 	.title {
 		font-size: 32rpx;
 		text-align: left;
+		color: #333;
 	}
 
 	.red-text {
@@ -123,5 +126,6 @@
 		border-radius: 12rpx;
 		margin-top: 24rpx;
 		overflow: hidden;
+		--cell-horizontal-padding: 16rpx;
 	}
 </style>

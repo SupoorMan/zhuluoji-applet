@@ -4,16 +4,13 @@
 		<view></view>
 		<view class="home-tabs">
 			<view class="home-tab-header">
-				<view @tap="active = 2" :class="active === 2 ? 'left' : ''">
-					<text class="tab-text">图纸分享</text>
-				</view>
-				<view class=""></view>
+				<view></view>
 				<!-- <view @tap="active = 1" :class="active === 1 ? 'left' : ''">
 					<text class="tab-text">roomtour</text>
-				</view> 
+				</view> -->
 				<view style="text-align: right" @tap="active = 2" :class="active === 2 ? 'right' : ''">
 					<text class="tab-text">图纸分享</text>
-				</view> -->
+				</view>
 			</view>
 			<view class="home-tab"
 				:style="active === 1  ? 'border-top-right-radius: 20rpx;'  : 'border-top-left-radius: 20rpx;' ">
@@ -21,7 +18,7 @@
 				<!-- roomtour 视频 -->
 				<!-- <video :src="roomTour.images" width="100%" height="100%" v-if="roomTour" /> -->
 				<!-- </view> -->
-				<view v-show="active === 2">
+				<view v-show="active === 2" v-if="typeList">
 					<van-tabs color="#BB81DA75" title-inactive-color="#666" type="card" :active="activeType"
 						@change="onTypeChange">
 						<van-tab v-for="item in typeList" :key="item.id" :title="item.topType">
@@ -38,7 +35,7 @@
 			</view>
 		</view>
 		<!-- 商品列表 -->
-		<view class="prod-list" v-if="active === 2 && typeList[activeType].list">
+		<view class="prod-list" v-if="active === 2 && typeList && typeList[activeType].list">
 			<van-cell-group inset v-for="proItem in typeList[activeType].list" :key="proItem.id">
 				<van-card :thumb="proItem.images">
 					<view slot="title" class="title">
@@ -209,7 +206,7 @@
 					current: 1,
 					pageSize: 1,
 				});
-				if (code === 200) {
+				if (code === 200 && data.records.length > 0) {
 					this.roomTour = data.records.length > 0 ? data.records[0] : null;
 					await this.getDetail();
 					await this.changeRcomdType(this.retabActive);
